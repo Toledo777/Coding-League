@@ -122,7 +122,7 @@ User stories:
 
 Main UI:
 
-![Home.svg](Proposal_Images\Home.svg)
+![Home.svg](Proposal_Images/Home.svg)
 
 List of features presented:
 
