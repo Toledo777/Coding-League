@@ -1,0 +1,19 @@
+{
+  "name": "project-league",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/dawson2223/620-w23/s02/team3/project-league.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dawson2223/620-w23/s02/team3/project-league/issues"
+  },
+  "homepage": "https://gitlab.com/dawson2223/620-w23/s02/team3/project-league#readme"
+}
