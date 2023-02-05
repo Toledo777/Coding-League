@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix --ext .mjs .",
+    "start": "nodemon --ignore ./dist server/dev.mjs"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,17 @@
   "bugs": {
     "url": "https://gitlab.com/dawson2223/620-w23/s02/team3/project-league/issues"
   },
-  "homepage": "https://gitlab.com/dawson2223/620-w23/s02/team3/project-league#readme"
+  "homepage": "https://gitlab.com/dawson2223/620-w23/s02/team3/project-league#readme",
+  "devDependencies": {
+    "esbuild": "^0.17.5",
+    "eslint": "^8.33.0",
+    "eslint-plugin-react": "^7.32.2",
+    "nodemon": "^2.0.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.7.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
