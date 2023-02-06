@@ -22,18 +22,7 @@ export async function recursiveWatch(path, onChange, delay = 500) {
 	}, delay);
 }
 
-
 // Recursively copies a directory
 export async function recursiveCopy(from, to) {
-	fs.readdir(from).then(async directory => {
-		// Directory
-		await Promise.all(
-			directory.map(file => recursiveCopy(`${from}/${file}`, `${to}/${file}`))
-		);
-	}).catch(async () => {
-		// Not a directory
-		await fs.cp(`${from}`, `${to}`);
-	});
+	await fs.cp(from, to, { recursive: true });
 }
-
-
