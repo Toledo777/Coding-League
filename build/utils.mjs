@@ -2,6 +2,7 @@ import * as esbuild from 'esbuild';
 import { recursiveCopy, recursiveWatch } from './recursiveDirUtils.mjs';
 
 const baseConfig = {
+	external: ['*.svg', '*.png', '*.jpg'],
 	entryPoints: ['client/index.jsx'],
 	bundle: true,
 	minify: true,
