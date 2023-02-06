@@ -1,27 +1,26 @@
 import * as esbuild from 'esbuild';
 import { recursiveCopy, recursiveWatch } from './recursiveDirUtils.mjs';
 
+const baseConfig = {
+	entryPoints: ['client/index.jsx'],
+	bundle: true,
+	minify: true,
+	sourcemap: false,
+	format: 'esm',
+	outdir: 'dist',
+};
+
 async function getCtxDev() {
 	return await esbuild.context({
-		entryPoints: ['client/index.jsx'],
-		bundle: true,
+		...baseConfig,
 		minify: false,
 		sourcemap: true,
-		format: 'esm',
-		outdir: 'dist',
 	});
 }
 
 
 async function getCtx() {
-	return await esbuild.context({
-		entryPoints: ['client/index.jsx'],
-		bundle: true,
-		minify: true,
-		sourcemap: false,
-		format: 'esm',
-		outdir: 'dist',
-	});
+	return await esbuild.context(baseConfig);
 }
 
 export async function build(ctx = getCtx()) {
