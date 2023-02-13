@@ -1,15 +1,13 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import puppeteer from 'puppeteer';
 import urlToId from './urlToId.mjs';
 import getCodeforcesProblems from './get_codeforces_problems.mjs';
 import scrapeProblem from './scrape_problem.mjs';
 
-const browser = await puppeteer.launch();
+const browser = await puppeteer.launch({ headless: false });
 const BATCH_SIZE = 6;
 const problems = await getCodeforcesProblems();
 let processed = [];
-
-mkdirSync('cache');
 
 async function fetchProblem(problem) {
 	return {
@@ -24,7 +22,7 @@ while (problems.length > 0) {
 		let toAdd = problems.pop();
 
 		if (toAdd) {
-			if (!existsSync(`cache/${urlToId(toAdd.url)}`)) {
+			if (!existsSync(`cache/${urlToId(toAdd.url)}.json`)) {
 				batch.push(toAdd);
 			} else {
 				batch.push(JSON.parse(readFileSync(`cache/${urlToId(toAdd.url)}.json`)));

@@ -6,13 +6,12 @@ export default async function scrapeProblem(browser, url) {
 	await page.goto(url);
 
 	const problem = await page.$('.problem-statement');
-
+	console.log(url);
 	const title = await problem.$eval('.title', (el => el.textContent));
 	// Getting the 1st index will be the corresponding text node, not the label
-	const time_limit = await problem.$eval('.time-limit', (el => el.childNodes[1].textContent));
-	const memory_limit = await problem.$eval('.memory-limit', (el => el.childNodes[1].textContent));
-	const input_type = await problem.$eval('.input-file', (el => el.childNodes[1].textContent));
-	const output_type = await problem.$eval('.output-file', (el => el.childNodes[1].textContent));
+	let time_limit = await problem.$eval('.time-limit', (el => el.childNodes[1].textContent));
+	let memory_limit = await problem.$eval('.memory-limit', (el => el.childNodes[1].textContent));
+	const tags = await page.$$eval('.tag-box', (el => el.map(el => el.textContent)));
 
 	// Extract an ID from the URL
 	const parseId = (url) => {
@@ -31,10 +30,17 @@ export default async function scrapeProblem(browser, url) {
 		}
 	));
 
-	let id = parseId(url);
+	const id = parseId(url);
+
+	// Always in MB
+	memory_limit = Number(memory_limit.split(' ')[0]);
+	// Always in seconds 
+	time_limit = Number(time_limit.split(' ')[0]);
+
 	console.timeEnd(url);
 
 	await page.close();
 
-	return Object.assign({ id, url, title, time_limit, memory_limit, input_type, output_type }, ...content);
+	// Combine content and metadata into single flat object
+	return Object.assign({ id, url, title, time_limit, memory_limit, tags }, ...content);
 }
