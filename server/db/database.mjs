@@ -10,6 +10,7 @@ async function dbConnect() {
     // check if ATLAS_URI exist
 	if (!mongoDB) {
 		console.log("Error: Please add ATLAS_URI to .env file");
+        console.log(mongoDB);
 		process.exit();
 	}
 	else {

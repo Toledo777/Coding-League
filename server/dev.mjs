@@ -2,8 +2,12 @@
 
 import { watch } from '../build/utils.mjs';
 import app from './app.mjs';
+import dbConnect from './db/database.mjs';
 
 const PORT = 8080;
+
+await dbConnect();
+
 
 app.listen(PORT, () => {
 	console.log(`Development server listening at http://localhost:${PORT}`);
