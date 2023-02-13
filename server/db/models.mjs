@@ -1,8 +1,8 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const testSchema = mongoose.Schema({
 	user: String,
 	comment: String,
 });
 
-export var testModel = mongoose.Model(testSchema, "testObj");
+export var testModel = mongoose.model("testObj", testSchema);
