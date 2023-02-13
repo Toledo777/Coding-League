@@ -1,0 +1,3 @@
+/* This file acts as the entry point for css bundling */
+/* It should be used only to import other globally used styles or variables */
+@import url(./style/root.css);
