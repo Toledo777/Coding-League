@@ -1,6 +1,22 @@
 import React from 'react';
+import { useState } from 'react';
 
 export default function Start() {
+	const [solution, setSolution] = useState('');
+
+	function handleSolutionChange(event) {
+		setSolution(event.target.value);
+	}
+
+	function clearSolution(){
+		setSolution('');
+	}
+
+	function runSolution(event){
+		console.log(solution);
+		console.log('Running solution...');
+	}
+
 	return <div>
 		<h1>Coding Problems</h1>
 		<div className='problem'>
@@ -11,17 +27,14 @@ export default function Start() {
 		</div>
 		<div><p></p></div>
 		<div className='form-div'>
-			<form className='form'>
-				<div className='form-input'>
-					<textarea className='solution' rows='15' cols='60'>
-
-					</textarea>
-				</div>
-				<div className='form-buttons'>
-					<button className='run'>Run</button>
-					<button className='clear'>Clear</button>
-				</div>
-			</form>
+			<div className='form-input'>
+				<textarea className='solution' rows='15' cols='60' onChange={handleSolutionChange} value={solution}>
+				</textarea>
+			</div>
+			<div className='form-buttons'>
+				<button className='run' onClick={runSolution}>Run</button>
+				<button className='clear' onClick={clearSolution}>Clear</button>
+			</div>
 		</div>
 	</div>;
 }
