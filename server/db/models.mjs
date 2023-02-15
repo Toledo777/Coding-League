@@ -1,17 +1,9 @@
 import mongoose, { mongo } from "mongoose";
 
-// const testSchema = mongoose.Schema({
-// 	user: String,
-// 	comment: String,
-// });
-
-// const userSchema = mongoose.Schema({
-
-// })
-
-
+// test case object used in problemSchema
 const testCase = { input: String, output: String };
 
+// schema for a coding problem
 const problemSchema = {
   id: String,
   url: String,
@@ -28,6 +20,23 @@ const problemSchema = {
   sample_tests: String,
   test_cases: [testCase],
   tags: [String],
+}
+
+const userAnswer = {
+    email: String,
+    problem_id: String,
+    user_answer: String,
+    pass_test: Boolean,
+    points: Number,
+}
+
+const user = {
+    email: String,
+    username: String,
+    avatar_uri: String,
+    wins: Number,
+    loss: Number,
+    rank: String
 }
 
 
