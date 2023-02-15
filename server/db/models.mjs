@@ -1,19 +1,34 @@
 import mongoose, { mongo } from "mongoose";
 
-const testSchema = mongoose.Schema({
-	user: String,
-	comment: String,
-});
+// const testSchema = mongoose.Schema({
+// 	user: String,
+// 	comment: String,
+// });
 
-const userSchema = mongoose.Schema({
+// const userSchema = mongoose.Schema({
 
-})
-
-const questionSchema = mongoose.Schema({
-    email: String,
-    username: String,
+// })
 
 
-})
+const testCase = { input: String, output: String };
 
-export var testModel = mongoose.model("testObj", testSchema);
+const problemSchema = {
+  id: String,
+  url: String,
+  title: String,
+  // in seconds
+  time_limit: Number,
+  // in megabytes
+  memory_limit: Number,
+  description: String,
+  input_specification: String,
+  output_specification: String,
+  note?: String,
+  sample_tests: String,
+  testcases: [testCase],
+  tags: [String],
+}
+
+
+
+export var testModel = mongoose.model("problem", problemSchema);
