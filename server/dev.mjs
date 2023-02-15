@@ -3,7 +3,7 @@
 import { watch } from '../build/utils.mjs';
 import app from './app.mjs';
 import dbConnect from './db/database.mjs';
-import { problem } from './db/models.mjs';
+import { problem } from './models/problem.mjs';
 
 const PORT = 8080;
 
@@ -11,7 +11,7 @@ await dbConnect();
 
 // test insertion, should not be in production
 // const t = new problem;
-// t.id = 1;
+// t.id = 2;
 // t.url = "testurl";
 // t.title = "testtitle";
 // t.time_limit = 1;

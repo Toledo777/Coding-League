@@ -1,6 +1,5 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
-// test case object used in problemSchema
 const testCase = { input: String, output: String };
 
 // schema for a coding problem
@@ -22,27 +21,5 @@ const problemSchema = {
   tags: [String],
 }
 
-const userAnswer = {
-    email: String,
-    problem_id: String,
-    user_answer: String,
-    pass_test: Boolean,
-    points: Number,
-}
-
-const user = {
-    email: String,
-    username: String,
-    avatar_uri: String,
-    wins: Number,
-    loss: Number,
-    rank: String
-}
-
-
 export var problem = mongoose.model("problem", problemSchema);
-
-
-
-
 
