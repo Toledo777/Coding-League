@@ -23,12 +23,17 @@ const problemSchema = {
   description: String,
   input_specification: String,
   output_specification: String,
-  note?: String,
+  // this field could be missing if it is null
+  note: String,
   sample_tests: String,
-  testcases: [testCase],
+  test_cases: [testCase],
   tags: [String],
 }
 
 
+export var problem = mongoose.model("problem", problemSchema);
 
-export var testModel = mongoose.model("problem", problemSchema);
+
+
+
+
