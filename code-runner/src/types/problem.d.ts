@@ -2,16 +2,19 @@ type HTML = string;
 
 type TestCase = { input: string, output: string };
 
-type Problem = {
+export type Problem = {
   id: string,
   url: string,
   title: string,
-  time_limit_seconds: number,
-  memory_limit_MB: number,
+  // in seconds
+  time_limit: number,
+  // in megabytes
+  memory_limit: number,
   description: HTML,
   input_specification: HTML,
   output_specification: HTML,
-  note: HTML,
-  test_cases: TestCase[],
+  note?: HTML,
+  sample_tests: HTML,
+  testcases: TestCase[],
   tags: string[],
 }
