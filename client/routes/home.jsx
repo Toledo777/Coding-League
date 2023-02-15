@@ -1,5 +1,5 @@
 import React from 'react';
-//import Problem from './problem';
+//import Problem from '../components/problem';
 
 export default function Home() {
 	return (
