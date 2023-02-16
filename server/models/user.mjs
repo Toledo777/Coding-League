@@ -5,7 +5,7 @@ const userSchema = {
     username: String,
     avatar_uri: String,
     wins: Number,
-    loss: Number,
+    losses: Number,
     rank: String
 }
 

@@ -8,11 +8,11 @@ import { createBrowserRouter } from 'react-router-dom';
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <Root/>,
-		errorElement: <Error/>,
+		element: <Root />,
+		errorElement: <Error />,
 		children: [
-			{ path: '/', element: <Home/> },
-			{ path: '/example', element: <Example/> }
+			{ path: '/', element: <Home /> },
+			{ path: '/example', element: <Example /> },
 		]
 	},
 ], { window });
