@@ -24,6 +24,10 @@ async function getCtx() {
 	return await esbuild.context(baseConfig);
 }
 
+export async function singleBuild() {
+	await recursiveCopy('client/public', 'dist');
+}
+
 export async function build(ctx = getCtx()) {
 	ctx = await ctx;
 	await recursiveCopy('client/public', 'dist');

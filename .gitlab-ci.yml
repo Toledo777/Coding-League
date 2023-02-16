@@ -6,17 +6,17 @@ stages:
   - deploy
 
 build:
-  stage: build
+  stage: build-frontend
   cache:
     key:
-      prefix: 'frontend-backend'
+      prefix: 'frontend'
       files:
         - 'package-lock.json'
     paths:
       - 'node_modules/'
   script:
     - npm install
-    - npm run start
+    - npm run build
   only:
     refs:
       - merge_requests
@@ -70,7 +70,7 @@ deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
   dependencies:
-    - build
+    - build-frontend
   #   - build-frontend
   #   - build-backend
   only:

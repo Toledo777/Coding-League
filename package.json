@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix --ext .mjs .",
     "dev": "mkdir dist & nodemon --ignore dist server/dev.mjs",
-    "start": "node server/prod.mjs"
+    "start": "node server/prod.mjs",
+    "build": "node build/build.mjs"
   },
   "repository": {
     "type": "git",
