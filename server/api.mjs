@@ -1,11 +1,12 @@
 import express from 'express';
 const router = express.Router();
+import { problem } from './models/problem.mjs';
 
 
-router.get('/problem', (req, res) => {
-	let x = (Math.floor(Math.random() * (1, req.query.range)) + 1);
-	console.log(x);
-	res.json({ id: x, text: 'sample problem ' + x });
+router.get('/problem', async (req, res) => {
+	console.log('problem api');
+	const x = await problem.find();
+	res.json(x[1].description);
 });
 
 export default router;
