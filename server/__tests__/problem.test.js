@@ -13,7 +13,7 @@ describe("test mongoose problem model", () => {
 
 
         mockingoose(problem).toReturn(_prob, "findOne");
-        let actualProblem = await model.findById({id: "2F18"})
+        let actualProblem = await problem.findById({id: "2F18"});
         return expect(JSON.parse(JSON.stringify(actualProblem))).toMatchObject(_prob);
     });
 });
