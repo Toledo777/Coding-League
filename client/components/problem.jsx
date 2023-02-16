@@ -1,24 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import useFetch from '../hooks/useFetch';
 
 export default function Problem(props) {
-
-	let [problem, setProblem] = useState('');
-
-	useEffect(() => {
-		(async () => {
-			const res = await fetch('/api/one-problem?range=' + props.range);
-			if (res.ok) {
-				let response = await res.json();
-				setProblem(response.text);
-			}
-		})();
-	}, []);
 
 	return (
 		<div>
 			<h3>
-				{problem}
+				{(useFetch('/api/one-problem?range=' + props.range, 1, [])[2].text)}
 			</h3>
 		</div>
 	);
