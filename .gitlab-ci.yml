@@ -1,35 +1,33 @@
 image: node:latest
 
 stages:
-  # - build
+  - build
   # - test
   - deploy
 
-# build-frontend:
-#   stage: build
-#   cache:
-#     key:
-#       prefix: 'frontend'
-#       files:
-#         - 'client/package-lock.json'
-#     paths:
-#       - 'client/node_modules/'
-#   script:
-#     - cd client
-#     - npm install
-#     - npm run build
-#   only:
-#     refs:
-#       - main
-#       - master
-#       - staging
-#       - AzureDeploy
-#   artifacts:
-#     expire_in: 1 days
-#     when: on_success
-#     paths:
-#       - client/dist
-#       - client/node_modules
+build:
+  stage: build
+  cache:
+    key:
+      prefix: 'frontend-backend'
+      files:
+        - 'package-lock.json'
+    paths:
+      - 'node_modules/'
+  script:
+    - npm install
+    - npm run start
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
+  artifacts:
+    expire_in: 1 days
+    when: on_success
+    paths:
+      - ./dist
+      - ./node_modules
 
 # build-backend:
 #   stage: build
@@ -44,10 +42,10 @@ stages:
 #     - cd server
 #     - npm install
 #   only:
-#     - main
-#     - master
-#     - staging
-#     - AzureDeploy
+#     refs:
+#       - merge_requests
+#     variables:
+#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
 #   artifacts:
 #     expire_in: 1 days
 #     when: on_success
@@ -58,10 +56,10 @@ stages:
 # test:
 #   stage: test
 #   only:
-#     - main
-#     - master
-#     - staging
-#     - AzureDeploy
+#     refs:
+#       - merge_requests
+#     variables:
+#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
 #   dependencies:
 #     - build-backend
 #   script:
@@ -71,7 +69,8 @@ stages:
 deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
-  # dependencies:
+  dependencies:
+    - build
   #   - build-frontend
   #   - build-backend
   only:
@@ -82,8 +81,7 @@ deploy:
   before_script:
     - "az login --allow-no-subscriptions --service-principal -u $AZ_SP_ID -p $AZ_SP_SECRET -t $AZ_TENANT"
   script:
-    # - zip -r deploy.zip client/dist server server/package.json
-    - zip -r deploy.zip README.md
+    - zip -r deploy.zip ./dist server ./package.json
     - "az webapp config appsettings set --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --settings WEBSITE_RUN_FROM_PACKAGE=1"
     - "az webapp config appsettings set --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --settings ATLAS_URI=$ATLAS_URI"
     - "az webapp deployment source config-zip --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --src deploy.zip"
