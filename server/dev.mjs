@@ -9,21 +9,6 @@ const PORT = 8080;
 
 await dbConnect();
 
-//test insertion, should not be in production
-const t = new problem;
-t.id = 2;
-t.url = "testurl";
-t.title = "testtitle";
-t.time_limit = 1;
-t.memory_limit = 1;
-t.description = "hello";
-t.input_specification = "Test";
-t.output_specification = "test";
-t.sample_tests = "test";
-t.test_cases = [{input: "Test", output: "test output"}];
-t.tags = ["tag1", "Tag2"];
-t.save();
-
 app.listen(PORT, () => {
 	console.log(`Development server listening at http://localhost:${PORT}`);
 });

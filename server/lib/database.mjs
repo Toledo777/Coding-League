@@ -6,6 +6,8 @@ dotenv.config();
 const mongoDB = process.env.ATLAS_URI;
 mongoose.set("strictQuery", false);
 
+
+// database connection function
 async function dbConnect() {
     // check if ATLAS_URI exist
 	if (!mongoDB) {
@@ -15,6 +17,7 @@ async function dbConnect() {
 	}
 	else {
 		try {
+			// connect with URI
 			await mongoose.connect(mongoDB);
 			console.log("Connected to database");
 		} 
