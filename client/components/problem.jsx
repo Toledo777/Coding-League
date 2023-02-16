@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch';
 export default function Problem(props) {
 
 
-	const [error, loading, data] = useFetch('/api/one-problem?range=' + props.range, 1, []);
+	const [error, loading, data] = useFetch('/api/problem?range=' + props.range, 1, []);
 
 	if (error !== undefined) {
 		console.log('there is an error!!!');
