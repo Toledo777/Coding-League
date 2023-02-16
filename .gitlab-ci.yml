@@ -5,8 +5,8 @@ stages:
   # - test
   - deploy
 
-build:
-  stage: build-frontend
+build-frontend:
+  stage: build
   cache:
     key:
       prefix: 'frontend'
