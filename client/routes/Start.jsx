@@ -80,7 +80,7 @@ export default function Start() {
 	return <div>
 		<h1>Coding Problem</h1>
 		<div className='problem'>
-			<Problem range='5'/>
+			<Problem className='title' range='5'/>
 			<div className='instructions'>Proglem: {problem.problem}</div>
 			<div className='input'>Input: {problem.input}</div>
 			<div className='output'>Output: {problem.output}</div>
