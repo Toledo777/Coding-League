@@ -27,7 +27,7 @@ async function getCtx() {
 export async function singleBuild(ctx = getCtx()) {
 	ctx = await ctx;
 	await recursiveCopy('client/public', 'dist');
-	ctx.rebuild();
+	await ctx.rebuild();
 	process.exit(0);
 }
 
