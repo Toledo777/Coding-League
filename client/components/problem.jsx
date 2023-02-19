@@ -2,6 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
+import Editor from './editor';
 
 export default function Problem(props) {
 
@@ -23,6 +24,7 @@ export default function Problem(props) {
 			<h3>
 				{data.text}
 			</h3>
+			<Editor/>
 		</div>
 	);
 }
