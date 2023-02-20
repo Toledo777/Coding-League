@@ -4,9 +4,12 @@ import { problem } from './models/problem.mjs';
 
 
 router.get('/problem/random', async (req, res) => {
-	console.log('problem api');
 	const response = await problem.find();
 	res.json(response[1]);
+});
+
+router.get("/hello_world", (req, res) => {
+	res.send("Hello World");
 });
 
 export default router;
