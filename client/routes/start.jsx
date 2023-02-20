@@ -4,7 +4,17 @@ import Problem from '../components/problem';
 
 export default function Start() {
 	const [solution, setSolution] = useState('');
-	const [problem, setProblem] = useState({problem: '', input: '', output: '', notes:''});
+	const [problem, setProblem] = useState({
+		_id: '',
+		title: '',
+		url: '',
+		desc: '',
+		input: '',
+		output: '',
+		test_cases: [],
+		mem_limit: 0,
+		time_limit: 0,
+		notes:''});
 	const [codeStatus, setCodeStatus] = useState({running: false, correct: false});
 
 	/**
@@ -21,16 +31,32 @@ export default function Start() {
 	 */
 	function loadProblem() {
 		// sample problem information (replace with full dynamic problem fetching from API)
-		let problem = 'Write a method that takes in a String, determines if the string is a palindrome or not, and finally outputs a Boolean result.';
-		let input = 'String';
-		let output = 'Boolean';
-		let notes = 'Some notes go here';
+		let prob_id = '233B';
+		let prob_name = 'B. Non-Square Equation';
+		let prob_url = 'https://codeforces.com/contest/233/problem/B';
+		let prob_desc = 'Let\'s consider equation:\n\nx2 + s(x)·x - n = 0, \nwhere x, n are positive integers, s(x) is the function, equal to the sum of digits of number x in the decimal number system.\n\nYou are given an integer n, find the smallest positive integer root of equation x, or else determine that there are no such roots.';
+		let input = 'A single line contains integer n (1 ≤ n ≤ 1018) — the equation parameter.\n\nPlease, do not use the %lld specifier to read or write 64-bit integers in С++. It is preferred to use cin, cout streams or the %I64d specifier.';
+		let output = 'Print -1, if the equation doesn\'t have integer positive roots. Otherwise print such smallest integer x (x > 0), that the equation given in the statement holds.';
+		let cases = [
+			{input: 2, output: 1},
+			{input: 110, output: 10},
+			{input: 4, output: -1}
+		];
+		let mem = 3;
+		let time = 1;
+		let notes = 'In the first test case x = 1 is the minimum root. As s(1) = 1 and 12 + 1·1 - 2 = 0.\n\nIn the second test case x = 10 is the minimum root. As s(10) = 1 + 0 = 1 and 102 + 1·10 - 110 = 0.\n\nIn the third test case the equation has no roots.';
 
 		// update problem state
 		setProblem({
-			problem: problem,
+			_id: prob_id,
+			title: prob_name,
+			url: prob_url,
+			desc: prob_desc,
 			input: input,
 			output: output,
+			test_cases: cases,
+			mem_limit: mem,
+			time_limit: time,
 			notes: notes
 		});
 
@@ -109,11 +135,13 @@ export default function Start() {
 	return <div>
 		<h1>Coding Problem</h1>
 		<div className='problem'>
-			<Problem className='title' range='5'/>
-			<div className='instructions'>Proglem: {problem.problem}</div>
-			<div className='input'>Input: {problem.input}</div>
-			<div className='output'>Output: {problem.output}</div>
-			<div className='notes' style={{display: 'none'}}>Notes: {problem.notes}</div>
+			{/* <Problem className='title' range='5'/> */}
+			<h1 className='title'>Proglem {problem._id}: {problem.title}</h1>
+			<div className='instructions' style={{ whiteSpace: 'pre-line' }}>{problem.desc}</div>
+			<div className='input' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Input:</b> {problem.input}</div>
+			<div className='output' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Output:</b> {problem.output}</div>
+			<div className='limits' style={{ whiteSpace: 'pre-line' }}>Memory limit: {problem.mem_limit}, Time limit: {problem.time_limit}</div>
+			<div className='notes' style={{ display: 'none', whiteSpace: 'pre-line' }}>Notes: {problem.notes}</div>
 		</div>
 		<div><p></p></div>
 		<div className='form-div'>
@@ -130,21 +158,34 @@ export default function Start() {
 			<h2 className='status-text'></h2>
 		</div>
 		<div className='results'>
-			<div className='test-cases'>
-				<div className='case-1'>
-					<h2 className='expected-1'>racecar (true): <img className='res-img-1' /></h2>
-				</div>
-				<div className='case-2'>
-					<h2 className='expected-2'>kayak (true): <img className='res-img-2' /></h2>
-				</div>
-				<div className='case-3'>
-					<h2 className='expected-3'>palindrome (false): <img className='res-img-3' /></h2>
-				</div>
-			</div>
+			<table className='test-cases'>
+				<tbody>
+					<tr className='tab-headers'>
+						<th>Input</th>
+						<th>Output</th>
+						<th>Result</th>
+					</tr>
+					<tr className='case-1'>
+						<td>{problem.test_cases[0]?.input}</td>
+						<td>{problem.test_cases[0]?.output}</td>
+						<td><img className='res-img-1' /></td>
+					</tr>
+					<tr className='case-2'>
+						<td>{problem.test_cases[1]?.input}</td>
+						<td>{problem.test_cases[1]?.output}</td>
+						<td><img className='res-img-2' /></td>
+					</tr>
+					<tr className='case-3'>
+						<td>{problem.test_cases[2]?.input}</td>
+						<td>{problem.test_cases[2]?.output}</td>
+						<td><img className='res-img-3' /></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-		<div className='after-running' style={{visibility: 'hidden'}}>
+		<div className='after-running' style={{ visibility: 'hidden' }}>
 			<p className='completed'></p>
-			<button className='next' style={{display: 'none'}}>Next problem</button>
+			<button className='next' style={{ display: 'none' }}>Next problem</button>
 			<button className='skip'>Skip problem</button>
 		</div>
 	</div>;
