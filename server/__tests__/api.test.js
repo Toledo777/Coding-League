@@ -1,4 +1,5 @@
 import request from 'supertest';
+import app from '../app.mjs';
 
 describe('GET /api', () => {
     test('Should return 200', async () => {
