@@ -14,7 +14,7 @@ export default function Start() {
 		test_cases: [],
 		mem_limit: 0,
 		time_limit: 0,
-		notes:''});
+		notes: ''});
 	const [codeStatus, setCodeStatus] = useState({running: false, correct: false});
 
 	/**
@@ -23,6 +23,17 @@ export default function Start() {
 	useEffect(() => {
 		loadProblem();
 	}, []);
+
+	/**
+	 * useEffect to show/hide notes depending on if current problem has them or not
+	 */
+	useEffect(() => {
+		if (problem.notes !== ''){
+			document.querySelector('.notes').style.display = 'inline';
+		} else {
+			document.querySelector('.notes').style.display = 'none';
+		}
+	}, [problem]);
 
 	/**
 	 * method to manually load a problem
@@ -44,7 +55,7 @@ export default function Start() {
 		];
 		let mem = 3;
 		let time = 1;
-		let notes = 'In the first test case x = 1 is the minimum root. As s(1) = 1 and 12 + 1·1 - 2 = 0.\n\nIn the second test case x = 10 is the minimum root. As s(10) = 1 + 0 = 1 and 102 + 1·10 - 110 = 0.\n\nIn the third test case the equation has no roots.';
+		let prob_notes = 'In the first test case x = 1 is the minimum root. As s(1) = 1 and 12 + 1·1 - 2 = 0.\n\nIn the second test case x = 10 is the minimum root. As s(10) = 1 + 0 = 1 and 102 + 1·10 - 110 = 0.\n\nIn the third test case the equation has no roots.';
 
 		// update problem state
 		setProblem({
@@ -57,15 +68,8 @@ export default function Start() {
 			test_cases: cases,
 			mem_limit: mem,
 			time_limit: time,
-			notes: notes
+			notes: prob_notes
 		});
-
-		// some problems have additional notes, some don't, hide/show element accordingly
-		if (problem.notes !== ''){
-			document.querySelector('.notes').style.display = 'inline';
-		} else {
-			document.querySelector('.notes').style.display = 'none';
-		}
 	}
 
 	// update textArea when typing
@@ -141,7 +145,7 @@ export default function Start() {
 			<div className='input' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Input:</b> {problem.input}</div>
 			<div className='output' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Output:</b> {problem.output}</div>
 			<div className='limits' style={{ whiteSpace: 'pre-line' }}>Memory limit: {problem.mem_limit}, Time limit: {problem.time_limit}</div>
-			<div className='notes' style={{ display: 'none', whiteSpace: 'pre-line' }}>Notes: {problem.notes}</div>
+			<div className='notes' style={{ display: 'none', whiteSpace: 'pre-line' }}>{'\n'}<b>Notes:</b> {problem.notes}</div>
 		</div>
 		<div><p></p></div>
 		<div className='form-div'>
