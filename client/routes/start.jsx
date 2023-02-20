@@ -7,18 +7,26 @@ export default function Start() {
 	const [problem, setProblem] = useState({problem: '', input: '', output: '', notes:''});
 	const [codeStatus, setCodeStatus] = useState({running: false, correct: false});
 
-	// Load a problem upon first page load
+	/**
+	 * useEffect to load problem upon first page load
+	 */
 	useEffect(() => {
 		loadProblem();
 	}, []);
 
-	// Can reuse method to load additional problems when the next/skip button is pressed
+	/**
+	 * method to manually load a problem
+	 * first used by useEffect on first page load
+	 * used whenever a problem is completed/skipped to load the next one
+	 */
 	function loadProblem() {
+		// sample problem information (replace with full dynamic problem fetching from API)
 		let problem = 'Write a method that takes in a String, determines if the string is a palindrome or not, and finally outputs a Boolean result.';
 		let input = 'String';
 		let output = 'Boolean';
 		let notes = 'Some notes go here';
 
+		// update problem state
 		setProblem({
 			problem: problem,
 			input: input,
@@ -26,7 +34,7 @@ export default function Start() {
 			notes: notes
 		});
 
-		// Check if the current problem has any notes associated with it, show notes section if yes
+		// some problems have additional notes, some don't, hide/show element accordingly
 		if (problem.notes !== ''){
 			document.querySelector('.notes').style.display = 'inline';
 		} else {
@@ -34,21 +42,37 @@ export default function Start() {
 		}
 	}
 
-	// Update textArea when typing
+	// update textArea when typing
+	/**
+	 * update textArea as user types
+	 * @param {Object} event 
+	 */
+
 	function handleSolutionChange(event) {
 		setSolution(event.target.value);
 	}
 
 	// Button to clear textArea
+	/**
+	 * clear textArea on "clear" button press
+	 */
 	function clearSolution() {
 		setSolution('');
 	}
 
-	// Select text from textArea, simulate running code for now with timeout promises, show post-execution status
+	/**
+	 * grab text from textArea (to be replaced with proper IDE)
+	 * simulate running code using timeout promises to mimick the code taking time to run
+	 * update page with post-execution stats (test case completion, passed/failed, etc.)
+	 */
 	async function runSolution() {
 		let solution = document.querySelector('.solution').textContent;
+
+		// user actually entered something
 		if (solution !== ''){
+			// there isn't any code currently running already
 			if (!codeStatus.running) {
+				// code is now running, update test case results as code results come in
 				setCodeStatus(codeStatus.running = true);
 				console.log('Running solution...');
 				await new Promise(r => setTimeout(r, 500));
@@ -62,17 +86,22 @@ export default function Start() {
 				console.log('done!');
 				setCodeStatus(codeStatus.correct = false);
 			} else {
+				// code is currently already running
 				console.log('Existing solution already running, wait until it\'s done!!!');
 			}
+			// show post-execxution results
 			document.querySelector('.after-running').style.visibility = 'visible';
 			if (!codeStatus.correct) {
+				// failed problem
 				document.querySelector('.completed').textContent = 'Test cases failed!';
 			} else {
+				// solved problem
 				document.querySelector('.completed').textContent = 'All test cases passed!';
 				document.querySelector('.skip').style.display = 'none';
 				document.querySelector('.next').style.display = 'inline';
 			}
 		} else {
+			// no input in textArea (or the "IDE")
 			alert('No code provided!');
 		}
 	}
