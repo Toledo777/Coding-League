@@ -1,26 +1,42 @@
-import PropTypes from 'prop-types';
-import useFetch from '../hooks/useFetch';
-
 import React from "react";
-import { render } from "react-dom";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/ext-language_tools";
 
+// takes as input new code that was changed
 function onChange(newValue) {
     console.log("change", newValue);
 }
 
+const annotations = [
+    {
+      row: 3, // must be 0 based
+      column: 4, // must be 0 based
+      text: "error.message", // text to show in tooltip
+      type: "error"
+    }
+];
+
+// code editor component
 export default function Editor(props) {
     return (
         <AceEditor
             mode="javascript"
-            theme="monokai"
+            theme="dracula"
             onChange={onChange}
-            name="UNIQUE_ID_OF_DIV"
-            editorProps={{ $blockScrolling: true }}
+            name="editorComponent"
+            annotations={annotations}
+            width="800px"
+            showGutter={true}
+            editorProps={{ 
+                $blockScrolling: true,
+            }}
+            setOptions={{
+                enableBasicAutocompletion: true,
+                useWorker: true,
+            }}
         />
     );
 };
