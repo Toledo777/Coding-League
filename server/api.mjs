@@ -27,7 +27,7 @@ router.get('/hello_world', (req, res) => {
 	res.send("Hello World");
 });
 
-router.post('/answer', (req, res) => {
+router.post('/attempt', (req, res) => {
 	console.log(req.query.answer);
 	res.status(200);
 })

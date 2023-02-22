@@ -17,7 +17,14 @@ export default function Start() {
 		time_limit: 0,
 		notes: ''
 	});
-	const [codeStatus, setCodeStatus] = useState({ running: false, correct: false });
+
+	const status = {
+		running: 'running',
+		correct: 'correct',
+		incorrect: 'incorrect',
+		stopped: 'stopped'
+	}
+	const [codeStatus, setCodeStatus] = useState(status.stopped);
 
 	/**
 	 * useEffect to load problem upon first page load
@@ -91,7 +98,6 @@ export default function Start() {
 	function clearSolution() {
 		setSolution('');
 	}
-	//post answer to the server
 	/**
 	 * sends an example post request to the server, should be attached to run button
 	 */
@@ -122,7 +128,7 @@ export default function Start() {
 			// there isn't any code currently running already
 			if (!codeStatus.running) {
 				// code is now running, update test case results as code results come in
-				setCodeStatus(codeStatus.running = true);
+				setCodeStatus(status.running);
 				console.log('Running solution...');
 				await new Promise(r => setTimeout(r, 500));
 				document.querySelector('.res-img-1').src = 'assets/incorrect.png';
@@ -131,9 +137,9 @@ export default function Start() {
 				await new Promise(r => setTimeout(r, 300));
 				document.querySelector('.res-img-3').src = 'assets/correct.png';
 				await new Promise(r => setTimeout(r, 100));
-				setCodeStatus(codeStatus.running = false);
+				setCodeStatus(status.running);
 				console.log('done!');
-				setCodeStatus(codeStatus.correct = false);
+				setCodeStatus(status.correct);
 			} else {
 				// code is currently already running
 				console.log('Existing solution already running, wait until it\'s done!!!');
