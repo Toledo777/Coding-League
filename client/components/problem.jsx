@@ -18,6 +18,10 @@ export default function Problem(props) {
 				{error && error}
 				{loading && 'loading...'}
 			</h3>
+			<h3>
+				<div dangerouslySetInnerHTML={{ __html: data.id }} />
+				<div dangerouslySetInnerHTML={{ __html: data.title }} />
+			</h3>
 			<div dangerouslySetInnerHTML={{ __html: data.description }} />
 			<div dangerouslySetInnerHTML={{ __html: data.input_specification }} />
 			<div dangerouslySetInnerHTML={{ __html: data.output_specification }} />

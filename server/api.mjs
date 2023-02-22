@@ -29,6 +29,7 @@ router.get('/hello_world', (req, res) => {
 
 router.post('/answer', (req, res) => {
 	console.log(req.query.answer);
+	res.status(200);
 })
 
 export default router;
