@@ -96,12 +96,17 @@ export default function Start() {
 	 * sends an example post request to the server, should be attached to run button
 	 */
 	async function postSolution() {
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ data: 'example post' })
-		};
-		fetch('/api/answer?answer=' + solution, requestOptions);
+		if (solution !== '') {
+			const requestOptions = {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ data: 'example post' })
+			};
+			fetch('/api/answer?answer=' + solution, requestOptions);
+		}
+		else {
+			alert('No code provided!');
+		}
 	}
 
 	/**
@@ -109,7 +114,7 @@ export default function Start() {
 	 * simulate running code using timeout promises to mimick the code taking time to run
 	 * update page with post-execution stats (test case completion, passed/failed, etc.)
 	 */
-	async function runSolution() {
+	async function compileSolution() {
 		let solution = document.querySelector('.solution').textContent;
 
 		// user actually entered something
@@ -168,8 +173,9 @@ export default function Start() {
 				</textarea>
 			</div>
 			<div className='form-buttons'>
-				<button className='run' onClick={runSolution}>Run</button>
+				<button className='compile' onClick={compileSolution}>Compile</button>
 				<button className='clear' onClick={clearSolution}>Clear</button>
+				<button className='submit' onClick={postSolution}>Submit</button>
 			</div>
 		</div>
 		<div className='status'>
