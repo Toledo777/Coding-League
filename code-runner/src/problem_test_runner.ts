@@ -13,7 +13,7 @@ type ProblemAttemptResult = {
     all_ok: boolean,
     total_ran: number,
     failures: number,
-    test_results: TestRunResult[],
+    individual_tests: TestRunResult[],
 }
 
 function createTestingPostfix(test_input: string, result_file: string) {
@@ -72,16 +72,19 @@ async function runTestCase(code: string, { input, output: expected_out }: TestCa
     return { ok, stderr, stdout, answer };
 }
 
+function processTestResults(results: TestRunResult[]): ProblemAttemptResult {
+    const failures = results.filter(res => !res.ok).length;
+    return {
+        failures,
+        all_ok: failures == 0,
+        total_ran: results.length,
+        individual_tests: results
+    };
+}
+
 export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
-    const test_results: TestRunResult[] = [];
+    const tests = problem.testcases.map(test => runTestCase(code, test));
+    const test_results: TestRunResult[] = await Promise.all(tests);
 
-    for (const test of problem.testcases) {
-        test_results.push(await runTestCase(code, test));
-    }
-
-    const failures = test_results.filter(res => !res.ok).length;
-    const all_ok = failures == 0;
-    const total_ran = test_results.length;
-
-    return { all_ok, total_ran, failures, test_results };
+    return processTestResults(test_results);
 }
