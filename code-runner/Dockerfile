@@ -9,5 +9,5 @@ USER deno
 ADD ./src .
 
 RUN deno cache index.ts --unstable
-
+# TODO: Replace allow all with specific permissions for security
 cmd ["run", "--allow-all", "index.ts"]
