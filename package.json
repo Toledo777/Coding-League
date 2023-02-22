@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint": "eslint --fix --ext .mjs .",
     "dev": "mkdir dist & nodemon --ignore dist server/dev.mjs",
     "start": "node server/prod.mjs"
@@ -24,11 +24,13 @@
     "esbuild": "^0.17.5",
     "eslint": "^8.33.0",
     "eslint-plugin-react": "^7.32.2",
+    "jest": "^29.4.3",
     "mockingoose": "^2.16.2",
     "nodemon": "^2.0.20",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.7.0"
+    "react-router-dom": "^6.7.0",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "ace-builds": "^1.15.2",
@@ -36,5 +38,7 @@
     "mongoose": "^6.9.1",
     "prop-types": "^15.8.1",
     "react-ace": "^10.1.0"
-  }
+  },
+
+  "type": "module"
 }

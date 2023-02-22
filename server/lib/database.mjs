@@ -1,28 +1,28 @@
-import mongoose from "mongoose";
-import * as dotenv from "dotenv";
+import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 // database url
 const mongoDB = process.env.ATLAS_URI;
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false);
 
 
 // database connection function
 async function dbConnect() {
-    // check if ATLAS_URI exist
+	// check if ATLAS_URI exist
 	if (!mongoDB) {
-		console.log("Error: Please add ATLAS_URI to .env file");
-        console.log(mongoDB);
+		console.log('Error: Please add ATLAS_URI to .env file');
+		console.log(mongoDB);
 		process.exit();
 	}
 	else {
 		try {
 			// connect with URI
 			await mongoose.connect(mongoDB);
-			console.log("Connected to database");
-		} 
-        catch(error) {
-			console.log("Error: Couldn't connect");
+			console.log('Connected to database');
+		}
+		catch (error) {
+			console.log('Error: Couldn\'t connect');
 			process.exit();
 		}
 	}

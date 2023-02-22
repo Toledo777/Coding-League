@@ -1,27 +1,30 @@
 import React from "react";
-import AceEditor from "react-ace";
+import {default as Ace} from "react-ace";
 
+const AceEditor = Ace.default;
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/ext-language_tools";
 
-// takes as input new code that was changed
-function onChange(newValue) {
+// code editor component
+export default function Editor(props) {
+  console.log(AceEditor)
+    // takes as input new code that was changed
+  function onChange(newValue) {
     console.log("change", newValue);
-}
+  }
 
-const annotations = [
+  const annotations = [
     {
       row: 3, // must be 0 based
       column: 4, // must be 0 based
       text: "error.message", // text to show in tooltip
       type: "error"
     }
-];
+  ];
 
-// code editor component
-export default function Editor(props) {
     return (
+      <div>
         <AceEditor
             mode="javascript"
             theme="dracula"
@@ -38,5 +41,6 @@ export default function Editor(props) {
                 useWorker: true,
             }}
         />
+      </div>
     );
 };
