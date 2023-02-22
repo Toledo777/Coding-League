@@ -4,10 +4,15 @@ import useFetch from '../hooks/useFetch';
 
 export default function Problem(props) {
 
+	let error, loading, data;
+	let specification;
 
-	const [error, loading, data] = useFetch('/api/problem/random?range=' + props.range, 1, []);
 
+	for (let key in props) {
+		specification = `${key}?${key}=${props[key]}`
+	}
 
+	[error, loading, data] = useFetch('api/problem/' + specification, 1, []);
 
 	return (
 		<div>
@@ -25,5 +30,5 @@ export default function Problem(props) {
 	);
 }
 Problem.propTypes = {
-	range: PropTypes.string.isRequired
+	random: PropTypes.string.isRequired
 };
