@@ -1,4 +1,5 @@
 import { allocateProblemTestProcessFiles, TestRunnerFiles } from "./problem_test_allocator.ts";
+import { readTextFileWithLimit } from "./safe_reader.ts";
 import { Problem, TestCase } from "./types/problem.d.ts";
 
 type TestRunResult = {
@@ -59,11 +60,10 @@ async function runTestCase(code: string, { input, output: expected_out }: TestCa
 
     clearTimeout(kill_timeout);
 
-    // TODO: Fix potential for massive output being created that will crash the server
     const [stdout, stderr, answer] = ([
-        await Deno.readTextFile(files.debug_out),
-        await Deno.readTextFile(files.error_out),
-        await Deno.readTextFile(files.solution_out),
+        await readTextFileWithLimit(files.debug_out, 2048),
+        await readTextFileWithLimit(files.error_out, 2048),
+        await readTextFileWithLimit(files.solution_out, 2048),
     ]);
 
     // TODO: Validate that this replacement is valid for all tests.
