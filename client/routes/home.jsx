@@ -7,7 +7,6 @@ export default function Home() {
 		<div>
 			<h1>Home!</h1>
 			<Problem range='5'></Problem>
-			<Editor range='4'/>
 		</div>
 	);
 }
