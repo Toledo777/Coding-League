@@ -20,4 +20,4 @@ const routes: Record<string, MatchHandler> = {
 
 console.log("Listening!");
 
-await serve(router(routes), { addr: ":8080" });
+await serve(router(routes), { addr: ":8000" });
