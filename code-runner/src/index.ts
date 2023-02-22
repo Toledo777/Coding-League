@@ -9,7 +9,14 @@ type TestAttemptRequest = {
 }
 
 const routes: Record<string, MatchHandler> = {
-	"POST@/test_solution": async (req) => {
+	"POST@/debug_problem": async (req) => {
+		const { problem_id, code }: TestAttemptRequest = await req.json();
+		const problem_data = await fetchProblemById(problem_id);
+		const result = await attemptProblem(code, problem_data);
+		return Response.json(result);
+	},
+
+	"POST@/attempt_problem": async (req) => {
 		const { problem_id, code }: TestAttemptRequest = await req.json();
 		const problem_data = await fetchProblemById(problem_id);
 		const result = await attemptProblem(code, problem_data);
