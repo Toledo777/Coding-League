@@ -4,8 +4,8 @@ import { Problem, TestCase } from "./types/problem.d.ts";
 type TestRunResult = {
     ok: boolean,
     stdout: string,
-    stderr: string
-    solution: string,
+    stderr: string,
+    answer: string,
 }
 
 type ProblemAttemptResult = {
@@ -45,26 +45,31 @@ async function createProcess(code: string, files: TestRunnerFiles): Promise<Deno
 }
 
 
-async function runTestCase(code: string, { input, output: expected_out }: TestCase): Promise<TestRunResult> {
+async function runTestCase(code: string, { input, output: expected_out }: TestCase, timeout = 2000): Promise<TestRunResult> {
     const files = await allocateProblemTestProcessFiles();
     const postfix = createTestingPostfix(input, files.solution_out);
 
     const process = await createProcess(code + postfix, files);
 
+    // Make sure the process is killed if it takes too long
+    const kill_timeout = setTimeout(() => process.kill(), timeout);
+
     // Wait until status is received before reading output files.
     const status = await process.status();
 
-    const [stdout, stderr, solution] = ([
+    clearTimeout(kill_timeout);
+
+    // TODO: Fix potential for massive output being created that will crash the server
+    const [stdout, stderr, answer] = ([
         await Deno.readTextFile(files.debug_out),
         await Deno.readTextFile(files.error_out),
         await Deno.readTextFile(files.solution_out),
     ]);
 
-
     // TODO: Validate that this replacement is valid for all tests.
-    const ok = status.success && solution == expected_out.replaceAll("\n", "");
+    const ok = status.success && answer == expected_out.replaceAll("\n", "");
 
-    return { ok, stderr, stdout, solution };
+    return { ok, stderr, stdout, answer };
 }
 
 export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
