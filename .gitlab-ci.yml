@@ -17,11 +17,6 @@ build-frontend:
   script:
     - npm install
     - npm run build
-  only:
-    refs:
-      - merge_requests
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
   artifacts:
     expire_in: 1 days
     when: on_success
