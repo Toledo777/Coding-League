@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import Problem from '../components/problem';
+import Problem from '../components/problem'; // unused for now until a full problem is fetched from the DB and returned through this component
 
 export default function Start() {
 	const [solution, setSolution] = useState('');
@@ -142,10 +142,10 @@ export default function Start() {
 			{/* <Problem className='title' range='5'/> */}
 			<h1 className='title'>Proglem {problem._id}: {problem.title}</h1>
 			<div className='instructions' style={{ whiteSpace: 'pre-line' }}>{problem.desc}</div>
-			<div className='input' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Input:</b> {problem.input}</div>
-			<div className='output' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Output:</b> {problem.output}</div>
-			<div className='limits' style={{ whiteSpace: 'pre-line' }}>Memory limit: {problem.mem_limit}, Time limit: {problem.time_limit}</div>
-			<div className='notes' style={{ display: 'none', whiteSpace: 'pre-line' }}>{'\n'}<b>Notes:</b> {problem.notes}</div>
+			<div className='input' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Input:</b>{'\n'}{problem.input}</div>
+			<div className='output' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Output:</b>{'\n'}{problem.output}</div>
+			<div className='limits' style={{ whiteSpace: 'pre-line' }}>{'\n'}<b>Memory limit:</b> {problem.mem_limit}{'\n'}<b>Time limit:</b> {problem.time_limit}</div>
+			<div className='notes' style={{ display: 'none', whiteSpace: 'pre-line' }}>{'\n'}<b>Notes:</b>{'\n'}{problem.notes}</div>
 		</div>
 		<div><p></p></div>
 		<div className='form-div'>
