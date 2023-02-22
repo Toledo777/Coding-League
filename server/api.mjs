@@ -28,7 +28,7 @@ router.get('/hello_world', (req, res) => {
 });
 
 router.post('/answer', (req, res) => {
-	console.log('posted');
+	console.log(req.query.answer);
 })
 
 export default router;
