@@ -35,7 +35,7 @@ export async function watch() {
 	let ctx = await getCtxDev();
 
 	let start = performance.now();
-	await build(ctx);
+	await ctx.rebuild();
 	console.log(`Build done in : ${performance.now() - start}ms`);
 
 	console.log('Rebuilding on change...');
