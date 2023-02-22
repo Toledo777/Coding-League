@@ -7,12 +7,17 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --text-color: #FFF;
+        
+    }
+    nav {
+        background-color: darkslategray;
     }
 }
 
 @media (prefers-color-scheme: light) {
     :root {
         --text-color: #000;
+        background-color: white;
     }
 }
 
@@ -22,14 +27,19 @@
 }
 
 
-.editor {
+.editor{
   
 }
 
 
 /* styling nav bar links */
-a {
+nav a {
     margin: 0 15px;
     color: white;
     font-size: 2em;
+    text-decoration: none;
+}
+
+button {
+    margin: 5 10px;
 }

@@ -41,7 +41,7 @@ export default function Editor(props) {
                 useWorker: true,
             }}
         />
-        <div>
+        <div className="editorButtons">
           <button>Run</button>
           <button>Submit</button>
         </div>
