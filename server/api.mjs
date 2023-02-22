@@ -23,8 +23,12 @@ router.get('/problem/tags', async (req, res) => {
 	res.json(response[1]);
 })
 
-router.get("/hello_world", (req, res) => {
+router.get('/hello_world', (req, res) => {
 	res.send("Hello World");
 });
+
+router.post('/answer', (req, res) => {
+	console.log('posted');
+})
 
 export default router;

@@ -6,12 +6,10 @@ export default function Problem(props) {
 
 	let error, loading, data;
 	let specification;
-
-
+	//stratgy pattern, depending on prop specification, api url will change
 	for (let key in props) {
 		specification = `${key}?${key}=${props[key]}`
 	}
-
 	[error, loading, data] = useFetch('api/problem/' + specification, 1, []);
 
 	return (
