@@ -60,8 +60,8 @@ deploy:
     - "az webapp config appsettings set --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --settings ATLAS_URI=$ATLAS_URI"
     - "az webapp deployment source config-zip --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --src deploy.zip"
 
-deploy:
-  stage: deploy-indev
+deploy-indev:
+  stage: deploy
   image: mcr.microsoft.com/azure-cli
   dependencies:
     - build-frontend
