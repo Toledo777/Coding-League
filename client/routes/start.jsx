@@ -168,7 +168,7 @@ export default function Start() {
 				</textarea>
 			</div>
 			<div className='form-buttons'>
-				<button className='run' onClick={postSolution}>Run</button>
+				<button className='run' onClick={runSolution}>Run</button>
 				<button className='clear' onClick={clearSolution}>Clear</button>
 			</div>
 		</div>
