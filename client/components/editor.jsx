@@ -24,7 +24,7 @@ export default function Editor(props) {
   ];
 
     return (
-      <div>
+      <div className="editor">
         <AceEditor
             mode="javascript"
             theme="dracula"
@@ -41,6 +41,10 @@ export default function Editor(props) {
                 useWorker: true,
             }}
         />
+        <div>
+          <button>Run</button>
+          <button>Submit</button>
+        </div>
       </div>
     );
 };

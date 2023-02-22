@@ -1,6 +1,7 @@
 :root {
     font-family: Arial, Helvetica, sans-serif;
     color-scheme: light dark;
+    margin: 10px 45px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,4 +14,22 @@
     :root {
         --text-color: #000;
     }
+}
+
+/* styling for problem description + editor */
+.problem-content {
+    display: flex;
+}
+
+
+.editor {
+  
+}
+
+
+/* styling nav bar links */
+a {
+    margin: 0 15px;
+    color: white;
+    font-size: 2em;
 }
