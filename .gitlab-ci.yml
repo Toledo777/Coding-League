@@ -29,19 +29,6 @@ build-frontend:
       - ./dist
       - ./node_modules
 
-# test:
-#   stage: test
-#   only:
-#     refs:
-#       - merge_requests
-#     variables:
-#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
-#   dependencies:
-#     - build-backend
-#   script:
-#     - cd server
-#     - npm run test
-
 deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli

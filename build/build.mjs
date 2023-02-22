@@ -1,3 +1,3 @@
-import { singleBuild } from '../build/utils.mjs';
+import { build } from '../build/utils.mjs';
 
-await singleBuild();
+await build();
