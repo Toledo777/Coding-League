@@ -34,10 +34,9 @@ deploy:
   image: mcr.microsoft.com/azure-cli
   dependencies:
     - build-frontend
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "staging"'
-      when: always
-    - when: never
+  only:
+    changes:
+      - staging
   before_script:
     - "az login --allow-no-subscriptions --service-principal -u $AZ_SP_ID -p $AZ_SP_SECRET -t $AZ_TENANT"
   script:
