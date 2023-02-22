@@ -1,11 +1,15 @@
 import express from 'express';
 const router = express.Router();
+import { problem } from './models/problem.mjs';
 
 
-router.get('/problem', (req, res) => {
-	let x = (Math.floor(Math.random() * (1, req.query.range)) + 1);
-	console.log(x);
-	res.json({ id: x, text: 'sample problem ' + x });
+router.get('/problem/random', async (req, res) => {
+	const response = await problem.find();
+	res.json(response[1]);
+});
+
+router.get("/hello_world", (req, res) => {
+	res.send("Hello World");
 });
 
 export default router;
