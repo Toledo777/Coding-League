@@ -29,30 +29,6 @@ build-frontend:
       - ./dist
       - ./node_modules
 
-# build-backend:
-#   stage: build
-#   cache:
-#     key:
-#       prefix: 'backend'
-#       files:
-#         - 'server/package-lock.json'
-#     paths:
-#       - 'server/node_modules/'
-#   script:
-#     - cd server
-#     - npm install
-#   only:
-#     refs:
-#       - merge_requests
-#     variables:
-#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
-#   artifacts:
-#     expire_in: 1 days
-#     when: on_success
-#     paths:
-#       - server/node_modules
-
-
 # test:
 #   stage: test
 #   only:
@@ -71,12 +47,10 @@ deploy:
   image: mcr.microsoft.com/azure-cli
   dependencies:
     - build-frontend
-  #   - build-backend
   only:
     refs:
       - merge_requests
     variables:
-      # - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
       - $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "staging"
   before_script:
     - "az login --allow-no-subscriptions --service-principal -u $AZ_SP_ID -p $AZ_SP_SECRET -t $AZ_TENANT"
@@ -87,11 +61,10 @@ deploy:
     - "az webapp deployment source config-zip --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --src deploy.zip"
 
 deploy:
-  stage: deploy
+  stage: deploy-indev
   image: mcr.microsoft.com/azure-cli
   dependencies:
     - build-frontend
-  #   - build-backend
   only:
     refs:
       - merge_requests
