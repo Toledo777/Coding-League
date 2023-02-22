@@ -14,13 +14,13 @@ export default function Problem(props) {
 			<h3>
 				{error && error}
 				{loading && 'loading...'}
-				<div dangerouslySetInnerHTML={{ __html: data.description }} />
-				<div dangerouslySetInnerHTML={{ __html: data.input_specification }} />
-				<div dangerouslySetInnerHTML={{ __html: data.output_specification }} />
-				<div dangerouslySetInnerHTML={{ __html: data.memory_limit }} />
-				<div dangerouslySetInnerHTML={{ __html: data.time_limit }} />
-				<div dangerouslySetInnerHTML={{ __html: data.note }} />
 			</h3>
+			<div dangerouslySetInnerHTML={{ __html: data.description }} />
+			<div dangerouslySetInnerHTML={{ __html: data.input_specification }} />
+			<div dangerouslySetInnerHTML={{ __html: data.output_specification }} />
+			<div dangerouslySetInnerHTML={{ __html: data.memory_limit }} />
+			<div dangerouslySetInnerHTML={{ __html: data.time_limit }} />
+			<div dangerouslySetInnerHTML={{ __html: data.note }} />
 		</div>
 	);
 }
