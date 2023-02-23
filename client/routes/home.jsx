@@ -5,7 +5,7 @@ export default function Home() {
 	return (
 		<div>
 			<h1>Home!</h1>
-			<Problem id='233B'></Problem>
+			<Problem tags="math"></Problem>
 		</div>
 	);
 }
