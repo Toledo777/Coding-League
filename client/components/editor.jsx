@@ -23,28 +23,31 @@ export default function Editor(props) {
     }
   ];
 
-    return (
-      <div className="editor">
-        <AceEditor
-            mode="javascript"
-            theme="dracula"
-            onChange={onChange}
-            name="editorComponent"
-            annotations={annotations}
-            width="800px"
-            showGutter={true}
-            editorProps={{ 
-                $blockScrolling: true,
-            }}
-            setOptions={{
-                enableBasicAutocompletion: true,
-                useWorker: true,
-            }}
-        />
-        <div className="editorButtons">
-          <button>Run</button>
-          <button>Submit</button>
-        </div>
+  function handleRun() {
+    console.log("Running code");
+  }
+  return (
+    <div className="editor">
+      <AceEditor
+          mode="javascript"
+          theme="dracula"
+          onChange={onChange}
+          name="editorComponent"
+          annotations={annotations}
+          width="800px"
+          showGutter={true}
+          editorProps={{ 
+              $blockScrolling: true,
+          }}
+          setOptions={{
+              enableBasicAutocompletion: true,
+              useWorker: true,
+          }}
+      />
+      <div className="editorButtons">
+        <button>Run</button>
+        <button>Submit</button>
       </div>
-    );
+    </div>
+  );
 };

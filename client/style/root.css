@@ -26,10 +26,14 @@
     display: flex;
 }
 
-
-.editor{
-  
+.description{
+    margin: 5px;
 }
+
+nav{
+    padding: 5px 10px;
+}
+
 
 
 /* styling nav bar links */
