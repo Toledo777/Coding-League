@@ -7,12 +7,12 @@
 - Robert Gutkowski
 
 ## Description
-Project League is a full-stack web application which allows users to partake in coding challenges to improve and expand their own skills, or compete with others. 
+Project League is a full-stack web application which allows users to partake in JavaScript coding challenges with the goal of improving and expanding their own skills in the JavaScript language. Users can take on these challenges solo or compete with others on a leaderboard.
 
 Features (so far):
-- It uses a combination of web scraping and setup script to populate the problems into MongoDB
-- Has a web page which fetches and load a coding problem. The coding problem page will have an IDE for users to submit their answer with JavaScript code.
-- Answer which gets submitted will be run by a debugger to determine if it passes the test cases.
+- It uses a combination of web scraping and a Java setup script to populate the scraped coding problems into MongoDB
+- Contains a web page which fetches and loads a coding problem from the MongoDB. The coding problem page will have an IDE for users to submit their solution. Solutions are written in JavaScript code.
+- One submitted, user solution will be run by a debugger to determine if it passes certain test cases that are unique to each problem.
   - If pass: move onto a next coding problem.
   - If fail: fix the answer and re-submit.
 
@@ -26,7 +26,7 @@ Features (so far):
 - Front-end tools
   - react-route
 - Back-end tools
-  - jest, supertest, mongoose, mockingoose
+  - jest, supertest, mongoose, mockingoose, eslint
 ## Getting Started
 
 ```sh
@@ -35,6 +35,10 @@ npm i
 
 # Start the development server with auto reload on change
 npm run dev
+
+# Process for starting production server
+npm run build
+npm run start
 ```
 
 ## Azure URL
