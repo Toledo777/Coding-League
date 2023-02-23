@@ -33,6 +33,9 @@ build-frontend:
       - 'node_modules/'
   script:
     - npm run build
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging" || $CI_COMMIT_BRANCH == "staging"
+      when: on_success
   artifacts:
     expire_in: 1 days
     when: on_success
@@ -46,8 +49,9 @@ deploy:
   dependencies:
     - eslint
     - build-frontend
-  only:
-    - staging
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+      when: on_success
   before_script:
     - "az login --allow-no-subscriptions --service-principal -u $AZ_SP_ID -p $AZ_SP_SECRET -t $AZ_TENANT"
   script:
@@ -62,11 +66,9 @@ deploy-indev:
   dependencies:
     - eslint
     - build-frontend
-  only:
-    refs:
-      - merge_requests
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
+      when: on_success
   before_script:
     - "az login --allow-no-subscriptions --service-principal -u $AZ_SP_ID -p $AZ_SP_SECRET -t $AZ_TENANT"
   script:
