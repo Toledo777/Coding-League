@@ -12,12 +12,12 @@ router.get('/problem/random', async (req, res) => {
 router.get('/problem/id', async (req, res) => {
 	const response = await problem.findById({ _id: req.query.id });
 	res.json(response);
-})
+});
 
 router.get('/problem/title', async (req, res) => {
 	const response = await problem.findOne({ title: req.query.title });
 	res.json(response);
-})
+});
 //preliminary difficulty implementation
 router.get('/problem/tags', async (req, res) => {
 	// if (req.query.difficulty) {
@@ -30,15 +30,15 @@ router.get('/problem/tags', async (req, res) => {
 	//finding multiple tags possible with $in
 	const response = await problem.find({ tags: { $in: ['\n    ' + req.query.tags + '\n', '\n    ' + '*2300' + '\n'] } });
 	res.json(response[0]);
-})
+});
 
 router.get('/hello_world', (req, res) => {
-	res.send("Hello World");
+	res.send('Hello World');
 });
 
 router.post('/answer', (req, res) => {
 	console.log(req.query.answer);
 	res.status(200);
-})
+});
 
 export default router;

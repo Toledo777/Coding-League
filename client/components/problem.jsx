@@ -7,7 +7,7 @@ export default function Problem(props) {
 	let specification;
 	//stratgy pattern, depending on prop specification, api url will change
 	for (let key in props) {
-		specification = `${key}?${key}=${props[key]}`
+		specification = `${key}?${key}=${props[key]}`;
 	}
 	//preliminary difficulty implementation
 	let extra = '&difficulty=10';
