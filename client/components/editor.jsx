@@ -10,6 +10,7 @@ import "ace-builds/src-noconflict/ext-language_tools";
 export default function Editor(props) {
   console.log(AceEditor)
     // takes as input new code that was changed
+    
   function onChange(newValue) {
     console.log("change", newValue);
   }
@@ -23,8 +24,14 @@ export default function Editor(props) {
     }
   ];
 
+  // event handler to handle code running
   function handleRun() {
     console.log("Running code");
+  }
+
+  // event handler to handle code submission
+  function handleSubmit() {
+    console.log("Submit code");
   }
   return (
     <div className="editor">
@@ -45,8 +52,8 @@ export default function Editor(props) {
           }}
       />
       <div className="editorButtons">
-        <button>Run</button>
-        <button>Submit</button>
+        <button onClick={handleRun}>Run</button>
+        <button onClick={handleSubmit}>Submit</button>
       </div>
     </div>
   );
