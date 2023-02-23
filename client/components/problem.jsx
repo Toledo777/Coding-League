@@ -4,16 +4,22 @@ import useFetch from '../hooks/useFetch';
 
 export default function Problem(props) {
 
-
-	const [error, loading, data] = useFetch('/api/problem/random?range=' + props.range, 1, []);
-
-
+	let specification;
+	//stratgy pattern, depending on prop specification, api url will change
+	for (let key in props) {
+		specification = `${key}?${key}=${props[key]}`
+	}
+	let [error, loading, data] = useFetch('api/problem/' + specification, 1, []);
 
 	return (
 		<div>
 			<h3>
 				{error && error}
 				{loading && 'loading...'}
+			</h3>
+			<h3>
+				<div dangerouslySetInnerHTML={{ __html: data.id }} />
+				<div dangerouslySetInnerHTML={{ __html: data.title }} />
 			</h3>
 			<div dangerouslySetInnerHTML={{ __html: data.description }} />
 			<div dangerouslySetInnerHTML={{ __html: data.input_specification }} />
@@ -25,5 +31,5 @@ export default function Problem(props) {
 	);
 }
 Problem.propTypes = {
-	range: PropTypes.string.isRequired
+	random: PropTypes.string.isRequired
 };

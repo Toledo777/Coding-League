@@ -5,7 +5,7 @@ export default function Home() {
 	return (
 		<div>
 			<h1>Home!</h1>
-			<Problem range='5'></Problem>
+			<Problem random='5'></Problem>
 		</div>
 	);
 }

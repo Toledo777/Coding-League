@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Problem from '../components/problem'; // unused for now until a full problem is fetched from the DB and returned through this component
+import useFetch from '../hooks/useFetch';
 
 export default function Start() {
 	const [solution, setSolution] = useState('');
@@ -14,8 +15,16 @@ export default function Start() {
 		test_cases: [],
 		mem_limit: 0,
 		time_limit: 0,
-		notes: ''});
-	const [codeStatus, setCodeStatus] = useState({running: false, correct: false});
+		notes: ''
+	});
+
+	const status = {
+		running: 'running',
+		stopped: 'stopepd',
+		correct: 'correct',
+		incorrect: 'incorrect'
+	}
+	const [codeStatus, setCodeStatus] = useState(status.stopped);
 
 	/**
 	 * useEffect to load problem upon first page load
@@ -28,7 +37,7 @@ export default function Start() {
 	 * useEffect to show/hide notes depending on if current problem has them or not
 	 */
 	useEffect(() => {
-		if (problem.notes !== ''){
+		if (problem.notes !== '') {
 			document.querySelector('.notes').style.display = 'inline';
 		} else {
 			document.querySelector('.notes').style.display = 'none';
@@ -49,9 +58,9 @@ export default function Start() {
 		let input = 'A single line contains integer n (1 ≤ n ≤ 1018) — the equation parameter.\n\nPlease, do not use the %lld specifier to read or write 64-bit integers in С++. It is preferred to use cin, cout streams or the %I64d specifier.';
 		let output = 'Print -1, if the equation doesn\'t have integer positive roots. Otherwise print such smallest integer x (x > 0), that the equation given in the statement holds.';
 		let cases = [
-			{input: 2, output: 1},
-			{input: 110, output: 10},
-			{input: 4, output: -1}
+			{ input: 2, output: 1 },
+			{ input: 110, output: 10 },
+			{ input: 4, output: -1 }
 		];
 		let mem = 3;
 		let time = 1;
@@ -89,21 +98,37 @@ export default function Start() {
 	function clearSolution() {
 		setSolution('');
 	}
+	/**
+	 * sends an example post request to the server, should be attached to run button
+	 */
+	async function postSolution() {
+		if (solution !== '') {
+			const requestOptions = {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ data: 'example post' })
+			};
+			fetch('/api/answer?answer=' + solution, requestOptions);
+		}
+		else {
+			alert('No code provided!');
+		}
+	}
 
 	/**
 	 * grab text from textArea (to be replaced with proper IDE)
 	 * simulate running code using timeout promises to mimick the code taking time to run
 	 * update page with post-execution stats (test case completion, passed/failed, etc.)
 	 */
-	async function runSolution() {
+	async function compileSolution() {
 		let solution = document.querySelector('.solution').textContent;
 
 		// user actually entered something
-		if (solution !== ''){
+		if (solution !== '') {
 			// there isn't any code currently running already
 			if (!codeStatus.running) {
 				// code is now running, update test case results as code results come in
-				setCodeStatus(codeStatus.running = true);
+				setCodeStatus(status.running);
 				console.log('Running solution...');
 				await new Promise(r => setTimeout(r, 500));
 				document.querySelector('.res-img-1').src = 'assets/incorrect.png';
@@ -112,9 +137,9 @@ export default function Start() {
 				await new Promise(r => setTimeout(r, 300));
 				document.querySelector('.res-img-3').src = 'assets/correct.png';
 				await new Promise(r => setTimeout(r, 100));
-				setCodeStatus(codeStatus.running = false);
+				setCodeStatus(status.running);
 				console.log('done!');
-				setCodeStatus(codeStatus.correct = false);
+				setCodeStatus(status.incorrect);
 			} else {
 				// code is currently already running
 				console.log('Existing solution already running, wait until it\'s done!!!');
@@ -154,8 +179,9 @@ export default function Start() {
 				</textarea>
 			</div>
 			<div className='form-buttons'>
-				<button className='run' onClick={runSolution}>Run</button>
+				<button className='compile' onClick={compileSolution}>Compile</button>
 				<button className='clear' onClick={clearSolution}>Clear</button>
+				<button className='submit' onClick={postSolution}>Submit</button>
 			</div>
 		</div>
 		<div className='status'>
