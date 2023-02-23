@@ -1,12 +1,29 @@
 image: node:latest
 
 stages:
+  - lint
   - build
   # - test
   - deploy
 
+before_script:
+  - npm i
+
+eslint:
+  stage: lint
+  script:
+   - npm run lint
+  rules:
+  - changes:
+    - build/*
+    - client/*
+    - server/*
+    - .gitlab-ci.yml
+
 build-frontend:
   stage: build
+  dependencies:
+    - eslint
   cache:
     key:
       prefix: 'frontend'
@@ -15,7 +32,6 @@ build-frontend:
     paths:
       - 'node_modules/'
   script:
-    - npm install
     - npm run build
   artifacts:
     expire_in: 1 days
@@ -28,6 +44,7 @@ deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
   dependencies:
+    - eslint
     - build-frontend
   only:
     - staging
@@ -43,6 +60,7 @@ deploy-indev:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
   dependencies:
+    - eslint
     - build-frontend
   only:
     refs:
