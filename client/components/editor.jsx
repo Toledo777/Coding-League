@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {default as Ace} from "react-ace";
 
 const AceEditor = Ace.default;
@@ -8,12 +8,12 @@ import "ace-builds/src-noconflict/ext-language_tools";
 
 // code editor component
 export default function Editor(props) {
-  console.log(AceEditor)
-    // takes as input new code that was changed
-    
-  function onChange(newValue) {
-    console.log("change", newValue);
-  }
+  const editorRef = useRef();
+
+  // takes as input new code that was changed
+  // function onChange(newValue) {
+  //   console.log("change", newValue);
+  // }
 
   const annotations = [
     {
@@ -27,19 +27,23 @@ export default function Editor(props) {
   // event handler to handle code running
   function handleRun() {
     console.log("Running code");
+    let problemCode = editorRef.current.editor.getValue();
   }
 
   // event handler to handle code submission
   function handleSubmit() {
     console.log("Submit code");
+    let problemCode = editorRef.current.editor.getValue();
   }
+
   return (
     <div className="editor">
       <AceEditor
+          ref={editorRef}
           mode="javascript"
           theme="dracula"
-          onChange={onChange}
-          name="editorComponent"
+          // onChange={onChange}
+          name="aceEditorComponent"
           annotations={annotations}
           width="800px"
           showGutter={true}
