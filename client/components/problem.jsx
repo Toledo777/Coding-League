@@ -9,7 +9,8 @@ export default function Problem(props) {
 	for (let key in props) {
 		specification = `${key}?${key}=${props[key]}`
 	}
-	let [error, loading, data] = useFetch('api/problem/' + specification, 1, []);
+	let extra = '&difficulty=10';
+	let [error, loading, data] = useFetch('api/problem/' + specification + extra, 1, []);
 
 	return (
 		<div>
@@ -18,7 +19,7 @@ export default function Problem(props) {
 				{loading && 'loading...'}
 			</h3>
 			<h3>
-				<div dangerouslySetInnerHTML={{ __html: data.id }} />
+				<div dangerouslySetInnerHTML={{ __html: data._id }} />
 				<div dangerouslySetInnerHTML={{ __html: data.title }} />
 			</h3>
 			<div dangerouslySetInnerHTML={{ __html: data.description }} />
@@ -26,10 +27,10 @@ export default function Problem(props) {
 			<div dangerouslySetInnerHTML={{ __html: data.output_specification }} />
 			<div dangerouslySetInnerHTML={{ __html: data.memory_limit }} />
 			<div dangerouslySetInnerHTML={{ __html: data.time_limit }} />
-			<div dangerouslySetInnerHTML={{ __html: data.note }} />
+			<div dangerouslySetInnerHTML={{ __html: data.notes }} />
 		</div>
 	);
 }
 Problem.propTypes = {
-	random: PropTypes.string.isRequired
+	random: PropTypes.string
 };
