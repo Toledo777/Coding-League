@@ -1,10 +1,10 @@
 import express from 'express';
 const router = express.Router();
 import { problem } from './models/problem.mjs';
-let id = '233B'
+
 
 router.get('/problem/random', async (req, res) => {
-	const response = await problem.findById({ _id: req.body.id });
+	const response = await problem.find({});
 	res.json(response);
 });
 
@@ -17,7 +17,7 @@ router.get('/problem/title', async (req, res) => {
 	const response = await problem.find({});
 	res.json(response[0]);
 })
-
+//preliminary difficulty implementation
 router.get('/problem/tags', async (req, res) => {
 	if (req.query.difficulty) {
 		console.log('there is difficulty range');

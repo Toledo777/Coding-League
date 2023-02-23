@@ -9,6 +9,7 @@ export default function Problem(props) {
 	for (let key in props) {
 		specification = `${key}?${key}=${props[key]}`
 	}
+	//preliminary difficulty implementation
 	let extra = '&difficulty=10';
 	let [error, loading, data] = useFetch('api/problem/' + specification + extra, 1, []);
 
