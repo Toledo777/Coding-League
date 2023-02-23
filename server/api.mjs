@@ -5,7 +5,7 @@ import { problem } from './models/problem.mjs';
 
 router.get('/problem/random', async (req, res) => {
 	const response = await problem.find({});
-	res.json(response);
+	res.json(response[0]);
 });
 
 router.get('/problem/id', async (req, res) => {
