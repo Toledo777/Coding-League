@@ -10,10 +10,11 @@ import "ace-builds/src-noconflict/ext-language_tools";
 export default function Editor(props) {
   const editorRef = useRef();
 
-  // takes as input new code that was changed
-  // function onChange(newValue) {
-  //   console.log("change", newValue);
-  // }
+
+  // gets editor text value on change, can be used for saving editor code locally
+  function onChange(newValue) {
+    console.log("change", newValue);
+  }
 
   const annotations = [
     {
