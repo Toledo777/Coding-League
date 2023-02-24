@@ -13,7 +13,7 @@ export default function Editor(props) {
 
   // gets editor text value on change, can be used for saving editor code locally
   function onChange(newValue) {
-    console.log("change", newValue);
+    // console.log("change", newValue);
   }
 
   const annotations = [
