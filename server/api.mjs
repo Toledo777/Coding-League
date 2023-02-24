@@ -10,8 +10,13 @@ router.get('/problem/random', async (req, res) => {
 });
 
 router.get('/problem/id', async (req, res) => {
-	const response = await problem.findById({ _id: req.query.id });
-	res.json(response);
+	if (req.query.id !== '' && req.query.id !== null) {
+		const response = await problem.findById({ _id: req.query.id });
+		res.json(response);
+	}
+	else {
+		res.json({ title: 'No ID input' });
+	}
 });
 
 router.get('/problem/title', async (req, res) => {
