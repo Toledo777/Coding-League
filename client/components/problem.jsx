@@ -8,9 +8,11 @@ export default function Problem(props) {
 	let specification;
 	//stratgy pattern, depending on prop specification, api url will change
 	for (let key in props) {
-		specification = `${key}?${key}=${props[key]}`
+		specification = `${key}?${key}=${props[key]}`;
 	}
-	let [error, loading, data] = useFetch('api/problem/' + specification, 1, []);
+	//preliminary difficulty implementation
+	let extra = '&difficulty=10';
+	let [error, loading, data] = useFetch('api/problem/' + specification + extra, 1, []);
 
 	return (
 		<div className='problem'>
@@ -37,5 +39,5 @@ export default function Problem(props) {
 	);
 }
 Problem.propTypes = {
-	random: PropTypes.string.isRequired
+	random: PropTypes.string
 };
