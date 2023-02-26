@@ -83,7 +83,14 @@ function processTestResults(results: TestRunResult[]): ProblemAttemptResult {
 }
 
 export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
-    const tests = problem.testcases.map(test => runTestCase(code, test));
+    const tests = problem.testCases.map(test => runTestCase(code, test));
+    const test_results: TestRunResult[] = await Promise.all(tests);
+
+    return processTestResults(test_results);
+}
+
+export async function debugProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
+    const tests = problem.testCases.slice(0, 5).map(test => runTestCase(code, test));
     const test_results: TestRunResult[] = await Promise.all(tests);
 
     return processTestResults(test_results);
