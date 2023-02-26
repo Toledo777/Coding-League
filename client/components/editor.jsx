@@ -53,7 +53,7 @@ export default function Editor(props) {
           }}
           setOptions={{
               enableBasicAutocompletion: true,
-              useWorker: true,
+              useWorker: false
           }}
       />
       <div className="editorButtons">
