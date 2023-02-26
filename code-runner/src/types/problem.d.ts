@@ -9,12 +9,12 @@ export type Problem = {
   // in seconds
   time_limit: number,
   // in megabytes
-  memory_limit: number,
+  memoryLimit: number,
   description: HTML,
-  input_specification: HTML,
-  output_specification: HTML,
+  inputSpecification: HTML,
+  outputSpecification: HTML,
   note?: HTML,
-  sample_tests: HTML,
-  testcases: TestCase[],
+  sampleTests: HTML,
+  testCases: TestCase[],
   tags: string[],
 }
