@@ -2,6 +2,9 @@ import express from 'express';
 const router = express.Router();
 import { problem } from './models/problem.mjs';
 
+// TODO: Change this to be environnement dependant
+const CODE_RUNNER_URL = 'localhost:8000';
+
 /**
  * gets a random problem, works on first 50 problems,
  *  incomplete until we decide how we want to implement difficulty
@@ -53,6 +56,18 @@ router.get('/problem/tags', async (req, res) => {
 	//finding multiple tags possible with $in
 	const response = await problem.find({ tags: { $in: ['\n    ' + req.query.tags + '\n', '\n    ' + '*2300' + '\n'] } });
 	res.json(response[0]);
+});
+
+
+/**
+ * Submits code to be ran by the code-runner
+ *  for now this acts only as a proxy for the code-runner
+ */
+router.post('/problem/debug', async (req, res) => {
+	const { code, problem_id } = req.body;
+	const response = await fetch(`${CODE_RUNNER_URL}/debug_problem`, { method: 'POST', body: { code, problem_id } });
+	const data = await response.json();
+	res.json(data);
 });
 
 /**
