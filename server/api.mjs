@@ -17,7 +17,7 @@ router.get('/problem/random', async (req, res) => {
  */
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
-		const response = await problem.findById({ _id: req.query.id });
+		const response = await problem.findById(req.query.id);
 		res.json(response);
 	}
 	else {
