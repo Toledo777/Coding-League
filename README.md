@@ -47,3 +47,7 @@ https://codingleague.azurewebsites.net/
 ## References
 ### Web scrape source
 https://codeforces.com/problemset/
+
+### Red X & Green Checkmark icons
+https://icons8.com/icon/111057/x 
+https://icons8.com/icon/rJyHKJgLY7Gc/done
