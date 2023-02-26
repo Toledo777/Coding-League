@@ -23,7 +23,7 @@ export default function Start() {
 		stopped: 'stopepd',
 		correct: 'correct',
 		incorrect: 'incorrect'
-	}
+	};
 	const [codeStatus, setCodeStatus] = useState(status.stopped);
 
 	/**

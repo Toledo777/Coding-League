@@ -4,7 +4,7 @@ const testCase = { input: String, output: String };
 
 // schema for a coding problem
 const problemSchema = {
-	id: String,
+	_id: String,
 	url: String,
 	title: String,
 	// in seconds
