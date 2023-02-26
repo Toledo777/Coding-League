@@ -3,7 +3,7 @@ type HTML = string;
 type TestCase = { input: string, output: string };
 
 export type Problem = {
-  id: string,
+  _id: string,
   url: string,
   title: string,
   // in seconds

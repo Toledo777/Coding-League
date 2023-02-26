@@ -1,1 +1,1 @@
-deno run --allow-run --allow-write --allow-read --allow-hrtime ./src/index.ts
+deno run --allow-net --allow-run --allow-write --allow-read --allow-hrtime ./src/index.ts
