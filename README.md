@@ -43,7 +43,7 @@ npm run start
 ```
 ### Populating MongoDB data
 
-- pre-requesties:
+- pre-requisites:
   -  .env containing:
       - ATLAS_URI (URI for connecting to mongoDB Atlas)
       - FILE_PATH (path of the JSON file containing coding problems)
