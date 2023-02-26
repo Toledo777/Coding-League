@@ -7,6 +7,7 @@ type TestRunResult = {
     stdout: string,
     stderr: string,
     answer: string,
+    expected: string,
 }
 
 type ProblemAttemptResult = {
@@ -46,7 +47,7 @@ async function createProcess(code: string, files: TestRunnerFiles): Promise<Deno
 }
 
 
-async function runTestCase(code: string, { input, output: expected_out }: TestCase, timeout = 2000): Promise<TestRunResult> {
+async function runTestCase(code: string, { input, output: expected }: TestCase, timeout = 2000): Promise<TestRunResult> {
     const files = await allocateProblemTestProcessFiles();
     const postfix = createTestingPostfix(input, files.solution_out);
 
@@ -67,9 +68,9 @@ async function runTestCase(code: string, { input, output: expected_out }: TestCa
     ]);
 
     // TODO: Validate that this replacement is valid for all tests.
-    const ok = status.success && answer == expected_out.replaceAll("\n", "");
+    const ok = status.success && answer == expected.replaceAll("\n", "");
 
-    return { ok, stderr, stdout, answer };
+    return { ok, stderr, stdout, answer, expected: expected };
 }
 
 function processTestResults(results: TestRunResult[]): ProblemAttemptResult {
