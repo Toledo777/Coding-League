@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
-import Editor from './editor';
 
 export default function Problem({ id }) {
 	let [error, loading, data] = useFetch('/api/problem/id/?id=' + id, []);
@@ -25,7 +24,6 @@ export default function Problem({ id }) {
 					<div dangerouslySetInnerHTML={{ __html: data.time_limit }} />
 					<div dangerouslySetInnerHTML={{ __html: data.note }} />
 				</div>
-				<Editor/>
 			</div>
 		</div>
 	);
