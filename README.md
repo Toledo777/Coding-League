@@ -28,6 +28,7 @@ Features (so far):
 - Back-end tools
   - jest, supertest, mongoose, mockingoose, eslint
 ## Getting Started
+### Running Server
 
 ```sh
 # Install dependencies
@@ -39,6 +40,19 @@ npm run dev
 # Process for starting production server
 npm run build
 npm run start
+```
+### Populating MongoDB data
+
+- pre-requisites:
+  -  .env containing:
+      - ATLAS_URI (URI for connecting to mongoDB Atlas)
+      - FILE_PATH (path of the JSON file containing coding problems)
+  - Java Runtime Environment (JRE)
+  - Java Development Kit (JDK)
+- Running setup script:
+
+```
+  java -jar <FILE_PATH>
 ```
 
 ## Azure URL
