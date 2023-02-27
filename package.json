@@ -1,0 +1,48 @@
+{
+  "name": "project-league",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "lint": "eslint --fix --ext .mjs .",
+    "dev": "mkdir dist & nodemon --ignore dist server/dev.mjs",
+    "start": "node server/prod.mjs",
+    "build": "node build/build.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/dawson2223/620-w23/s02/team3/project-league.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dawson2223/620-w23/s02/team3/project-league/issues"
+  },
+  "homepage": "https://gitlab.com/dawson2223/620-w23/s02/team3/project-league#readme",
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "esbuild": "^0.17.5",
+    "eslint": "^8.33.0",
+    "eslint-plugin-react": "^7.32.2",
+    "jest": "^29.4.3",
+    "mockingoose": "^2.16.2",
+    "nodemon": "^2.0.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.7.0",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "@tabler/icons-react": "^2.5.0",
+    "body-parser": "^1.20.2",
+    "dompurify": "^3.0.0",
+    "ace-builds": "^1.15.2",
+    "express": "^4.18.2",
+    "mongoose": "^6.9.1",
+    "prop-types": "^15.8.1",
+    "react-ace": "^10.1.0"
+  },
+
+  "type": "module"
+}

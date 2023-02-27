@@ -1,0 +1,78 @@
+image: node:latest
+
+stages:
+  - lint
+  - build
+  # - test
+  - deploy
+
+before_script:
+  - npm i
+
+eslint:
+  stage: lint
+  script:
+   - npm run lint
+  rules:
+  - changes:
+    - build/*
+    - client/*
+    - server/*
+    - .gitlab-ci.yml
+
+build-frontend:
+  stage: build
+  dependencies:
+    - eslint
+  cache:
+    key:
+      prefix: 'frontend'
+      files:
+        - 'package-lock.json'
+    paths:
+      - 'node_modules/'
+  script:
+    - npm run build
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging" || $CI_COMMIT_BRANCH == "staging"
+      when: on_success
+  artifacts:
+    expire_in: 1 days
+    when: on_success
+    paths:
+      - ./dist
+      - ./node_modules
+
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  dependencies:
+    - eslint
+    - build-frontend
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+      when: on_success
+  before_script:
+    - "az login --allow-no-subscriptions --service-principal -u $AZ_SP_ID -p $AZ_SP_SECRET -t $AZ_TENANT"
+  script:
+    - zip -r deploy.zip dist node_modules server package.json
+    - "az webapp config appsettings set --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --settings WEBSITE_RUN_FROM_PACKAGE=1"
+    - "az webapp config appsettings set --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --settings ATLAS_URI=$ATLAS_URI"
+    - "az webapp deployment source config-zip --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME --src deploy.zip"
+
+deploy-indev:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  dependencies:
+    - eslint
+    - build-frontend
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"
+      when: on_success
+  before_script:
+    - "az login --allow-no-subscriptions --service-principal -u $AZ_SP_ID -p $AZ_SP_SECRET -t $AZ_TENANT"
+  script:
+    - zip -r deploy.zip dist node_modules server package.json
+    - "az webapp config appsettings set --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME_TESTING --settings WEBSITE_RUN_FROM_PACKAGE=1"
+    - "az webapp config appsettings set --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME_TESTING --settings ATLAS_URI=$ATLAS_URI"
+    - "az webapp deployment source config-zip --resource-group $RESOURCE_GROUP_NAME --name $APP_NAME_TESTING --src deploy.zip"

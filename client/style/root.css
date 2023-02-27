@@ -1,0 +1,50 @@
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    color-scheme: light dark;
+    color: var(--text-color);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #FFF;
+
+    }
+
+    nav {
+        background-color: darkslategray;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --text-color: #000;
+        background-color: white;
+    }
+}
+
+/* styling for problem description + editor */
+.problem-content {
+    display: flex;
+}
+
+.description {
+    margin: 5px;
+}
+
+nav {
+    padding: 5px 10px;
+}
+
+
+
+/* styling nav bar links */
+nav a {
+    margin: 0 15px;
+    color: white;
+    font-size: 2em;
+    text-decoration: none;
+}
+
+button {
+    margin: 5 10px;
+}
