@@ -33,7 +33,6 @@ export default function Solve() {
 
 
 		<div className='form-div'>
-
 			<div className='form-buttons'>
 				<button className='debug' onClick={debugSolution}>Debug</button>
 			</div>
