@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import { IconCircleX, IconCircleCheck, IconCaretRight, IconCaretDown } from '@tabler/icons-react';
-export default function TestCaseView({ testCase, index }) {
+import style from './attemptOutput.module.css';
+
+export default function TestCase({ testCase, index }) {
 	const [expanded, setExpanded] = useState(false);
 	const { ok, stderr, stdout, answer, expected } = testCase;
 	console.log(answer);
 
-	return <div>
+	return <div className={style.testCase}>
 		<div className='case-heading'>
 
 			<span className='case-status'>
@@ -35,7 +37,7 @@ export default function TestCaseView({ testCase, index }) {
 	</div >;
 }
 
-TestCaseView.propTypes = {
+TestCase.propTypes = {
 	index: propTypes.number,
 	testCase: {
 		ok: propTypes.bool,

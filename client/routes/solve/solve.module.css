@@ -1,0 +1,15 @@
+.solve {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.editorContainer {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+
+.editor-buttons {
+    display: flex;
+}
