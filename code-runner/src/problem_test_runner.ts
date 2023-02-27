@@ -70,7 +70,7 @@ async function runTestCase(code: string, { input, output: expected }: TestCase, 
     // TODO: Validate that this replacement is valid for all tests.
     const ok = status.success && answer == expected.replaceAll("\n", "");
 
-    return { ok, stderr, stdout, answer, expected: expected };
+    return { ok, stderr, stdout, answer, expected };
 }
 
 function processTestResults(results: TestRunResult[]): ProblemAttemptResult {

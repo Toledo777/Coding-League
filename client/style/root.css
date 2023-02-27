@@ -1,6 +1,7 @@
 :root {
     font-family: Arial, Helvetica, sans-serif;
     color-scheme: light dark;
+    color: var(--text-color);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -2,22 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
 
-export default function Problem(props) {
-
-	let specification;
-	//stratgy pattern, depending on prop specification, api url will change
-	for (let key in props) {
-		specification = `${key}?${key}=${props[key]}`;
-	}
-	//preliminary difficulty implementation
-	let extra = '&difficulty=10';
-	let [error, loading, data] = useFetch('api/problem/' + specification + extra, 1, []);
+export default function Problem({ id }) {
+	let [error, loading, data] = useFetch('/api/problem/id/?id=' + id, []);
 
 	return (
 		<div>
 			<h3>
 				{error && error}
-				{loading && 'loading...'}
+				{loading && 'loading...' + id}
 			</h3>
 			<h3>
 				<div dangerouslySetInnerHTML={{ __html: data._id }} />
@@ -33,5 +25,5 @@ export default function Problem(props) {
 	);
 }
 Problem.propTypes = {
-	random: PropTypes.string
+	id: PropTypes.string
 };
