@@ -7,6 +7,7 @@ export default function Root() {
 			<nav>
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
+				<Link to={'/search'}>Search</Link>
 			</nav>
 			<main className='content'>
 				<Outlet />
