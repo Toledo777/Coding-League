@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import propTypes from 'prop-types';
 import { IconCircleX, IconCircleCheck, IconCaretRight, IconCaretDown } from '@tabler/icons-react';
 export default function TestCaseView({ testCase, index }) {
 	const [expanded, setExpanded] = useState(false);
@@ -35,13 +34,3 @@ export default function TestCaseView({ testCase, index }) {
 	</div >;
 }
 
-TestCaseView.propTypes = {
-	index: propTypes.number,
-	testCase: {
-		ok: propTypes.bool,
-		stdout: propTypes.string,
-		stderr: propTypes.string,
-		answer: propTypes.string,
-		expected: propTypes.string,
-	}
-};

@@ -1,0 +1,22 @@
+.outer > * {
+    display:inline-block;
+    background-color: lightgray;
+    margin-bottom: 10px;
+  }
+.insideProblem{
+    height: 170px;
+}
+
+.insideButton{
+    position: absolute;
+    height: 170px;
+    padding-left: 100px;
+}
+.actualButton{
+    width: 70%;
+    background-color: lightgray;
+    padding: 14px 28px;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 80%;
+}
