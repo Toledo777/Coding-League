@@ -1,14 +1,15 @@
 :root {
     font-family: Arial, Helvetica, sans-serif;
     color-scheme: light dark;
-    margin: 10px 45px;
+    color: var(--text-color);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --text-color: #FFF;
-        
+
     }
+
     nav {
         background-color: darkslategray;
     }
@@ -26,11 +27,11 @@
     display: flex;
 }
 
-.description{
+.description {
     margin: 5px;
 }
 
-nav{
+nav {
     padding: 5px 10px;
 }
 

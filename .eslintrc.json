@@ -11,6 +11,9 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+    "ignorePatterns": [
+        "code-runner/**"
+    ],
     "plugins": [
         "react"
     ],

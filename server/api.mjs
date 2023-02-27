@@ -1,6 +1,16 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const router = express.Router();
 import { problem } from './models/problem.mjs';
+
+
+const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
+
+// Parse body as json
+router.use(bodyParser.json());
 
 /**
  * gets a random problem, works on first 50 problems,
@@ -48,11 +58,27 @@ router.get('/problem/tags', async (req, res) => {
 	// }
 	// console.log('there is no difficulty');
 
-
-
 	//finding multiple tags possible with $in
 	const response = await problem.find({ tags: { $in: ['\n    ' + req.query.tags + '\n', '\n    ' + '*2300' + '\n'] } });
 	res.json(response[0]);
+});
+
+
+/**
+ * Submits code to be ran by the code-runner
+ *  for now this acts only as a proxy for the code-runner
+ */
+router.post('/problem/debug', async (req, res) => {
+	console.log(req.body);
+	const { code, problem_id } = req.body;
+	const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		}, method: 'POST', body: JSON.stringify({ code, problem_id })
+	});
+	const data = await response.json();
+	res.json(data);
 });
 
 /**
