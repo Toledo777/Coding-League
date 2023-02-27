@@ -1,6 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
+
+
+
 dotenv.config();
 
 const router = express.Router();
@@ -28,7 +31,12 @@ router.get('/problem/random', async (req, res) => {
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
 		const response = await problem.findById(req.query.id);
-		res.json(response);
+		if (response != undefined) {
+			res.json(response);
+		}
+		else {
+			res.json({ title: 'bad ID' });
+		}
 	}
 	else {
 		res.json({ title: 'No ID input' });
@@ -71,14 +79,16 @@ router.get('/problem/tags', async (req, res) => {
 router.post('/problem/debug', async (req, res) => {
 	console.log(req.body);
 	const { code, problem_id } = req.body;
-	const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}, method: 'POST', body: JSON.stringify({ code, problem_id })
-	});
-	const data = await response.json();
-	res.json(data);
+	if (code != undefined) {
+		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}, method: 'POST', body: JSON.stringify({ code, problem_id })
+		});
+		const data = await response.json();
+		res.json(data);
+	}
 });
 
 /**
