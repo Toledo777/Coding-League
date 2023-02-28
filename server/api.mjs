@@ -16,14 +16,15 @@ const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 router.use(bodyParser.json());
 
 /**
- * gets a random problem, works on first 50 problems,
- *  incomplete until we decide how we want to implement difficulty
+ * gets random problems in a range given by req.query.range
+ *  
  */
 router.get('/problem/random', async (req, res) => {
-	const response = await problem.find({});
+	let random = Math.floor(Math.random() * 2941);
 	let array = [];
 	for (let i = 0; i < req.query.range; i++) {
-		array.push(response[i]);
+		array.push(await problem.findOne({}).skip(random));
+		random = Math.floor(Math.random() * 2941);
 	}
 	res.json(array);
 });
