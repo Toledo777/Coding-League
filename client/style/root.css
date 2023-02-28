@@ -7,44 +7,13 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --text-color: #FFF;
-
-    }
-
-    nav {
-        background-color: darkslategray;
+        --panel-color: #FFF3;
     }
 }
 
 @media (prefers-color-scheme: light) {
     :root {
         --text-color: #000;
-        background-color: white;
+        --panel-color: #FFF3;
     }
-}
-
-/* styling for problem description + editor */
-.problem-content {
-    display: flex;
-}
-
-.description {
-    margin: 5px;
-}
-
-nav {
-    padding: 5px 10px;
-}
-
-
-
-/* styling nav bar links */
-nav a {
-    margin: 0 15px;
-    color: white;
-    font-size: 2em;
-    text-decoration: none;
-}
-
-button {
-    margin: 5 10px;
 }
