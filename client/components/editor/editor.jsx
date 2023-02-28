@@ -12,8 +12,6 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 export default function Editor({ onChange }) {
 	const editorRef = useRef();
 
-	setInterval(() => console.log(editorRef.current.editor.getValue()), 1000);
-
 	return (
 		<AceEditor
 			className={style.editor}

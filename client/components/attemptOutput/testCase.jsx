@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import { IconCircleX, IconCircleCheck, IconCaretRight, IconCaretDown } from '@tabler/icons-react';
 import style from './attemptOutput.module.css';
+import TermView from '../terminal/termView';
 
 export default function TestCase({ testCase, index }) {
 	const [expanded, setExpanded] = useState(false);
 	const { ok, stderr, stdout, answer, expected } = testCase;
-	console.log(answer);
 
 	return <div className={style.testCase}>
 		<div className='case-heading'>
-
 			<span className='case-status'>
 				{ok ? <IconCircleCheck color='green' /> : <IconCircleX color='red' />}
 			</span>
@@ -24,14 +23,8 @@ export default function TestCase({ testCase, index }) {
 					expected: <code>{expected}</code>
 					but received: <code>{answer}</code>
 				</div>
-				<div className='stderr-container'>
-					<div>stderr</div>
-					<code className='stderr'>{stderr}</code>
-				</div>
-				<div className='stdout-container'>
-					<div>stdout</div>
-					<code className='stdout'>{stdout}</code>
-				</div>
+				<TermView data={stderr} label="Stderr" />
+				<TermView data={stdout} label="Stdout" />
 			</div>}
 		</div>
 	</div >;

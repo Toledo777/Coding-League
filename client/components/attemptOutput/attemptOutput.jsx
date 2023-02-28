@@ -17,7 +17,9 @@ export default function AttemptOutput({ result }) {
 				Passed: {total_ran - failures}/{total_ran}
 			</div>
 			<div>
-				{individual_tests.map((testCase, index) => ({ testCase, index })).map(TestCaseView)}
+				{individual_tests
+					.map((testCase, index) => ({ testCase, index }))
+					.map(TestCaseView)}
 			</div>
 		</div>
 	);
