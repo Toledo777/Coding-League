@@ -5,7 +5,7 @@ export default function Search() {
 	return (
 		<div>
 			<h1>Search!</h1>
-			<SearchHolder></SearchHolder>
+			<SearchHolder range={3}></SearchHolder>
 		</div>
 	);
 }

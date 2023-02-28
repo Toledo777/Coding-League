@@ -2,9 +2,9 @@ import React from 'react';
 import SearchCase from './SearchCase/searchCase';
 import useFetch from '../hooks/useFetch';
 
-export default function SearchHolder() {
+export default function SearchHolder({ range }) {
 
-	let [error, loading, data] = useFetch('/api/problem/random?range=' + '5', []);
+	let [error, loading, data] = useFetch('/api/problem/random?range=' + range, []);
 
 	console.log(data);
 
