@@ -11,7 +11,7 @@ export default function Problem({ id }) {
 				{loading && 'loading...' + id}
 			</h3>
 			<h3 className='header'>
-				<div dangerouslySetInnerHTML={{ __html: data.id }} />
+				<div dangerouslySetInnerHTML={{ __html: data._id }} />
 				<div dangerouslySetInnerHTML={{ __html: data.title }} />
 			</h3>
 			<div className='problem-content'>
