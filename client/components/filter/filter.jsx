@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import MultiRangeSlider from 'multi-range-slider-react';
+// import { RangeSlider } from 'react-range-slider-input';
+// import 'react-range-slider-input/dist/style.css';
 
 export default function Filter({ setTags, setRange }) {
 	const [minValue, setMinValue] = useState(0);
@@ -33,7 +34,8 @@ export default function Filter({ setTags, setRange }) {
 				<option value="val3">data structures</option>
 				<option value="val4">geometry</option>
 			</select>
-			<MultiRangeSlider min={0} max={50} step={2} minValue={minValue} maxValue={maxValue} onInput={(e) => { handleChangeInput(e); }} />
+			
+			{/* <RangeSlider /> */}
 		</div>
 	);
 }
