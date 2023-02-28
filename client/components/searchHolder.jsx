@@ -6,8 +6,6 @@ export default function SearchHolder({ range }) {
 
 	let [error, loading, data] = useFetch('/api/problem/random?range=' + range, []);
 
-	console.log(data);
-
 	return (
 		<div>
 			<h3>
