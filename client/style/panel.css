@@ -1,2 +1,10 @@
 /* General styling for a raised panel */
-.panel {}
+.panel {
+    background-color: var(--panel-color);
+    border-radius: 0.25rem;
+    box-shadow:
+        0px 0px 0px 1px #FFF5 inset,
+        0rem 0.25rem 0.25rem #0004;
+    margin: var(--gap-s);
+    padding: var(--gap-s);
+}
