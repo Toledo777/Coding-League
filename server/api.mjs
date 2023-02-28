@@ -30,6 +30,15 @@ router.get('/problem/random', async (req, res) => {
 	res.json(array);
 });
 
+router.get('/problem/list', async (req, res) => {
+	let array = [];
+	let max = parseInt(req.query.range) + parseInt(req.query.count);
+	for (let i = req.query.count; i < max; i++) {
+		array.push(await problem.findOne({}).skip(i));
+	}
+	res.json(array);
+});
+
 /**
  * gets a single problem by its id
  */

@@ -4,7 +4,10 @@ import useFetch from '../hooks/useFetch';
 
 export default function SearchHolder({ range }) {
 
-	let [error, loading, data] = useFetch('/api/problem/random?range=' + range, []);
+	let count = 0;
+	let [error, loading, data] = useFetch('/api/problem/list?range=' + range + '&count=' + count, []);
+
+
 
 	return (
 		<div>
@@ -13,11 +16,7 @@ export default function SearchHolder({ range }) {
 				{loading && 'loading...'}
 			</h3>
 			{data.map(d => <div key={d._id}> <SearchCase title={d.title} type={d.tags}></SearchCase> </div>)}
-			<div>
-				<h3>
-					pagination implmentation
-				</h3>
-			</div>
+
 		</div>
 	);
 }
