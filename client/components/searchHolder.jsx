@@ -6,13 +6,15 @@ export default function SearchHolder() {
 
 	let [error, loading, data] = useFetch('/api/problem/random?range=' + '5', []);
 
+	console.log(data);
+
 	return (
 		<div>
 			<h3>
 				{error && error}
 				{loading && 'loading...'}
 			</h3>
-			{data.map(d => <div key={d._id}> <SearchCase title={d.title} difficulty={d.difficulty} type={d.tags}></SearchCase> </div>)}
+			{data.map(d => <div key={d._id}> <SearchCase title={d.title} type={d.tags}></SearchCase> </div>)}
 			<div>
 				<h3>
 					pagination implmentation
