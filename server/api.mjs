@@ -21,8 +21,11 @@ router.use(bodyParser.json());
  */
 router.get('/problem/random', async (req, res) => {
 	const response = await problem.find({});
-	let random = Math.floor(Math.random(50));
-	res.json(response[random]);
+	let array = [];
+	for (let i = 0; i < req.query.range; i++) {
+		array.push(response[i]);
+	}
+	res.json(array);
 });
 
 /**

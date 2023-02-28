@@ -4,23 +4,7 @@ import useFetch from '../hooks/useFetch';
 
 export default function SearchHolder() {
 
-	let [error, loading, data] = useFetch('/api/problem/id?id=' + '1234E', []);
-
-
-
-
-	data = [{
-		id: 1,
-		title: 'hello',
-		difficulty: 'super hard',
-		tags: 'these are the tags'
-	},
-	{
-		id: 2,
-		title: 'hello2',
-		difficulty: 'not very hard',
-		tags: 'even more tags'
-	}];
+	let [error, loading, data] = useFetch('/api/problem/random?range=' + '10', []);
 
 	return (
 		<div>

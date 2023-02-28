@@ -2,10 +2,10 @@
     display:inline-block;
     background-color: lightgray;
     margin-bottom: 10px;
-    width: 135px;
   }
 .insideProblem{
     height: 170px;
+    width: 200px;
 }
 
 .insideButton{
