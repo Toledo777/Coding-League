@@ -29,6 +29,7 @@ router.get('/problem/random', async (req, res) => {
  */
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
+		// Retrieve cache value using cache key. Return cache value if exist
 		const IDCache = 'problem ID: ' + req.query.id;
 		let cachedResponse = cache.get(IDCache);
 		if(!cachedResponse){
@@ -52,6 +53,7 @@ router.get('/problem/id', async (req, res) => {
  * gets a single problem by its title
  */
 router.get('/problem/title', async (req, res) => {
+	// Retrieve cache value using cache key. Return cache value if exist
 	const titleCache = 'problem title: ' + req.query.title;
 	let cachedResponse = cache.get(titleCache);
 	if(!cachedResponse){
@@ -59,10 +61,8 @@ router.get('/problem/title', async (req, res) => {
 		if(response){
 			cache.put(titleCache, response);
 		}
-		console.log('not cached');
 		res.json(response);
 	} else {
-		console.log('cached');
 		res.json(cachedResponse);
 	}
 
