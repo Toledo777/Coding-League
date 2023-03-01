@@ -1,6 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
+import cache from 'memory-cache';
+
 dotenv.config();
 
 const router = express.Router();
@@ -27,8 +29,17 @@ router.get('/problem/random', async (req, res) => {
  */
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
-		const response = await problem.findById(req.query.id);
-		res.json(response);
+		const cacheName = 'problem ID: ' + req.query.id;
+		let problemIdResponse = cache.get(cacheName);
+		if(!problemIdResponse){
+			const response = await problem.findById(req.query.id);
+			if(response !== null){
+				cache.put(cacheName, response);
+			}
+			res.json(response);
+		} else {
+			res.json(problemIdResponse);
+		}
 	}
 	else {
 		res.json({ title: 'No ID input' });
