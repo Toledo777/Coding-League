@@ -29,16 +29,16 @@ router.get('/problem/random', async (req, res) => {
  */
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
-		const cacheName = 'problem ID: ' + req.query.id;
-		let problemIdResponse = cache.get(cacheName);
-		if(!problemIdResponse){
+		const IDCache = 'problem ID: ' + req.query.id;
+		let cachedResponse = cache.get(IDCache);
+		if(!cachedResponse){
 			const response = await problem.findById(req.query.id);
 			if(response !== null){
-				cache.put(cacheName, response);
+				cache.put(IDCache, response);
 			}
 			res.json(response);
 		} else {
-			res.json(problemIdResponse);
+			res.json(cachedResponse);
 		}
 	}
 	else {
@@ -50,8 +50,20 @@ router.get('/problem/id', async (req, res) => {
  * gets a single problem by its title
  */
 router.get('/problem/title', async (req, res) => {
-	const response = await problem.findOne({ title: req.query.title });
-	res.json(response);
+	const titleCache = 'problem title: ' + req.query.title;
+	let cachedResponse = cache.get(titleCache);
+	if(!cachedResponse){
+		const response = await problem.findOne({ title: req.query.title });
+		if(response){
+			cache.put(titleCache, response);
+		}
+		console.log('not cached');
+		res.json(response);
+	} else {
+		console.log('cached');
+		res.json(cachedResponse);
+	}
+
 });
 
 
