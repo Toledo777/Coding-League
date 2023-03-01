@@ -10,6 +10,7 @@
     :root {
         --text-color: #FFF;
         --panel-color: #FFF3;
+        --bg-color: #FFF1;
     }
 }
 
@@ -17,7 +18,12 @@
     :root {
         --text-color: #000;
         --panel-color: #FFF3;
+        --bg-color: #FFFA;
     }
+}
+
+body {
+    background-color: var(--bg-color);
 }
 
 #root {
