@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
-import useAuthFetch from './hooks/useAuthFetch';
+import usePost from './hooks/usePost';
 
 export default function Root() {
 	// fetch google client id
@@ -11,7 +11,7 @@ export default function Root() {
 	
 	// fetch google crendetials using token
 	const [credentials, setCredentials] = useState(null);
-	const [authError, authLoad, authData] = useAuthFetch('auth', credentials,[]);
+	const [authError, authLoad, authData] = usePost('auth', credentials, []);
 
 
 	// reword error message for user
@@ -27,7 +27,7 @@ export default function Root() {
 
 	// handles google login, makes fetch to auth api
 	function handleLogin(googleData) {
-		setCredentials(googleData.credentials)
+		setCredentials({token: googleData.credentials});
 		console.log(googleData.credentials);
 	}
 

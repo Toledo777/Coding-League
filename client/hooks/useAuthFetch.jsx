@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function useAuthFetch(url, body, defaultValue, deps = []) {
+export default function useAuthFetch(url, loginCredential, defaultValue, deps = []) {
 	const [error, setError] = useState();
 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState(defaultValue);
@@ -12,7 +12,7 @@ export default function useAuthFetch(url, body, defaultValue, deps = []) {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch(url, { headers, method: 'GET', body: JSON.stringify(body) })
+		fetch(url, { headers, method: 'POST', body: JSON.stringify({token: loginCredential}) })
 			.then(res => res.json())
 			.then(data => setData(data))
 			.finally(() => setLoading(false))
