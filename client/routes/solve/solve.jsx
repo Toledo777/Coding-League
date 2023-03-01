@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost';
 import AttemptOutput from '../../components/attemptOutput/attemptOutput';
 import Editor from '../../components/editor/editor';
-import style from './solve.module.css';
+import './solve.css';
 
 export default function Solve() {
 	// Get the problem id from the route
@@ -23,14 +23,14 @@ export default function Solve() {
 		setDebugCode(solution);
 	};
 
-	return <div className={style.solve}>
-		<div className={style.verticalPanel}>
+	return <div className='solve'>
+		<div className='vertical-panel'>
 			<Problem id={id} />
 		</div>
 
-		<div className={style.editorContainer}>
+		<div className='editor-container'>
 			<Editor onChange={(value) => setSolution(value)} />
-			<div className={style['editor-buttons']}>
+			<div className='editor-buttons'>
 				<button className='debug' onClick={debugSolution}>Debug</button>
 			</div>
 		</div>

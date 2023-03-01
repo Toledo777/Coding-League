@@ -3,7 +3,7 @@
     grid-template-columns: 1fr 1fr;
 }
 
-.editorContainer {
+.editor-container {
     display: flex;
     flex-direction: column;
     min-width: 200px;
