@@ -4,6 +4,10 @@ import TestCaseView from './testCase';
 import style from './attemptOutput.module.css';
 
 export default function AttemptOutput({ result }) {
+	if (!result) {
+		return <div>Empty :(</div>;
+	}
+
 	const {
 		all_ok,
 		total_ran,

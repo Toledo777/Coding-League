@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost';
 import AttemptOutput from '../../components/attemptOutput/attemptOutput';
 import Editor from '../../components/editor/editor';
+import SplitPane from '../../components/splitPane/splitPane';
 import './solve.css';
 
 export default function Solve() {
@@ -24,15 +25,14 @@ export default function Solve() {
 	};
 
 	return <div className='solve'>
-		<div className='vertical-panel'>
+		<SplitPane labels={['problem', 'output']}>
 			<Problem id={id} />
-
 			<div>
+				{<AttemptOutput result={debugResult} />}
 				{debugError && <div>{debugError}</div>}
 				{debugLoading && <div>{debugLoading}</div>}
-				{debugResult && <AttemptOutput result={debugResult} />}
 			</div>
-		</div>
+		</SplitPane>
 
 		<div className='editor-container panel'>
 			<div className='editor-sizer'>

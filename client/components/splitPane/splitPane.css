@@ -1,0 +1,23 @@
+.pane-button.btn {
+    border-radius: 0.25rem 0.25rem 0rem 0rem;
+    margin: 0px;
+}
+
+.pane-button.btn.selected {
+    backdrop-filter: brightness(0.5);
+}
+
+.split-pane {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.pane-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    max-height: 100%;
+    overflow: auto;
+}
