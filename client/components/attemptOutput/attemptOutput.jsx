@@ -1,7 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import TestCaseView from './testCase';
-import style from './attemptOutput.module.css';
+import './attemptOutput.css';
 
 export default function AttemptOutput({ result }) {
 	if (!result) {
@@ -15,7 +15,7 @@ export default function AttemptOutput({ result }) {
 		individual_tests
 	} = result;
 	return (
-		<div className={style.testCase}>
+		<div>
 			<div className='status'>{all_ok ? 'Passed' : 'Failed'}</div>
 			<div className='counts'>
 				Passed: {total_ran - failures}/{total_ran}

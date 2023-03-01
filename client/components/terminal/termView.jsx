@@ -5,7 +5,7 @@ import './xterm.css';
 
 // Used to handle data streams meant to be interpreted from a terminal emulator.
 // Otherwise any output using ansi escape codes would be jumbled and malformed
-export default function TermView({ label, data }) {
+export default function TermView({ data }) {
 	const termElement = createRef();
 
 	useEffect(() => {
@@ -20,7 +20,6 @@ export default function TermView({ label, data }) {
 	}, [data]);
 
 	return <div>
-		<h3>{label}</h3>
 		<div ref={termElement}></div >
 	</div>;
 }

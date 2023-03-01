@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import { IconCircleX, IconCircleCheck, IconCaretRight, IconCaretDown } from '@tabler/icons-react';
-import style from './attemptOutput.module.css';
 import TermView from '../terminal/termView';
+import SplitPane from '../splitPane/splitPane';
+import './attemptOutput.css';
 
 export default function TestCase({ testCase, index }) {
 	const [expanded, setExpanded] = useState(false);
 	const { ok, stderr, stdout, answer, expected } = testCase;
 
-	return <div className={style.testCase}>
+	return <div className='test-case'>
 		<div className='case-heading'>
 			<span className='case-status'>
 				{ok ? <IconCircleCheck color='green' /> : <IconCircleX color='red' />}
@@ -18,14 +19,16 @@ export default function TestCase({ testCase, index }) {
 			<span className='dropdown-toggle' onClick={() => setExpanded(!expanded)}>
 				{expanded ? <IconCaretDown /> : <IconCaretRight />}
 			</span>
-			{expanded && <div>
+			{expanded && <>
 				<div>
 					expected: <code>{expected}</code>
 					but received: <code>{answer}</code>
 				</div>
-				<TermView data={stderr} label="Stderr" />
-				<TermView data={stdout} label="Stdout" />
-			</div>}
+				<SplitPane labels={['stderr', 'stdout']}>
+					<TermView data={stderr} label="Stderr" />
+					<TermView data={stdout} label="Stdout" />
+				</SplitPane>
+			</>}
 		</div>
 	</div >;
 }
