@@ -7,10 +7,9 @@ export default function Search() {
 	const [tags, setTags] = useState(['all']);
 	const [range, setRange] = useState([800, 3500]);
 
-	function updateFilter(newTags, newRange){
-		setTags(newTags);
-		setRange(newRange);
-	}
+	useEffect (() => {
+		// pass parameters to SearchCaseAndHolder component here
+	}, [search, tags, range]);
 	
 	return (
 		<div>
