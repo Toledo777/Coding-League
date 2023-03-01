@@ -1,11 +1,4 @@
 .editor {
     height: 100% !important;
     width: 100% !important;
-
-    border-radius: 0.25rem;
-    box-shadow:
-        0rem 0.25rem 0.25rem #0004;
-
-    margin: var(--gap-s);
-    padding: var(--gap-s);
 }

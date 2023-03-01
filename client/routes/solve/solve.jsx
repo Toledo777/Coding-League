@@ -29,9 +29,12 @@ export default function Solve() {
 		</div>
 
 		<div className='editor-container'>
-			<Editor onChange={(value) => setSolution(value)} />
+			<div className='editor-sizer'>
+				<Editor onChange={(value) => setSolution(value)} />
+			</div>
 			<div className='editor-buttons'>
-				<button className='debug' onClick={debugSolution}>Debug</button>
+				<button className='debug btn' onClick={debugSolution}>Debug</button>
+				<button className='submit btn' onClick={debugSolution}>Submit</button>
 			</div>
 		</div>
 

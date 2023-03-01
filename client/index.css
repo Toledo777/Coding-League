@@ -2,4 +2,5 @@
 /* It should be used only to import other globally used styles or variables */
 @import url(./style/root.css);
 @import url(./style/nav.css);
+@import url(./style/button.css);
 @import url(./style/panel.css);

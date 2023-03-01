@@ -4,12 +4,16 @@
 }
 
 .editor-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr auto;
     min-width: 200px;
+    align-items: stretch;
 }
-
 
 .editor-buttons {
     display: flex;
+}
+
+.editor-sizer {
+    width: auto;
 }
