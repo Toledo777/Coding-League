@@ -10,8 +10,8 @@ export default function Root() {
 	let [error, loading, data] = useFetch('/api/google-client-id', [])
 	
 	// fetch google crendetials using token
-	const [credentials, setCredentials] = useState(null);
-	const [authError, authLoad, authData] = usePost('auth', credentials, []);
+	const [credential, setCredential] = useState(null);
+	const [authError, authLoad, authData] = usePost('auth', credential, []);
 
 
 	// reword error message for user
@@ -27,8 +27,8 @@ export default function Root() {
 
 	// handles google login, makes fetch to auth api
 	function handleLogin(googleData) {
-		setCredentials({token: googleData.credentials});
-		console.log(googleData.credentials);
+		setCredential({token: googleData.credential});
+		console.log(googleData.credential);
 	}
 
 	return (
