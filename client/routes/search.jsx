@@ -1,6 +1,7 @@
 import React from 'react';
 import Filter from '../components/filter/filter';
 import { useState, useEffect } from 'react';
+import SearchHolder from '../components/searchHolder';
 
 export default function Search() {
 	const [search, setSearch] = useState('');
@@ -16,6 +17,7 @@ export default function Search() {
 			<h1>Search!</h1>
 			<h2>Search params:</h2>
 			<Filter tags={tags} setTags={setTags} range={range} setRange={setRange} />
+			<SearchHolder></SearchHolder>
 		</div>
 	);
 }
