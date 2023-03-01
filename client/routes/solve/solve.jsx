@@ -26,9 +26,15 @@ export default function Solve() {
 	return <div className='solve'>
 		<div className='vertical-panel'>
 			<Problem id={id} />
+
+			<div>
+				{debugError && <div>{debugError}</div>}
+				{debugLoading && <div>{debugLoading}</div>}
+				{debugResult && <AttemptOutput result={debugResult} />}
+			</div>
 		</div>
 
-		<div className='editor-container'>
+		<div className='editor-container panel'>
 			<div className='editor-sizer'>
 				<Editor onChange={(value) => setSolution(value)} />
 			</div>
@@ -36,12 +42,6 @@ export default function Solve() {
 				<button className='debug btn' onClick={debugSolution}>Debug</button>
 				<button className='submit btn' onClick={debugSolution}>Submit</button>
 			</div>
-		</div>
-
-		<div>
-			{debugError && <div>{debugError}</div>}
-			{debugLoading && <div>{debugLoading}</div>}
-			{debugResult && <AttemptOutput result={debugResult} />}
 		</div>
 	</div>;
 }
