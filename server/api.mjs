@@ -10,6 +10,7 @@ const router = express.Router();
 import { problem } from './models/problem.mjs';
 
 
+
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 
 // Parse body as json
@@ -21,19 +22,21 @@ router.use(bodyParser.json());
  *  
  */
 router.get('/problem/random', async (req, res) => {
-	let random = Math.floor(Math.random() * 2941);
-	let array = [];
-	for (let i = 0; i < req.query.range; i++) {
-		array.push(await problem.findOne({}).skip(random));
-		random = Math.floor(Math.random() * 2941);
-	}
-	res.json(array);
+	// let random = Math.floor(Math.random() * 2941);
+	// let array = [];
+	// for (let i = 0; i < req.query.start; i++) {
+	// 	array.push(await problem.findOne({}).skip(random));
+	// 	random = Math.floor(Math.random() * 2941);
+	// }
+	let problem = await problem.find([{ $sample: { size: 1 } }]);
+	res.json(problem);
 });
 
+//fetches {req.query.count} number of problems starting at {req.query.start} in the db's entire list of problems (for pagination) 
 router.get('/problem/list', async (req, res) => {
 	let array = [];
-	let max = parseInt(req.query.range) + parseInt(req.query.count);
-	for (let i = req.query.count; i < max; i++) {
+	let max = parseInt(req.query.start) + parseInt(req.query.count);
+	for (let i = req.query.start; i < max; i++) {
 		array.push(await problem.findOne({}).skip(i));
 	}
 	res.json(array);
