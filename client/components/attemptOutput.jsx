@@ -1,5 +1,5 @@
 import React from 'react';
-import propTypes from 'prop-types';
+
 import TestCaseView from './testCaseView';
 
 export default function AttemptOutput({ result }) {
@@ -22,19 +22,4 @@ export default function AttemptOutput({ result }) {
 	);
 }
 
-AttemptOutput.propTypes = {
-	result: {
-		all_ok: propTypes.bool,
-		total_ran: propTypes.number,
-		failures: propTypes.number,
-		individual_tests: propTypes.arrayOf(
-			{
-				ok: propTypes.bool,
-				stdout: propTypes.string,
-				stderr: propTypes.string,
-				answer: propTypes.string,
-				expected: propTypes.string,
-			}
-		),
-	}
-};
+

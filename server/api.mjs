@@ -33,10 +33,12 @@ router.get('/problem/id', async (req, res) => {
 		let cachedResponse = cache.get(IDCache);
 		if(!cachedResponse){
 			const response = await problem.findById(req.query.id);
-			if(response !== null){
+			if (response != undefined) {
 				cache.put(IDCache, response);
+				res.json(response);
+			} else {
+				res.json({ title: 'invalid ID' });
 			}
-			res.json(response);
 		} else {
 			res.json(cachedResponse);
 		}
@@ -94,14 +96,16 @@ router.get('/problem/tags', async (req, res) => {
 router.post('/problem/debug', async (req, res) => {
 	console.log(req.body);
 	const { code, problem_id } = req.body;
-	const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}, method: 'POST', body: JSON.stringify({ code, problem_id })
-	});
-	const data = await response.json();
-	res.json(data);
+	if (code != undefined) {
+		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}, method: 'POST', body: JSON.stringify({ code, problem_id })
+		});
+		const data = await response.json();
+		res.json(data);
+	}
 });
 
 /**

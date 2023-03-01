@@ -4,8 +4,14 @@ import compression from 'compression';
 
 const app = express();
 
+/**
+ * Compress all responses JSON, resulting in smaller data sizes
+ */
 app.use(compression());
 
+/**
+ * Setup caching for API routes to use
+ */
 app.use(function (req, res, next) {
 	res.set('Cache-control', 'public, max-age=31536000');
 	next();
