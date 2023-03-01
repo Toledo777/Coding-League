@@ -14,7 +14,7 @@ router.use(bodyParser.json());
 
 // returns google client id to be used in the client
 router.get('/google-client-id', (req, res) => {
-	let clientID = {GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID}
+	let clientID = process.env.GOOGLE_CLIENT_ID;
 	res.json(clientID);
 });
 
