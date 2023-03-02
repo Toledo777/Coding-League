@@ -2,7 +2,7 @@
     background-color: var(--panel-color);
     border-radius: 0.25rem;
     box-shadow:
-        0px 0px 0px 1px #FFF5 inset,
+        0px 0px 0px 1px #AAA inset,
         0px 0px 50px 1px #FFF0 inset,
         0rem 0.25rem 0.25rem #0004;
     margin: var(--gap-m);
@@ -15,14 +15,14 @@
 
 .btn:hover {
     box-shadow:
-        0px 0px 0px 1px #FFFA inset,
+        0px 0px 0px 1px #CCC inset,
         0px 0px 50px 1px #FFF0 inset,
         0rem 0.25rem 0.25rem #0004;
 }
 
 .btn:active {
     box-shadow:
-        0px 0px 0px 1px #FFFA inset,
+        0px 0px 0px 1px #CCC inset,
         0px 0px 50px 1px #FFF6 inset,
         0rem 0.25rem 0.25rem #0004;
 }
