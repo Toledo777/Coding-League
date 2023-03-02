@@ -1,7 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import { OAuth2Client } from 'google-auth-library';
-import { user } from './models/user.mjs';
+import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,9 +26,9 @@ router.use(session({
 
 router.use(express.json());
 
-router.post('/login', async (req, res, next) => {
-	if(!req.body.token){
-		return res.status(401).json({error: 'no token'});
+router.post('/login', async (req, res) => {
+	if (!req.body.token) {
+		return res.status(401).json({ error: 'no token' });
 	}
 	const { token } = req.body;
 	const ticket = await client.verifyIdToken({
@@ -36,30 +36,32 @@ router.post('/login', async (req, res, next) => {
 		audience: process.env.GOOGLE_CLIENT_ID
 	});
 	if (!ticket) {
-		return res.sendStatus(401).json({state: 'invalid'});
+		return res.sendStatus(401).json({ state: 'invalid' });
 	}
+	let resData = {};
 	const { name, email, picture } = ticket.getPayload();
 	const user = { name, email, picture };
 	console.log(user);
-	// const response = user.findOne(email);
-	// if (response) {
-	// 	res.json({state: 'registered'});
-	// 	// Update
-	// } else {
-	// 	res.json({ state: 'not-registered'});
-	// 	// Insert (Or not. Redirect to profile setup page)
-	// 	// put info into session
-	// 	// 3 responses: is registered (cred in google database), (cre not in database), (they aren't who they say they are)
-	// 	// logged, pending,  
-	// }
-
-	// req.session.regenerate((err) => {
-	// 	if (err) {
-	// 		// handle error
-	// 	}
-	// 	req.session.user = user;
-	// 	res.json({ user: user });
-	// });
+	const response = userModel.findOne(email);
+	if (response.email) {
+		resData['state'] = 'registered';
+		// Update
+	} else {
+		resData['state'] = 'not-registered';
+		// Insert (Or not. Redirect to profile setup page)
+		// put info into session
+		// 3 responses: is registered (cred in google database), (cre not in database), (they aren't who they say they are)
+		// logged, pending, error
+	}
+	resData['user'] = user;
+	console.log(resData);
+	req.session.regenerate((err) => {
+		if (err) {
+			// handle error
+		}
+		req.session.user = user;
+		res.json({ userData: resData });
+	});
 });
 // route if user is authenticated
 // global state (user's name, email)
@@ -69,6 +71,13 @@ function isAuthenticated(req, res, next) {
 	}
 	return next();
 }
+router.get("/protected",
+	isAuthenticated,
+	function (req, res, next) {
+		//would actually be doing something
+		res.sendStatus(200);
+	}
+);
 
 router.post('/logout', isAuthenticated, (req, res, next) => {
 	req.session.destroy((err) => {

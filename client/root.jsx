@@ -8,7 +8,7 @@ import usePost from './hooks/usePost';
 export default function Root() {
 	// fetch google client id
 	let [error, loading, data] = useFetch('/api/google-client-id', []);
-	
+
 	// fetch google crendetials using token
 	const [credential, setCredential] = useState(null);
 	//const [authError, authLoad, authData] = usePost('auth/login', credential, []);
@@ -16,7 +16,7 @@ export default function Root() {
 
 	// reword error message for user
 	if (error) {
-		error = "Error loading google authentification";
+		error = 'Error loading google authentification';
 	}
 
 	// handles error google login fails
@@ -26,9 +26,20 @@ export default function Root() {
 	}
 
 	// handles google login, makes fetch to auth api
-	function handleLogin(googleData) {
-		setCredential({token: googleData.credential});
-		console.log(googleData.credential);
+	async function handleLogin(googleData) {
+		const res = await fetch('/auth/login', {
+			method: 'POST',
+			body: JSON.stringify({
+				token: googleData.credential
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		//setCredential({ token: googleData.credential });
+		const data = await res.json();
+		console.log(data.userData);
 	}
 
 	return (
