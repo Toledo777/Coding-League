@@ -133,7 +133,8 @@ router.get('/user/id', async(req, res) => {
 router.put('/update/user/id', async (req, res) => {
 	// check for id
 	if (req.query.id) {
-		const response = await user.updateOne({_id: req.query.id})
+		const userData = req.body;
+		const response = await user.updateOne({_id: req.query.id}, userData);
 		if (response != undefined) {
 			res.json(response);
 		}
