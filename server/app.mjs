@@ -1,12 +1,13 @@
 import express from 'express';
 import api from '../server/api.mjs';
+import auth from '../server/auth.mjs'
 
 const app = express();
 
 app.use(express.static('dist'));
 
 app.use('/api', api);
-
+app.use('/auth', auth)
 /**
  * 404 response if sub-query not provided
  */

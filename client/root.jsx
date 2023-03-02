@@ -7,11 +7,11 @@ import usePost from './hooks/usePost';
 
 export default function Root() {
 	// fetch google client id
-	let [error, loading, data] = useFetch('/api/google-client-id', [])
+	let [error, loading, data] = useFetch('/api/google-client-id', []);
 	
 	// fetch google crendetials using token
 	const [credential, setCredential] = useState(null);
-	const [authError, authLoad, authData] = usePost('auth', credential, []);
+	//const [authError, authLoad, authData] = usePost('auth/login', credential, []);
 
 
 	// reword error message for user
