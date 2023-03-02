@@ -2,3 +2,6 @@
   list-style: none;
   text-indent: -2em;
 }
+.diffSlider {
+  max-width: 20em;
+}

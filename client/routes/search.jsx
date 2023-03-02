@@ -6,17 +6,17 @@ import SearchHolder from '../components/searchHolder';
 export default function Search() {
 	const [search, setSearch] = useState('');
 	const [tags, setTags] = useState(['all']);
-	const [range, setRange] = useState([800, 3500]);
+	const [diffRange, setDiffRange] = useState([800, 3500]);
 
 	useEffect (() => {
 		// pass parameters to SearchCaseAndHolder component here
-	}, [search, tags, range]);
+	}, [search, tags, diffRange]);
 	
 	return (
 		<div>
 			<h1>Search!</h1>
 			<h2>Search params:</h2>
-			<Filter tags={tags} setTags={setTags} range={range} setRange={setRange} />
+			<Filter tags={tags} setTags={setTags} diffRange={diffRange} setDiffRange={setDiffRange} />
 			<SearchHolder></SearchHolder>
 		</div>
 	);
