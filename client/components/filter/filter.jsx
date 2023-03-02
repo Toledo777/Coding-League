@@ -7,6 +7,7 @@ export default function Filter({ tags, setTags, diffRange, setDiffRange }) {
 	const [minValue, setMinValue] = useState(800);
 	const [maxValue, setMaxValue] = useState(3500);
 
+	// Check in with others to see if we can get tags programatically instead of... this.
 	const tagLabels = [
 		'math',
 		'probabilities',
@@ -34,6 +35,7 @@ export default function Filter({ tags, setTags, diffRange, setDiffRange }) {
 		'shortest paths',
 	];
 
+	// When user selects from multi-select, update the tags state to currently selected options
 	function setTagsHelper(event) {
 		let choices = Array.from(event.target.selectedOptions).map(({ value }) => value);
 		if (choices.length === 0){
@@ -42,6 +44,7 @@ export default function Filter({ tags, setTags, diffRange, setDiffRange }) {
 		setTags(choices);
 	}
 
+	// When either the min or max value of the slider changes, update the difficulty range state accordingly
 	useEffect (() => {
 		setDiffRange([minValue, maxValue]);
 	}, [minValue, maxValue]);
