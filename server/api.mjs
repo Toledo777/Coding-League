@@ -1,15 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
-
-
+import * as fileIO from './fileIO/fileIO.mjs';
 
 dotenv.config();
 
 const router = express.Router();
 import { problem } from './models/problem.mjs';
-
-
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 
@@ -88,6 +85,20 @@ router.get('/problem/tags', async (req, res) => {
 	res.json(response[0]);
 });
 
+
+/**
+ * get json result containing string array of all possible coding problem tags
+ * used in react to populate the tag multiselect field in the filter component of the search page
+ */
+router.get('/problem/allTags', async (req, res) => {
+	console.log(process.cwd());
+	let tags = await fileIO.readFile(fileIO.allTagsPath);
+	// if (tags == null) {
+	// 	res.status(404).json({ error: 'tags unavailable' });
+	// } else {
+	res.status(200).json({ tags });
+	// }
+});
 
 /**
  * Submits code to be ran by the code-runner

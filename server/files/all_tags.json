@@ -1,0 +1,110 @@
+[
+  {
+    "name": "implementation"
+  },
+  {
+    "name": "constructive algorithms"
+  },
+  {
+    "name": "math"
+  },
+  {
+    "name": "brute force"
+  },
+  {
+    "name": "dfs and similar"
+  },
+  {
+    "name": "dp"
+  },
+  {
+    "name": "graphs"
+  },
+  {
+    "name": "greedy"
+  },
+  {
+    "name": "number theory"
+  },
+  {
+    "name": "trees"
+  },
+  {
+    "name": "*special problem"
+  },
+  {
+    "name": "data structures"
+  },
+  {
+    "name": "binary search"
+  },
+  {
+    "name": "sortings"
+  },
+  {
+    "name": "two pointers"
+  },
+  {
+    "name": "combinatorics"
+  },
+  {
+    "name": "shortest paths"
+  },
+  {
+    "name": "data structures"
+  },
+  {
+    "name": "graph matchings"
+  },
+  {
+    "name": "divide and conquer"
+  },
+  {
+    "name": "meet-in-the-middle"
+  },
+  {
+    "name": "sortings"
+  },
+  {
+    "name": "bitmasks"
+  },
+  {
+    "name": "games"
+  },
+  {
+    "name": "geometry"
+  },
+  {
+    "name": "hashing"
+  },
+  {
+    "name": "flows"
+  },
+  {
+    "name": "matrices"
+  },
+  {
+    "name": "ternary search"
+  },
+  {
+    "name": "string suffix structures"
+  },
+  {
+    "name": "2-sat"
+  },
+  {
+    "name": "probabilities"
+  },
+  {
+    "name": "chinese remainder theorem"
+  },
+  {
+    "name": "expression parsing"
+  },
+  {
+    "name": "fft"
+  },
+  {
+    "name": "schedules"
+  }
+]
