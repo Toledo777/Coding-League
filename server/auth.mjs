@@ -25,10 +25,10 @@ router.post('/auth', async (req, res, next) => {
 	if(response) {
 		// Update
 	} else {
-		// Insert
+		// Insert (or not. Redirect to profile setup page)
 	}
 
-	req.session.regenerate(function(err) {
+	req.session.regenerate((err) => {
 		if (err) {
 			// handle error
 		}
@@ -37,3 +37,19 @@ router.post('/auth', async (req, res, next) => {
 	});
 });
 
+function isAuthenticated(req, res, next) {
+	if(!req.session.user) {
+		//handle error
+	}
+	return next();
+}
+
+router.post('/logout', isAuthenticated, (req, res, next) =>{
+	req.session.destroy((err) => {
+		if (err) {
+			//handle error
+		}
+		res.clearCookie('id');
+		res.sendStatus(200);
+	});
+});
