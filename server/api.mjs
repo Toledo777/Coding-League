@@ -17,7 +17,7 @@ const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 router.use(bodyParser.json());
 
 /**
- * gets random problems in a range given by req.query.range (2941 is equal to the amount of problems in our db)
+ * gets random problems in a range given by req.query.start (2941 is equal to the amount of problems in our db)
  * this is so we don't have to fetch the entire db every time we want some randoms
  *  
  */

@@ -2,8 +2,8 @@ import React from 'react';
 import useFetch from '../hooks/useFetch';
 
 export default function Problem({ id }) {
-	//let [error, loading, data] = useFetch('/api/problem/id/?id=' + id, []);
-	let [error, loading, data] = useFetch('api/problem/random/random', []);
+	let [error, loading, data] = useFetch('/api/problem/id/?id=' + id, []);
+	//let [error, loading, data] = useFetch('api/problem/random/random', []);
 	return (
 		<div className='problem'>
 			<h3>
