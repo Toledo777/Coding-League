@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
 
@@ -22,24 +22,18 @@ router.use(bodyParser.json());
  *  
  */
 router.get('/problem/random', async (req, res) => {
-	// let random = Math.floor(Math.random() * 2941);
-	// let array = [];
-	// for (let i = 0; i < req.query.start; i++) {
-	// 	array.push(await problem.findOne({}).skip(random));
-	// 	random = Math.floor(Math.random() * 2941);
-	// }
-	let problem = await problem.find([{ $sample: { size: 1 } }]);
-	res.json(problem);
+	let response = await problem.aggregate([{ $sample: { size: 1 } }]);
+	console.log(response);
+	res.json(response[0]);
 });
 
 //fetches {req.query.count} number of problems starting at {req.query.start} in the db's entire list of problems (for pagination) 
 router.get('/problem/list', async (req, res) => {
-	let array = [];
-	let max = parseInt(req.query.start) + parseInt(req.query.count);
-	for (let i = req.query.start; i < max; i++) {
-		array.push(await problem.findOne({}).skip(i));
-	}
-	res.json(array);
+	let response = await problem.aggregate([
+		{ $skip: parseInt(req.query.start) },
+		{ $limit: parseInt(req.query.count) }
+	]);
+	res.json(response);
 });
 
 /**
