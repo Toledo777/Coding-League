@@ -2,15 +2,15 @@
     display:inline-block;
     background-color: lightgray;
     margin-bottom: 10px;
-    width: 135px;
   }
 .insideProblem{
-    height: 170px;
+    height: 150px;
+    width: 200px;
 }
 
 .insideButton{
     position: absolute;
-    height: 170px;
+    height: 150px;
     padding-left: 100px;
 }
 .actualButton{

@@ -18,6 +18,7 @@ export default function Search() {
 			<h2>Search params:</h2>
 			<Filter tags={tags} setTags={setTags} diffRange={diffRange} setDiffRange={setDiffRange} />
 			<SearchHolder></SearchHolder>
+			<SearchHolder count={3} start={0} title={''} tag={[]} ></SearchHolder>
 		</div>
 	);
 }

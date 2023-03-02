@@ -10,19 +10,36 @@ const router = express.Router();
 import { problem } from './models/problem.mjs';
 
 
+
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 
 // Parse body as json
 router.use(bodyParser.json());
 
 /**
- * gets a random problem, works on first 50 problems,
- *  incomplete until we decide how we want to implement difficulty
+ * gets random problems in a range given by req.query.range (2941 is equal to the amount of problems in our db)
+ * this is so we don't have to fetch the entire db every time we want some randoms
+ *  
  */
 router.get('/problem/random', async (req, res) => {
-	const response = await problem.find({});
-	let random = Math.floor(Math.random(50));
-	res.json(response[random]);
+	// let random = Math.floor(Math.random() * 2941);
+	// let array = [];
+	// for (let i = 0; i < req.query.start; i++) {
+	// 	array.push(await problem.findOne({}).skip(random));
+	// 	random = Math.floor(Math.random() * 2941);
+	// }
+	let problem = await problem.find([{ $sample: { size: 1 } }]);
+	res.json(problem);
+});
+
+//fetches {req.query.count} number of problems starting at {req.query.start} in the db's entire list of problems (for pagination) 
+router.get('/problem/list', async (req, res) => {
+	let array = [];
+	let max = parseInt(req.query.start) + parseInt(req.query.count);
+	for (let i = req.query.start; i < max; i++) {
+		array.push(await problem.findOne({}).skip(i));
+	}
+	res.json(array);
 });
 
 /**
