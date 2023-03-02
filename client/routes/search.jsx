@@ -5,7 +5,7 @@ export default function Search() {
 	return (
 		<div>
 			<h1>Search!</h1>
-			<SearchHolder></SearchHolder>
+			<SearchHolder count={3} start={0} title={''} tag={[]} ></SearchHolder>
 		</div>
 	);
 }

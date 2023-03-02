@@ -1,16 +1,11 @@
 import React from 'react';
 import './searchCase.css';
-export default function SearchCase({ title, difficulty, type }) {
-	if (difficulty == undefined) {
-		difficulty = 'Not Applicable';
-	}
+export default function SearchCase({ title, type }) {
 	return (
 		<div className='outer'>
 			<div className='insideProblem'>
 				Title:
 				<div dangerouslySetInnerHTML={{ __html: title }} />
-				Difficulty:
-				<div dangerouslySetInnerHTML={{ __html: difficulty }} />
 				Type:
 				<div dangerouslySetInnerHTML={{ __html: type }} />
 			</div>
