@@ -3,15 +3,13 @@ import { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
-import usePost from './hooks/usePost';
+// import usePost from './hooks/usePost';
 
 export default function Root() {
 	// fetch google client id
 	let [error, loading, data] = useFetch('/api/google-client-id', []);
-
-	// fetch google crendetials using token
-	const [credential, setCredential] = useState(null);
 	//const [authError, authLoad, authData] = usePost('auth/login', credential, []);
+	const [username, setUser] = useState('');
 
 
 	// reword error message for user
@@ -27,6 +25,8 @@ export default function Root() {
 
 	// handles google login, makes fetch to auth api
 	async function handleLogin(googleData) {
+
+		// call POST request for logging in
 		const res = await fetch('/auth/login', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -37,9 +37,24 @@ export default function Root() {
 			}
 		});
 
-		//setCredential({ token: googleData.credential });
+		// Retrieve data as json and set user's name
 		const data = await res.json();
-		console.log(data.userData);
+
+		if(data.state === 'not-registered'){
+			// This path will redirect to profile setup page
+			console.log('redirect to setup page');
+		}
+
+		// This will eventually be in else if for 'registered' state
+		setUser(data.user.name);
+	}
+
+	/**
+	 * Call fetch to logout the user
+	 */
+	async function handleLogout() {
+		await fetch('/auth/logout');
+		setUser();
 	}
 
 	return (
@@ -47,9 +62,11 @@ export default function Root() {
 			<nav>
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
-				<GoogleLogin
-					onSuccess={handleLogin}
-				/>
+
+				{!username && <GoogleLogin onSuccess={handleLogin} onError={handleError}/>}
+				{username ? username : ''}
+				{username && <button onClick={handleLogout}>Logout</button>}
+
 			</nav>
 			<main className='content'>
 				<h3>

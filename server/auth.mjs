@@ -27,9 +27,13 @@ router.use(session({
 router.use(express.json());
 
 router.post('/login', async (req, res) => {
+
+	// Check if token in request
 	if (!req.body.token) {
 		return res.status(401).json({ error: 'no token' });
 	}
+
+	// Retrieve token, and verify it its valid
 	const { token } = req.body;
 	const ticket = await client.verifyIdToken({
 		idToken: token,
@@ -38,51 +42,52 @@ router.post('/login', async (req, res) => {
 	if (!ticket) {
 		return res.sendStatus(401).json({ state: 'invalid' });
 	}
-	let resData = {};
+
+	// Extract user data 
 	const { name, email, picture } = ticket.getPayload();
 	const user = { name, email, picture };
-	console.log(user);
+
+	let state = '';
 	const response = userModel.findOne(email);
 	if (response.email) {
-		resData['state'] = 'registered';
+		state = 'registered';
 		// Update
 	} else {
-		resData['state'] = 'not-registered';
+		state = 'not-registered';
 		// Insert (Or not. Redirect to profile setup page)
 		// put info into session
 		// 3 responses: is registered (cred in google database), (cre not in database), (they aren't who they say they are)
 		// logged, pending, error
+		// global state (user's name, email)
 	}
-	resData['user'] = user;
-	console.log(resData);
+
+	// Note: you may want to save the session to a datastore like Redis in production.
 	req.session.regenerate((err) => {
 		if (err) {
 			// handle error
 		}
 		req.session.user = user;
-		res.json({ userData: resData });
+		res.json({'state': state, user});
 	});
 });
 // route if user is authenticated
-// global state (user's name, email)
 function isAuthenticated(req, res, next) {
 	if (!req.session.user) {
-		//handle error
+		return res.sendStatus(401);
 	}
 	return next();
 }
-router.get("/protected",
+router.get('/protected',
 	isAuthenticated,
-	function (req, res, next) {
-		//would actually be doing something
+	function (req, res) {
 		res.sendStatus(200);
 	}
 );
 
-router.post('/logout', isAuthenticated, (req, res, next) => {
+router.post('/logout', isAuthenticated, (req, res) => {
 	req.session.destroy((err) => {
 		if (err) {
-			//handle error
+			return res.sendStatus(500);
 		}
 		res.clearCookie('id');
 		res.sendStatus(200);
