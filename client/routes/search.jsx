@@ -1,22 +1,22 @@
 import React from 'react';
 import Filter from '../components/filter/filter';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SearchHolder from '../components/searchHolder';
 
 export default function Search() {
 	const [search, setSearch] = useState('');
 	const [tags, setTags] = useState(['all']);
-	const [diffRange, setDiffRange] = useState([800, 3500]);
+	const [diffMin, setDiffMin] = useState(800);
+	const [diffMax, setDiffMax] = useState(3500);
 
-	useEffect (() => {
-		// pass parameters to SearchCaseAndHolder component here
-	}, [search, tags, diffRange]);
+	// useEffect (() => {
+	// }, [search, tags, diffRange]);
 	
 	return (
 		<div>
 			<h1>Search!</h1>
 			<h2>Search params:</h2>
-			<Filter tags={tags} setTags={setTags} diffRange={diffRange} setDiffRange={setDiffRange} />
+			<Filter key='filters' tags={tags} setTags={setTags} diffMin={diffMin} diffMax={diffMax} setDiffMin={setDiffMin} setDiffMax={setDiffMax} />
 			<SearchHolder></SearchHolder>
 			<SearchHolder count={3} start={0} title={''} tag={[]} ></SearchHolder>
 		</div>
