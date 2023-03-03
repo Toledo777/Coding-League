@@ -5,6 +5,7 @@ import useFetch from '../../hooks/useFetch';
 export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, setDiffMax }) {
 	const MultiRangeSlider = require('multi-range-slider-react').default;
 
+	// Fetch all tags for tag multielect
 	const [error, loading, tagLabels] = useFetch('/api/allTags', []);
 
 	// When user selects from multi-select, update the tags state to currently selected options
@@ -16,10 +17,7 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 		setTags(choices);
 	}
 
-	useEffect(() => {
-		console.log((tagLabels.length));
-	}, [tagLabels]);
-
+	// Handle slider value changing
 	const sliderChange = (min, max) => {
 		setDiffMin(min);
 		setDiffMax(max);

@@ -8,9 +8,6 @@ export default function Search() {
 	const [tags, setTags] = useState(['all']);
 	const [diffMin, setDiffMin] = useState(800);
 	const [diffMax, setDiffMax] = useState(3500);
-
-	// useEffect (() => {
-	// }, [search, tags, diffRange]);
 	
 	return (
 		<div>
