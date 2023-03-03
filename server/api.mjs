@@ -96,7 +96,7 @@ router.get('/allTags', async (req, res) => {
 	// if (tags == null) {
 	// 	res.status(404).json({ error: 'tags unavailable' });
 	// } else {
-	res.json({ tags });
+	res.json(tags);
 	// }
 });
 

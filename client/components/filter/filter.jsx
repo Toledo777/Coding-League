@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './filter.css';
-import useFetch from '../../hooks/usePost';
+import useFetch from '../../hooks/useFetch';
 
 export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, setDiffMax }) {
 	const MultiRangeSlider = require('multi-range-slider-react').default;
@@ -16,6 +16,10 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 		setTags(choices);
 	}
 
+	useEffect(() => {
+		console.log((tagLabels.length));
+	}, [tagLabels]);
+
 	const sliderChange = (min, max) => {
 		setDiffMin(min);
 		setDiffMax(max);
@@ -26,7 +30,7 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 			<h2>Filters</h2>
 			<h3>Tags</h3>
 			<select className='tagSelect' multiple={true} onChange={(event) => setTagsHelper(event)}>
-				{/* {tagLabels.tags.length > 0 && tagLabels.tags.map((label, index) => <option key={index} value={label.name}>{label.name}</option>)} */}
+				{ tagLabels.length > 0 && tagLabels.map((tag, index) => <option key={index} value={tag.name}>{tag.name}</option>)}
 			</select>
 			<button className='clearTags' onClick={() => { setTags(['all']); }}>Clear tags</button>
 			<ul className='tags'>
