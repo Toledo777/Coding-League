@@ -9,14 +9,6 @@ const app = express();
  */
 app.use(compression());
 
-/**
- * Setup caching for API routes to use
- */
-app.use(function (req, res, next) {
-	res.set('Cache-control', 'public, max-age=31536000');
-	next();
-});
-
 app.use(express.static('dist'));
 
 app.use('/api', api);
