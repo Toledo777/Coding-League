@@ -33,10 +33,10 @@ router.get('/problem/id', async (req, res) => {
 		if (response != undefined) {
 			res.json(response);
 		} else {
-			res.json({ title: 'invalid ID' });
+			res.status(404).json({ title: 'invalid ID' });
 		}
 	} else {
-		res.json({ title: 'No ID input' });
+		res.status(404).json({ title: 'No ID input' });
 	}
 });
 

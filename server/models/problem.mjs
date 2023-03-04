@@ -1,9 +1,4 @@
 import mongoose from 'mongoose';
-import cachegoose from 'recachegoose';
-
-cachegoose(mongoose, {
-	engine: 'memory'
-});
 
 const testCase = { input: String, output: String };
 
