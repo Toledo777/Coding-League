@@ -5,7 +5,7 @@ import compression from 'compression';
 const app = express();
 
 /**
- * Compress all responses JSON, resulting in smaller data sizes
+ * Compress all JSON responses, resulting in smaller data sizes
  */
 app.use(compression());
 
