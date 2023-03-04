@@ -87,11 +87,11 @@ router.get('/problem/tags', async (req, res) => {
 router.get('/allTags', async (req, res) => {
 	console.log(process.cwd());
 	let tags = await fileIO.readFile(fileIO.allTagsPath);
-	// if (tags == null) {
-	// 	res.status(404).json({ error: 'tags unavailable' });
-	// } else {
-	res.json(tags);
-	// }
+	if (tags == null) {
+		res.status(404).json({ error: 'tags unavailable' });
+	} else {
+		res.json(tags);
+	}
 });
 
 /**

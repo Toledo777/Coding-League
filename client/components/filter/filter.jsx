@@ -50,7 +50,7 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 			<h2>Filters</h2>
 			<h3>Tags</h3>
 			<select className='tagSelect' multiple={true} onChange={(event) => setTagsHelper(event)}>
-				{ tagLabels !== null && tagLabels.length > 0 && tagLabels.map((tag, index) => <option key={index} value={tag.name}>{tag.name}</option>)}
+				{ tagLabels.length > 0 && tagLabels.error === undefined && tagLabels.map((tag, index) => <option key={index} value={tag.name}>{tag.name}</option>)}
 			</select>
 			<button className='clearTags' onClick={() => { setTags(['all']); }}>Clear tags</button>
 			<ul className='tags'>
