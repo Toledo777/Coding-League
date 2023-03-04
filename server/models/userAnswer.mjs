@@ -1,4 +1,9 @@
 import mongoose from 'mongoose';
+import cachegoose from 'recachegoose';
+
+cachegoose(mongoose, {
+	engine: 'memory'
+});
 
 const userAnswerSchema = {
 	email: String,
