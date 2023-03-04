@@ -1,7 +1,29 @@
+/* Tags Selected List */
 .tags {
   list-style: none;
   text-indent: -2em;
 }
+
+/* Difficulty Slider */
 .diffSlider {
   max-width: 20em;
+}
+
+/* Complicated Difficulty Slider Styling */
+.diffSlider .range-slider__thumb[data-lower] {
+  background: var(--gradient-start);
+}
+
+.diffSlider .range-slider__thumb[data-upper] {
+  background: var(--gradient-end);
+}
+
+.diffSlider .range-slider__thumb[data-active] {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+#diffSlider .range-slider__range {
+  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+  background-size: 200% 100%;
+  background-position: 50% 0;
 }
