@@ -8,6 +8,14 @@ app.use(express.static('dist'));
 
 app.use('/api', api);
 app.use('/auth', auth);
+
+/**
+ * 404 response if sub-query not provided
+ */
+app.get('/auth', (req, res) => {
+	res.status(404).send('query must be provided');
+});
+
 /**
  * 404 response if sub-query not provided
  */
