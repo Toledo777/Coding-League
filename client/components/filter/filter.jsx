@@ -57,11 +57,7 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 				{tags.length > 0 && tags.map((tag, index) => <li key={index}>{tag} </li>)}
 			</ul>
 			<h3>Difficulty</h3>
-			{/* <MultiRangeSlider className='diffSlider' min='800' max='3500' minValue={diffMin} maxValue={diffMax} step={100} stepOnly={true} onChange={(event) => sliderChange(event.minValue, event.maxValue)} /> */}
-			{/* <ReactRangeSlider min={800} max={3500} value={[diffMin, diffMax]} onInput={(event) => {}}/> */}
-			
 			<RangeSlider className='diffSlider' id="diffSlider" style='--gradient-start: rgba(0,0,255,1.0); --gradient-end: rgba(255,0,0,1.0);' min='800' max='3500' step='100' value={[diffMin, diffMax]} defaultValue={[diffMin, diffMax]} onInput={(event) => { sliderChange(event); }}/>
-			{/* <RangeSliderElement className='diffSlider'></RangeSliderElement> */}
 			<button className='clearRange' onClick={() => { sliderClear([800, 3500]); }}>Clear difficulty</button>
 			<p>Range: {diffMin} - {diffMax}</p>
 			<button className='resetParams' onClick={() => { setTags(['all']); sliderClear([800, 3500]); }}>Reset filters</button>
