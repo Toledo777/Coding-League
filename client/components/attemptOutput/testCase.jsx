@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import propTypes from 'prop-types';
 import { IconCircleX, IconCircleCheck, IconCaretRight, IconCaretDown } from '@tabler/icons-react';
 import TermView from '../terminal/termView';
 import SplitPane from '../splitPane/splitPane';
@@ -32,14 +31,3 @@ export default function TestCase({ testCase, index }) {
 		</div>
 	</div >;
 }
-
-TestCase.propTypes = {
-	index: propTypes.number,
-	testCase: {
-		ok: propTypes.bool,
-		stdout: propTypes.string,
-		stderr: propTypes.string,
-		answer: propTypes.string,
-		expected: propTypes.string,
-	}
-};

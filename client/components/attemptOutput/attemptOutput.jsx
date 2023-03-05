@@ -1,5 +1,4 @@
 import React from 'react';
-import propTypes from 'prop-types';
 import TestCaseView from './testCase';
 import './attemptOutput.css';
 
