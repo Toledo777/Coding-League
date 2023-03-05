@@ -23,16 +23,19 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 	};
 
 	// Handle slider clear button or filters clear button click
-	const sliderClear = (values) => {
-		sliderChange(values);
-		document.querySelector('.diffSlider').value = values;
+	const sliderClear = () => {
+		sliderChange(800, 3500);
+		document.querySelector('.diffSlider').value = [800, 3500];
 	};
 
 	// Calculate slider gradient color in realtime using current values of the thumbs
 	const calculateColor = (values) => {
-		let newStart = `rgba(${0+(255*((values[0]-800)/(3500-800)))},${255-(255*((values[0]-800)/(3500-800)))},0,1.0)`;
-		let newEnd = `rgba(${0+(255*((values[1]-800)/(3500-800)))},${255-(255*((values[1]-800)/(3500-800)))},0,1.0)`;
-		let slider = document.querySelector('.diffSlider');
+		const [minColor, maxColor] = values.map(v => (255 * ((v - 800) / (3500 - 800))));
+
+		const newStart = `rgba(${minColor},${255 - minColor},0,1.0)`;
+		const newEnd = `rgba(${maxColor},${255 - maxColor},0,1.0)`;
+
+		const slider = document.querySelector('.diffSlider');
 		slider.style.setProperty('--gradient-start', newStart);
 		slider.style.setProperty('--gradient-end', newEnd);
 	};
@@ -47,17 +50,26 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 			<h2>Filters</h2>
 			<h3>Tags</h3>
 			<select className='tagSelect' multiple={true} onChange={(event) => setTagsHelper(event)}>
-				{ tagLabels.length > 0 && tagLabels.error === undefined && tagLabels.map((tag, index) => <option key={index} value={tag}>{tag}</option>)}
+				{ tagLabels.error === undefined && tagLabels.map((tag, index) => <option key={index} value={tag}>{tag}</option>)}
 			</select>
 			<button className='clearTags' onClick={() => { setTags(['all']); }}>Clear tags</button>
 			<ul className='tags'>
 				{tags.length > 0 && tags.map((tag, index) => <li key={index}>{tag}</li>) || tags.length === 0 && (() => <li key={0}>all</li>)}
 			</ul>
 			<h3>Difficulty</h3>
-			<RangeSlider className='diffSlider' id="diffSlider" style='--gradient-start: rgba(0,0,255,1.0); --gradient-end: rgba(255,0,0,1.0);' min='800' max='3500' step='100' value={[diffMin, diffMax]} defaultValue={[diffMin, diffMax]} onInput={(event) => { sliderChange(event[0], event[1]); }}/>
-			<button className='clearRange' onClick={() => { sliderClear([800, 3500]); }}>Clear difficulty</button>
+			<RangeSlider
+				className='diffSlider'
+				id="diffSlider"
+				style='--gradient-start: rgba(0,0,255,1.0); --gradient-end: rgba(255,0,0,1.0);'
+				min='800'
+				max='3500'
+				step='100'
+				value={[diffMin, diffMax]}
+				defaultValue={[diffMin, diffMax]}
+				onInput={(event) => { sliderChange(event[0], event[1]); }}/>
+			<button className='clearRange' onClick={() => { sliderClear(); }}>Clear difficulty</button>
 			<p>Range: {diffMin} - {diffMax}</p>
-			<button className='resetParams' onClick={() => { setTags(['all']); sliderClear([800, 3500]); }}>Reset filters</button>
+			<button className='resetParams' onClick={() => { setTags(['all']); sliderClear(); }}>Reset filters</button>
 		</div>
 	);
 }
