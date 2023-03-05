@@ -1,6 +1,7 @@
 import express from 'express';
 import api from '../server/api.mjs';
 import auth from '../server/auth.mjs';
+import session from 'express-session';
 
 const app = express();
 

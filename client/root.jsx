@@ -1,17 +1,14 @@
 import React from 'react';
-import { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
-// import usePost from './hooks/usePost';
+import useCredentials from './hooks/useCredentials';
 
 export default function Root() {
 	// fetch google client id
 	let [error, loading, data] = useFetch('/api/google-client-id', []);
-	//const [authError, authLoad, authData] = usePost('auth/login', credential, []);
-	const [username, setUser] = useState('');
-
-
+	const [user, setUser] = useCredentials();
+	
 	// reword error message for user
 	if (error) {
 		error = 'Error loading google authentification';
@@ -23,7 +20,9 @@ export default function Root() {
 		console.error(authErr);
 	}
 
-	// handles google login, makes fetch to auth api
+	/**
+	 * handles google login, makes fetch to auth api
+	 */
 	async function handleLogin(googleData) {
 
 		// call POST request for logging in
@@ -44,17 +43,21 @@ export default function Root() {
 			// This path will redirect to profile setup page
 			console.log('redirect to setup page');
 		}
-
 		// This will eventually be in else if for 'registered' state
-		setUser(data.user.name);
+		setUser(data.user);
 	}
 
-	/**
-	 * Call fetch to logout the user
+	/** 
+	 * handles google logout, makes fetch to auth api
 	 */
 	async function handleLogout() {
-		await fetch('/auth/logout');
-		setUser();
+		await fetch('/auth/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		setUser({ name: '', email: '', picture: '' });
 	}
 
 	return (
@@ -63,9 +66,9 @@ export default function Root() {
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
 
-				{!username && <GoogleLogin onSuccess={handleLogin} onError={handleError}/>}
-				{username ? username : ''}
-				{username && <button onClick={handleLogout}>Logout</button>}
+				{!user.name && <GoogleLogin onSuccess={handleLogin} onError={handleError}/>}
+				{user.name ? user.name : ''}
+				{user.name && <button onClick={handleLogout}>Logout</button>}
 
 			</nav>
 			<main className='content'>
