@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './splitPane.css';
 
 // The labels must be supplied in the same order they appear in the elements 
-export default function SplitPane({ labels, children }) {
-	const [selected, setSelected] = useState(0);
+export default function SplitPane({ labels, children, value }) {
+	const [selected, setSelected] = useState(Math.max(labels.indexOf(value), 0));
 
 	return <div className='split-pane'>
 		<div className='pane-selector'>{

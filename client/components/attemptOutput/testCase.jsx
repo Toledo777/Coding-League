@@ -24,7 +24,7 @@ export default function TestCase({ testCase, index }) {
 					expected: <code>{expected}</code>
 					but received: <code>{answer}</code>
 				</div>
-				<SplitPane labels={['stderr', 'stdout']}>
+				<SplitPane labels={['stderr', 'stdout']} value={stderr.length ? 'stderr' : 'stdout'}>
 					<TermView data={stderr} label="Stderr" />
 					<TermView data={stdout} label="Stdout" />
 				</SplitPane>
