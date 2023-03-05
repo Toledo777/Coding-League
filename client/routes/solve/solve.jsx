@@ -6,7 +6,7 @@ import AttemptOutput from '../../components/attemptOutput/attemptOutput';
 import Editor from '../../components/editor/editor';
 import SplitPane from '../../components/splitPane/splitPane';
 import useFetch from '../../hooks/useFetch';
-
+import Loading from '../../components/loader/loader';
 import './solve.css';
 
 export default function Solve() {
@@ -14,17 +14,15 @@ export default function Solve() {
 	const params = useParams();
 	const { id } = params;
 	const [error, loading, problem] = useFetch(`/api/problem/id/?id=${id}`);
-
-	const [debugCode, setDebugCode] = useState(null);
 	const [solution, setSolution] = useState('');
-
-	const debugSubmission = { code: debugCode, problem_id: id };
-
-	const [debugError, debugLoading, debugResult] = usePost('/api/problem/debug', debugSubmission, null, [debugCode]);
+	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
 
 
 	const debugSolution = () => {
-		setDebugCode(solution);
+		sendDebug({
+			code: solution,
+			problem_id: id
+		});
 	};
 
 	return <div className='solve'>
@@ -33,7 +31,7 @@ export default function Solve() {
 			<div>
 				{<AttemptOutput result={debugResult} />}
 				{debugError && <div>{debugError}</div>}
-				{debugLoading && <div>{debugLoading}</div>}
+				{debugLoading && <Loading />}
 			</div>
 		</SplitPane>
 
