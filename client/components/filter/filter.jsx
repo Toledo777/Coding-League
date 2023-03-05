@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import './filter.css';
 import useFetch from '../../hooks/useFetch';
 import 'react-range-slider-input/dist/style.css';
+const RangeSlider = require('react-range-slider-input').default;
 
 export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, setDiffMax }) {
-	const RangeSlider = require('react-range-slider-input').default;
 
 	// Fetch all tags for tag multielect
 	const [error, loading, tagLabels] = useFetch('/api/allTags', []);
@@ -12,17 +12,14 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 	// When user selects from multi-select, update the tags state to currently selected options
 	function setTagsHelper(event) {
 		let choices = Array.from(event.target.selectedOptions).map(({ value }) => value);
-		if (choices.length === 0) {
-			choices = ['all'];
-		}
 		setTags(choices);
 	}
 
 	// Handle slider value changing
-	const sliderChange = (event) => {
-		setDiffMin(event[0]);
-		setDiffMax(event[1]);
-		calculateColor(event);
+	const sliderChange = (min, max) => {
+		setDiffMin(min);
+		setDiffMax(max);
+		calculateColor([min, max]);
 	};
 
 	// Handle slider clear button or filters clear button click
@@ -54,10 +51,10 @@ export default function Filter({ tags, setTags, diffMin, diffMax, setDiffMin, se
 			</select>
 			<button className='clearTags' onClick={() => { setTags(['all']); }}>Clear tags</button>
 			<ul className='tags'>
-				{tags.length > 0 && tags.map((tag, index) => <li key={index}>{tag} </li>)}
+				{tags.length > 0 && tags.map((tag, index) => <li key={index}>{tag}</li>) || tags.length === 0 && (() => <li key={0}>all</li>)}
 			</ul>
 			<h3>Difficulty</h3>
-			<RangeSlider className='diffSlider' id="diffSlider" style='--gradient-start: rgba(0,0,255,1.0); --gradient-end: rgba(255,0,0,1.0);' min='800' max='3500' step='100' value={[diffMin, diffMax]} defaultValue={[diffMin, diffMax]} onInput={(event) => { sliderChange(event); }}/>
+			<RangeSlider className='diffSlider' id="diffSlider" style='--gradient-start: rgba(0,0,255,1.0); --gradient-end: rgba(255,0,0,1.0);' min='800' max='3500' step='100' value={[diffMin, diffMax]} defaultValue={[diffMin, diffMax]} onInput={(event) => { sliderChange(event[0], event[1]); }}/>
 			<button className='clearRange' onClick={() => { sliderClear([800, 3500]); }}>Clear difficulty</button>
 			<p>Range: {diffMin} - {diffMax}</p>
 			<button className='resetParams' onClick={() => { setTags(['all']); sliderClear([800, 3500]); }}>Reset filters</button>
