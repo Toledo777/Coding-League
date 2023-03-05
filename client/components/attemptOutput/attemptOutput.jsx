@@ -13,6 +13,7 @@ export default function AttemptOutput({ result }) {
 		failures,
 		individual_tests
 	} = result;
+
 	return (
 		<div>
 			<div className='status'>{all_ok ? 'Passed' : 'Failed'}</div>

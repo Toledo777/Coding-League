@@ -13,6 +13,7 @@ export default function TestCase({ testCase, index }) {
 			<span className='case-status'>
 				{ok ? <IconCircleCheck color='green' /> : <IconCircleX color='red' />}
 			</span>
+
 			<span className='case-label'>Test Case #{index}</span>
 
 			<span className='dropdown-toggle' onClick={() => setExpanded(!expanded)}>

@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Problem from '../../components/problem';
 import { useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost';
