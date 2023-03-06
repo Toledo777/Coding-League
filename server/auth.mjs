@@ -50,13 +50,11 @@ router.post('/login', async (req, res) => {
 	const { name, email, picture } = ticket.getPayload();
 	const user = { name, email, picture };
 
-	let state = '';
 	const response = userModel.findOne(email);
-	if (response.email) {
-		state = 'registered';
+
+	const state = response.email ? 'registered' : 'not-registered';
+	if (state === 'registered') {
 		// Update DB
-	} else {
-		state = 'not-registered';
 	}
 
 	// {ACCORDING TO JAYA's DEMO} 
