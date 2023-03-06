@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
 
 export default function Problem({ id }) {
@@ -28,6 +27,3 @@ export default function Problem({ id }) {
 		</div>
 	);
 }
-Problem.propTypes = {
-	id: PropTypes.string
-};
