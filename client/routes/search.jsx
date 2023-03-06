@@ -1,4 +1,5 @@
 import React from 'react';
+import SearchBar from '../components/SearchBar/SearchBar';
 import SearchHolder from '../components/searchHolder';
 
 export default function Search() {
@@ -6,6 +7,7 @@ export default function Search() {
 		<div>
 			<h1>Search!</h1>
 			<SearchHolder count={3} start={0} title={''} tag={[]} ></SearchHolder>
+			<SearchBar></SearchBar>
 		</div>
 	);
 }
