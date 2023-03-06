@@ -7,16 +7,30 @@ import useFetch from '../hooks/useFetch';
 //start = page to start on
 //title = search param
 //tag = also search param
-export default function SearchHolder({ count, start, title, tag }) {
+export default function SearchHolder({ count, start, title, tags, id }) {
 
 
 
 	let [error, loading, data] = useFetch('/api/problem/list?start=' + start + '&count=' + count, []);
 
-	//these logs are here for the linter, it was suggested to add title and tag as params for now because they will be used in filtering and searching
-	console.log(title);
-	console.log(tag);
+	//if there is an id sent to the holder, it will only show the problem associated with that id
+	if (id) {
+		[error, loading, data] = useFetch('/api/problem/id/?id=' + id, []);
 
+	}
+	//if there is a title sent to the holder, it will only show the problem associated with that title
+	else if (title) {
+		[error, loading, data] = useFetch('/api/problem/title/?title=' + title, []);
+	}
+
+	//this log is here for the linter, it was suggested to add tag as a param for now because it will be used in filtering and searching
+	console.log(tags);
+
+
+	//since we are mapping the data, if it returns as one object (in the case of id or title) we have to put it into an array
+	if (!Array.isArray(data)) {
+		data = [data];
+	}
 
 	return (
 		<div>

@@ -1,21 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export default function SearchBar(title) {
+export default function SearchBar({ titleChange }) {
 
-	function searcher() {
-		console.log(title);
+	let [text, setText] = useState('');
+
+	const searcher = () => {
+		//console.log(text);
+		titleChange(text);
+	};
 
 
-	}
+	const texter = (e) => {
+		setText(e.target.value);
+	};
 
 	return (
 		<div>
-			<form>
-				<label>
-					Search:
-					<input type='text' onSubmit={searcher} />
-				</label>
-			</form>
+			<label>
+				Search:
+				<input type='text' onChange={texter} />
+				<button onClick={searcher}>Submit</button>
+			</label>
 		</div>
 	);
 }
