@@ -1,10 +1,9 @@
 import React from 'react';
 import Filter from '../components/filter/filter';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchHolder from '../components/searchHolder';
 
 export default function Search() {
-	const [search, setSearch] = useState('');
 	const [tags, setTags] = useState([]);
 	const [diffRange, setDiffRange] = useState([800, 3500]);
 
@@ -12,7 +11,7 @@ export default function Search() {
 		setTags(newTags);
 		setDiffRange(newDiffRange);
 	};
-	
+
 	return (
 		<div>
 			<h1>Search!</h1>
@@ -20,7 +19,6 @@ export default function Search() {
 			<Filter
 				key='filters'
 				filterChange={filterChange} />
-			<SearchHolder></SearchHolder>
 			<SearchHolder count={3} start={0} title={''} tag={[]} ></SearchHolder>
 		</div>
 	);

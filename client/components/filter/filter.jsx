@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './filter.css';
 import useFetch from '../../hooks/useFetch';
 import 'react-range-slider-input/dist/style.css';
