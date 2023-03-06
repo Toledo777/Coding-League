@@ -7,7 +7,7 @@ export default function useCredentials() {
 		fetch('/auth/credentials', { headers })
 			.then(res => res.json())
 			.then(creds => setCredentials(creds))
-			.catch(e => console.log(e));
+			.catch(e => console.error(e));
 	}, []);
 	return [credentials, setCredentials];
 }
