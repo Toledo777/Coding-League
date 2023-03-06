@@ -5,7 +5,8 @@ import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const SESSION_MAX_AGE = 10000;
+const SESSION_MAX_AGE = 86400000; // 1 day
+const ENV_MODE = process.env.NODE_ENV || 'development';
 const router = express.Router();
 
 router.use(session({
@@ -15,7 +16,7 @@ router.use(session({
 	resave: false,
 	cookie: {
 		maxAge: SESSION_MAX_AGE, //time in ms
-		secure: false, //should only sent over https, but set to false for testing and dev on localhost
+		secure: ENV_MODE === 'development' ? false: true, //should only sent over https, but set to false for testing and dev on localhost
 		httpOnly: true, //can't be read by clientside JS
 		sameSite: 'strict' //only sent for requests to same origin
 	}
