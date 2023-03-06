@@ -1,9 +1,14 @@
 import express from 'express';
 import api from '../server/api.mjs';
 import auth from '../server/auth.mjs';
-import session from 'express-session';
+import compression from 'compression';
 
 const app = express();
+
+/**
+ * Compress all JSON responses, resulting in smaller data sizes
+ */
+app.use(compression());
 
 app.use(express.static('dist'));
 
