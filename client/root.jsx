@@ -57,7 +57,7 @@ export default function Root() {
 				'Content-Type': 'application/json'
 			}
 		});
-		setUser({ name: '', email: '', picture: '' });
+		setUser(null);
 	}
 
 	return (
@@ -66,9 +66,9 @@ export default function Root() {
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
 
-				{!user.name && <GoogleLogin onSuccess={handleLogin} onError={handleError}/>}
-				{user.name ? user.name : ''}
-				{user.name && <button onClick={handleLogout}>Logout</button>}
+				{!user && <GoogleLogin onSuccess={handleLogin} onError={handleError}/>}
+				{user && user.name}
+				{user && <button onClick={handleLogout}>Logout</button>}
 
 			</nav>
 			<main className='content'>

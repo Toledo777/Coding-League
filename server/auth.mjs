@@ -66,21 +66,15 @@ router.post('/login', async (req, res) => {
 			return res.sendStatus(500);
 		}
 		req.session.user = user;
-		res.json({'state': state, user: user});
+		res.json({state, user});
 	});
 });
 
 /**
- * Retrieves user info from session if it exists
+ * Retrieves user info from session
  */ 
 router.get('/credentials', (req, res)=>{
-	let user;
-	if (req.session.user) {
-		user = req.session.user;
-	} else {
-		user = {name: '', email: '', picture: ''};
-	}
-	res.json(user);
+	req.session.user ? res.json(req.session.user): res.json({error: 'No user credentials available'});
 });
 
 //***** routes for authenticated users only *****\\
