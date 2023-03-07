@@ -2,11 +2,39 @@ import express, { response } from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
+import { searchProblems, insertProblems } from './search/searchManager.mjs';
+import { problem } from './models/problem.mjs';
+import { create, insertBatch, search } from '@lyrasearch/lyra';
 
 dotenv.config();
 
 const router = express.Router();
-import { problem } from './models/problem.mjs';
+
+let lyraPopulate = async () => {
+	console.log('Fetching problem IDs/Titles/Descriptions');
+	// db.students.find({}, {roll:1, _id:0});
+	const dbFind = await problem.find({}, { _id: 1, title: 1 });
+	console.log(dbFind[0]);
+	// await insertProblems([dbFind[0], dbFind[1]]);
+	await insertProblems([
+		{
+			_id: '1',
+			title: 'Here is the light!.',
+		},
+		{
+			_id: '2',
+			title: 'Some more Light.',
+		},
+		{
+			_id: '3',
+			title: 'Darkness is arriving.',
+		}
+	]);
+	console.log('after insert');
+	console.log('search for "Light": ' + await searchProblems('Light'));
+	console.log('search for "Dark": ' + await searchProblems('Dark'));
+};
+lyraPopulate();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 
@@ -15,7 +43,6 @@ let problemTags;
 try {
 	problemTags = await fs.readFile('./server/assets/all_tags.json', 'utf-8');
 	problemTags = JSON.parse(problemTags);
-	console.log(problemTags);
 } catch (e) {
 	console.log(e);
 }
@@ -119,6 +146,11 @@ router.get('/allTags', async (req, res) => {
 		res.json(problemTags);
 	}
 });
+
+/**
+ * get json result containing string array of all coding problem names
+ * used in react to autocomplete 
+ */
 
 /**
  * useless hello world, can be deleted in a later commit
