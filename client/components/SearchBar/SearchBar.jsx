@@ -4,12 +4,6 @@ export default function SearchBar({ titleChange }) {
 
 	let [text, setText] = useState('');
 
-	const searcher = () => {
-		//console.log(text);
-		titleChange(text);
-	};
-
-
 	const texter = (e) => {
 		setText(e.target.value);
 	};
@@ -19,7 +13,7 @@ export default function SearchBar({ titleChange }) {
 			<label>
 				Search:
 				<input type='text' onChange={texter} />
-				<button onClick={searcher}>Submit</button>
+				<button onClick={() => titleChange(text)}>Submit</button>
 			</label>
 		</div>
 	);

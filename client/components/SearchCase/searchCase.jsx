@@ -1,6 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import './searchCase.css';
-export default function SearchCase({ title, type }) {
+export default function SearchCase({ title, type, id }) {
+
+	let navigate = useNavigate();
+
+	const routeChange = () => {
+		let path = '/solve/' + id;
+		navigate(path);
+	};
+
 	return (
 		<div className='outer'>
 			<div className='insideProblem'>
@@ -10,7 +19,7 @@ export default function SearchCase({ title, type }) {
 				<div dangerouslySetInnerHTML={{ __html: type }} />
 			</div>
 			<div className='insideButton'>
-				<button className='actualButton'>
+				<button className='actualButton' onClick={routeChange}>
 					Code
 				</button>
 			</div>
