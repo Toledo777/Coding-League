@@ -8,8 +8,7 @@ import useFetch from '../hooks/useFetch';
 export default function Search() {
 	const [tags, setTags] = useState([]);
 	const [diffRange, setDiffRange] = useState([800, 3500]);
-	const [title, setTitle] = useState('');
-
+	const [title, setTitle] = useState('2');
 
 	let [error, loading, data] = useFetch('/api/searchProblems?search=' + title, [], [title]);
 
@@ -19,9 +18,17 @@ export default function Search() {
 	console.log(tags);
 
 
+	tags.map(t => {
+		if (data.tags.includes(t)) {
+			console.log('has tag');
+		}
+	});
+
+
 	const filterChange = (newTags, newDiffRange) => {
 		setTags(newTags);
 		setDiffRange(newDiffRange);
+		console.log('inside filter change');
 	};
 
 	function titleChange(input) {
