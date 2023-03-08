@@ -3,11 +3,11 @@ import { Link, Outlet } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
 import useCredentials from './hooks/useCredentials';
-import { retrieveLoginCredentials } from './utils/auth';
+import { retrieveLoginCredentials } from './utils/authentication.mjs';
 
 export default function Root() {
 	// fetch google client id
-	let [error, loading, data] = useFetch('/api/google-client-id', []);
+	let [error, loading, data] = useFetch('/auth/google-client-id', []);
 	const [user, setUser] = useCredentials();
 
 	// reword error message for user

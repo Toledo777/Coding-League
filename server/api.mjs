@@ -14,13 +14,6 @@ const ONE_DAY = 86400;
 // Parse body as json
 router.use(bodyParser.json());
 
-// returns google client id to be used in the client
-router.get('/google-client-id', (req, res) => {
-	let clientID = process.env.GOOGLE_CLIENT_ID;
-	res.json(clientID);
-});
-
-
 /**
  * gets a random problem, works on first 50 problems,
  *  incomplete until we decide how we want to implement difficulty

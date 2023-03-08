@@ -26,6 +26,12 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 router.use(express.json());
 
+// returns google client id to be used in the client
+router.get('/google-client-id', (req, res) => {
+	let clientID = process.env.GOOGLE_CLIENT_ID;
+	res.json(clientID);
+});
+
 /**
  * Return user data by first verify ID Token, then determine user's registration status.
  */
@@ -49,7 +55,6 @@ router.post('/login', async (req, res) => {
 	// Extract user data 
 	const { name, email, picture } = ticket.getPayload();
 	const user = { name, email, picture };
-
 	const response = userModel.findOne(email);
 
 	const state = response.email ? 'registered' : 'not-registered';
