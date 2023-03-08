@@ -22,7 +22,7 @@
         0rem 0rem 0rem var(--glow-color);
 }
 
-.btn:hover, 
+.btn:hover,
 .btn:active {
     box-shadow:
         0px 0px 0px 1px var(--border-color-active) inset,
@@ -33,11 +33,11 @@
 
 /* Green button for confirmation/submission */
 .btn.confirm {
-    --glow-color:var(--confirm-color);
+    --glow-color: var(--confirm-color);
     --border-color: #0008;
     --border-color-active: #FFF8;
     background-color: var(--confirm-color);
-    color: #0008;
+    color: #000A;
 }
 
 /* Red button for confirming cancellation/deleting things */
@@ -45,16 +45,15 @@
     --glow-color: var(--cancel-color);
     --border-color: #FFFA;
     --border-color-active: #FFFE;
-    background-color: var(--cancel-color);   
-    color: #FFFE;
+    background-color: var(--cancel-color);
+    color: #FFFF;
 }
 
 /* Warning button for less severe cancels */
 .btn.warn {
-    --glow-color:var(--warn-color);
+    --glow-color: var(--warn-color);
     --border-color: #0006;
     --border-color-active: #FFF6;
     background-color: var(--warn-color);
     color: #000A;
 }
-
