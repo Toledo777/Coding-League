@@ -23,7 +23,6 @@
   "devDependencies": {
     "dotenv": "^16.0.3",
     "esbuild": "^0.17.5",
-    "esbuild-css-modules-plugin": "^2.7.1",
     "eslint": "^8.33.0",
     "eslint-plugin-react": "^7.32.2",
     "jest": "^29.4.3",

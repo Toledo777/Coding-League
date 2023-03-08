@@ -1,9 +1,7 @@
 import * as esbuild from 'esbuild';
-import CssModulesPlugin from 'esbuild-css-modules-plugin';
 import { recursiveCopy, recursiveWatch } from './recursiveDirUtils.mjs';
 
 const baseConfig = {
-	plugins: [CssModulesPlugin()],
 	external: ['*.svg', '*.png', '*.jpg'],
 	entryPoints: ['client/index.jsx'],
 	bundle: true,
