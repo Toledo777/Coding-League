@@ -13,8 +13,7 @@ const router = express.Router();
 let lyraPopulate = async () => {
 	console.log('Fetching problem IDs/Titles/Descriptions');
 	// db.students.find({}, {roll:1, _id:0});
-	const dbFind = await problem.find({}, { _id: 1, title: 1 });
-	console.log(dbFind);
+	const dbFind = await problem.find({}, { _id: 1, title: 1 }).map(({_id, title}) => ({_id, title}));
 	await insertProblems(dbFind);
 	// const oneProblem = [
 	// 	{
