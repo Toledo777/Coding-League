@@ -2,7 +2,7 @@ import React from 'react';
 import useFetch from '../hooks/useFetch';
 
 export default function Problem({ id, title }) {
-	let [error, loading, data] = useFetch('/api/problem/random/', []);
+	let [error, loading, data] = [];
 
 	if (id) {
 		[error, loading, data] = useFetch('/api/problem/id/?id=' + id, []);
@@ -10,6 +10,9 @@ export default function Problem({ id, title }) {
 	}
 	else if (title) {
 		[error, loading, data] = useFetch('/api/problem/title/?title=' + title, []);
+	}
+	else {
+		[error, loading, data] = useFetch('/api/problem/random/', []);
 	}
 
 

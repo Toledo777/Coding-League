@@ -30,7 +30,6 @@ router.use(bodyParser.json());
  */
 router.get('/problem/random', async (req, res) => {
 	let response = await problem.aggregate([{ $sample: { size: 1 } }]);
-	console.log(response);
 	res.json(response[0]);
 });
 
@@ -94,7 +93,7 @@ router.get('/problem/tags', async (req, res) => {
  *  for now this acts only as a proxy for the code-runner
  */
 router.post('/problem/debug', async (req, res) => {
-	console.log(req.body);
+	//console.log(req.body);
 	const { code, problem_id } = req.body;
 	if (code != undefined) {
 		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
