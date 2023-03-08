@@ -9,6 +9,11 @@
     color: var(--text-color);
     --gap-s: 0.25rem;
     --gap-m: calc(var(--gap-s) * 2);
+    
+    --confirm-color: rgb(79, 225, 79);
+    --warn-color: yellow;
+    --cancel-color: rgb(255, 48, 48);
+
 }
 
 @media (prefers-color-scheme: dark) {
