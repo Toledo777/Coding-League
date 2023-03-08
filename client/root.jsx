@@ -36,6 +36,8 @@ export default function Root() {
 		}
 		// setUser will eventually be in else if for 'registered' state
 		setUser(data.user);
+
+		//TODO: reload page after completed
 	}
 
 	/** 
