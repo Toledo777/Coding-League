@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchBar from '../components/SearchBar/SearchBar';
 import Filter from '../components/filter/filter';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SearchHolder from '../components/searchHolder';
 import useFetch from '../hooks/useFetch';
 
@@ -15,13 +15,18 @@ export default function Search() {
 
 	//a log for the linter so diffRange doesn't go unused
 	console.log(diffRange);
-	console.log(tags);
 
 
 	tags.map(t => {
-		if (data.tags.includes(t)) {
-			console.log('has tag');
-		}
+		console.log('tag = ' + t);
+		data.map((d, index) => {
+			console.log(d.tags);
+			if (!d.tags.includes(t)) {
+				console.log('does not include that tag');
+				data.splice(index, 1);
+				console.log(d);
+			}
+		});
 	});
 
 
