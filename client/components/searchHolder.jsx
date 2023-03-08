@@ -10,10 +10,12 @@ import useFetch from '../hooks/useFetch';
 export default function SearchHolder({ count, start, title, tags }) {
 
 	if (title == '') {
-		title = 'E. Necklace Assembly';
+		title = 'A. Two distinct points';
 	}
-	let [error, loading, data] = useFetch('/api/problem/title/?title=' + title, [], [title]);
+	let [error, loading, data] = useFetch('/api/searchProblems?search=' + title, [], [title]);
 
+
+	console.log(data);
 	if (!Array.isArray(data)) {
 		data = [data];
 	}
