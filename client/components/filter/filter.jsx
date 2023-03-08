@@ -21,7 +21,6 @@ export default function Filter({ filterChange }) {
 	// Clear selected tags list
 	const clearTags = () => {
 		setTags([]);
-		filterChange(tags, [diffMin, diffMax]);
 	};
 
 	// Update range state, slider appearance and thumb positions when user moves either thumb (or resets state and appearance when clicking 'Clear difficulty' button)
@@ -34,14 +33,12 @@ export default function Filter({ filterChange }) {
 	// Reset range state, slider appearance and thumb positions
 	const clearDiffRange = () => {
 		setDiffRangeHelper(800, 3500);
-		filterChange(tags, [diffMin, diffMax]);
 	};
 
 	// Reset all filter components to default
 	const clearFilters = () => {
 		setTagsHelper([]);
 		setDiffRangeHelper(800, 3500);
-		filterChange(tags, [diffMin, diffMax]);
 	};
 
 	// Calculate slider gradient color in realtime using current range value attached to each thumb
@@ -60,6 +57,10 @@ export default function Filter({ filterChange }) {
 	useEffect(() => {
 		calculateColor([diffMin, diffMax]);
 	}, []);
+
+	useEffect(() => {
+		filterChange(tags, [diffMin, diffMax]);
+	}, [tags, diffMin, diffMax]);
 
 	return (
 		<div className='filter-pane'>
