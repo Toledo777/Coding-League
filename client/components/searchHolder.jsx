@@ -25,7 +25,7 @@ export default function SearchHolder({ error, loading, data }) {
 				{error && error}
 				{loading && 'loading...'}
 			</h3>
-			{data.map(d => <div key={d._id}> <SearchCase title={d.title} type={d.tags} id={d._id}></SearchCase> </div>)}
+			{data.error === undefined && data.map(d => <div key={d._id}> <SearchCase title={d.title} type={d.tags} id={d._id}></SearchCase> </div>)}
 		</div>
 	);
 }
