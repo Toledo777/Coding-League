@@ -1,8 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 dotenv.config();
-import mongoose from 'mongoose';
+
 
 const router = express.Router();
 import { problem } from './models/problem.mjs';
@@ -10,6 +11,7 @@ import { user } from './models/user.mjs';
 
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
+const ONE_DAY = 86400;
 
 // Parse body as json
 router.use(bodyParser.json());
@@ -29,16 +31,14 @@ router.get('/problem/random', async (req, res) => {
  */
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
-		const response = await problem.findById(req.query.id);
+		const response = await problem.findById(req.query.id).cache(ONE_DAY);
 		if (response != undefined) {
 			res.json(response);
+		} else {
+			res.status(404).json({ title: 'invalid ID' });
 		}
-		else {
-			res.json({ title: 'bad ID' });
-		}
-	}
-	else {
-		res.json({ title: 'No ID input' });
+	} else {
+		res.status(404).json({ title: 'No ID input' });
 	}
 });
 
@@ -46,7 +46,7 @@ router.get('/problem/id', async (req, res) => {
  * gets a single problem by its title
  */
 router.get('/problem/title', async (req, res) => {
-	const response = await problem.findOne({ title: req.query.title });
+	const response = await problem.findOne({ title: req.query.title }).cache(ONE_DAY);
 	res.json(response);
 });
 
