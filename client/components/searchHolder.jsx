@@ -18,11 +18,14 @@ export default function SearchHolder({ error, loading, data }) {
 	//TODO: implement a list type of "default" problems to show the user on the search page
 	// 	[error, loading, data] = useFetch('/api/problem/list?start=' + start + '&count=' + count, []);
 
+	//for the linter
+	console.log(error);
+
 
 	return (
 		<div>
 			<h3>
-				{error && error}
+				{data.error && data.error}
 				{loading && 'loading...'}
 			</h3>
 			{data.error === undefined && data.map(d => <div key={d._id}> <SearchCase title={d.title} type={d.tags} id={d._id}></SearchCase> </div>)}
