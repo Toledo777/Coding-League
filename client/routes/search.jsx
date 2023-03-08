@@ -3,14 +3,21 @@ import SearchBar from '../components/SearchBar/SearchBar';
 import Filter from '../components/filter/filter';
 import { useState } from 'react';
 import SearchHolder from '../components/searchHolder';
+import useFetch from '../hooks/useFetch';
 
 export default function Search() {
 	const [tags, setTags] = useState([]);
 	const [diffRange, setDiffRange] = useState([800, 3500]);
 	const [title, setTitle] = useState('');
 
-	//a log for the linter so diffRance doesn't go unused
+
+	let [error, loading, data] = useFetch('/api/searchProblems?search=' + title, [], [title]);
+
+
+	//a log for the linter so diffRange doesn't go unused
 	console.log(diffRange);
+	console.log(tags);
+
 
 	const filterChange = (newTags, newDiffRange) => {
 		setTags(newTags);
@@ -28,7 +35,7 @@ export default function Search() {
 			<Filter
 				key='filters'
 				filterChange={filterChange} />
-			<SearchHolder count={3} start={0} title={title} tag={tags} ></SearchHolder>
+			<SearchHolder error={error} loading={loading} data={data} ></SearchHolder>
 			<SearchBar titleChange={input => titleChange(input)}> </SearchBar>
 		</div>
 	);
