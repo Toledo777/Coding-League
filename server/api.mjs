@@ -13,33 +13,8 @@ const router = express.Router();
 let lyraPopulate = async () => {
 	console.log('Fetching problem IDs/Titles/Descriptions');
 	// db.students.find({}, {roll:1, _id:0});
-	const dbFind = await problem.find({}, { _id: 1, title: 1 }).map(({_id, title}) => ({_id, title}));
+	const dbFind = (await problem.find({}, { _id: 1, title: 1 })).map(({ _id, title }) => ({ _id, title }));
 	await insertProblems(dbFind);
-	// const oneProblem = [
-	// 	{
-	// 		'_id': '1108A',
-	// 		'title': 'A.Two distinct points',
-	// 	},
-	// 	{
-	// 		'_id': 'another ID',
-	// 		'title': 'B. One single point',
-	// 	}];
-	// await insertProblems([
-	// 	{
-	// 		_id: '1',
-	// 		title: 'Here is the light!.',
-	// 	},
-	// 	{
-	// 		_id: '2',
-	// 		title: 'Some more Light.',
-	// 	},
-	// 	{
-	// 		_id: '3',
-	// 		title: 'Darkness is arriving.',
-	// 	}
-	// ]);
-	// console.log('done inserting 3 random titles!');
-	// await insertProblems(dbFind);
 	console.log('after insert');
 	console.log('search for "Distinct": ' + await searchProblems('distinct'));
 	console.log('search for "Dark": ' + await searchProblems('Dark'));
