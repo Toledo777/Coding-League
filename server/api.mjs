@@ -156,12 +156,15 @@ router.post('/user/create', async(req, res) => {
 router.put('/user/update', express.json(), async (req, res) => {
 	// check for email
 	console.log(req.body)
+	const userData = req.body;
 	if (req.body.email) {
-		const userData = req.body.username;
-		const response = await user.updateOne({email: req.body.email}, userData);
+		const response = await user.updateOne({email: userData.email}, userData);
 		console.log(userData);
-		if (response != undefined) {
-			res.json(response);
+
+		// if response from db
+		if (response.acknowledged) {
+			console.log("Account updated succesfully");
+			res.status(204).json({title: "Account updated"});
 		}
 
 		// no data found with email
