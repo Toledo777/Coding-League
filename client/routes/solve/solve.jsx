@@ -41,7 +41,7 @@ export default function Solve() {
 			</div>
 			<div className='editor-buttons'>
 				<button className='debug btn' onClick={debugSolution}>Debug</button>
-				<button className='submit btn' onClick={debugSolution}>Submit</button>
+				<button className='submit btn confirm' onClick={debugSolution}>Submit</button>
 			</div>
 		</div>
 	</div>;
