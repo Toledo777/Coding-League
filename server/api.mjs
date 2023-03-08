@@ -11,7 +11,7 @@ dotenv.config();
 const router = express.Router();
 
 let lyraPopulate = async () => {
-	const dbFind = (await problem.find({}, { _id: 1, title: 1, tags: 1 })).map(({ _id, title, tags}) => ({ _id, title, tags }));
+	const dbFind = (await problem.find({}, { _id: 1, title: 1, tags: 1 })).map(({ _id, title, tags }) => ({ _id, title, tags }));
 	await insertProblems(dbFind);
 	// console.log('after insert');
 	// const distinctResults = await searchProblems('distinct');
@@ -135,7 +135,9 @@ router.get('/allTags', async (req, res) => {
  * used for search bar on search page
  */
 router.get('/searchProblems', async (req, res) => {
-	if (req.query.search == undefined) {
+	if (req.query.search === undefined) {
+		res.status(400).json({ error: 'missing search param' });
+	} else if (req.query.search === '') {
 		res.status(404).json({ error: 'not searching for anything' });
 	} else {
 		const distinctResults = await searchProblems(req.query.search);
