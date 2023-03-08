@@ -18,22 +18,16 @@ export default function SearchHolder({ count, start, title, tags }) {
 		data = [data];
 	}
 
+	//for the linter
 	console.log(count);
 	console.log(start);
-
-	//if there is a title sent to the holder, it will only show the problem associated with that title
-
-
+	console.log(tags);
 
 	//TODO: implement a list type of "default" problems to show the user on the search page
 	// {
 	// 	[error, loading, data] = useFetch('/api/problem/list?start=' + start + '&count=' + count, []);
 	// 	console.log('inside else');
 	// }
-
-	//this log is here for the linter, it was suggested to add tag as a param for now because it will be used in filtering and searching
-	console.log(tags);
-
 
 
 	return (
