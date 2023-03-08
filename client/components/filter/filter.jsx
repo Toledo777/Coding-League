@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './filter.css';
 import useFetch from '../../hooks/useFetch';
 import 'react-range-slider-input/dist/style.css';
-const RangeSlider = require('react-range-slider-input').default;
+// const RangeSlider = require('react-range-slider-input').default;
+import { default as _RangeSlider } from 'react-range-slider-input';
+const RangeSlider = _RangeSlider.default;
 
 export default function Filter({ filterChange }) {
 	// Fetch all tags for tag multielect

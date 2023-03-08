@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchBar from '../components/SearchBar/SearchBar';
 import Filter from '../components/filter/filter';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchHolder from '../components/searchHolder';
 import useFetch from '../hooks/useFetch';
 
