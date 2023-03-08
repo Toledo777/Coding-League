@@ -11,13 +11,11 @@ dotenv.config();
 const router = express.Router();
 
 let lyraPopulate = async () => {
-	console.log('Fetching problem IDs/Titles/Descriptions');
-	// db.students.find({}, {roll:1, _id:0});
 	const dbFind = (await problem.find({}, { _id: 1, title: 1 })).map(({ _id, title }) => ({ _id, title }));
 	await insertProblems(dbFind);
-	console.log('after insert');
-	console.log('search for "Distinct": ' + await searchProblems('distinct'));
-	console.log('search for "Dark": ' + await searchProblems('Dark'));
+	// console.log('after insert');
+	// const distinctResults = await searchProblems('distinct');
+	// console.log(distinctResults.map((result) => `search for "Distinct": ${result._id}, ${result.title}`));
 };
 lyraPopulate();
 
@@ -132,9 +130,18 @@ router.get('/allTags', async (req, res) => {
 });
 
 /**
- * get json result containing string array of all coding problem names
- * used in react to autocomplete 
+ * get json result containing JSON array of titles and IDs of problems returned from Lyra Search
+ * takes in a search query to searche Lyra schema
+ * used for search bar on search page
  */
+router.get('/searchProblems', async (req, res) => {
+	if (req.query.search == undefined) {
+		res.status(404).json({ error: 'not searching for anything' });
+	} else {
+		const distinctResults = await searchProblems(req.query.search);
+		res.status(200).json(distinctResults);
+	}
+});
 
 /**
  * useless hello world, can be deleted in a later commit
