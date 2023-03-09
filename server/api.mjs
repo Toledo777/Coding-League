@@ -107,6 +107,7 @@ router.post('/answer', (req, res) => {
 
 /**
  * GET api to get all data on a user based on userID
+ * to use call '/api/user?id= with' id
  */
 router.get('/user', async(req, res) => {
 	// check for id
@@ -152,6 +153,7 @@ router.post('/user/create', async(req, res) => {
 /**
  * PUT api to update user data already present in database
  * uses email to update user
+ * 
  */
 router.put('/user/update', express.json(), async (req, res) => {
 	// check for email
