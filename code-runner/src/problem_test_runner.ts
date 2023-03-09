@@ -2,7 +2,7 @@ import { allocateProblemTestProcessFiles, TestRunnerFiles } from "./problem_test
 import { readTextFileWithLimit } from "./safe_reader.ts";
 import { Problem, TestCase } from "./types/problem.d.ts";
 
-type TestRunResult = {
+type TestResult = {
     ok: boolean,
     stdout: string,
     stderr: string,
@@ -10,11 +10,11 @@ type TestRunResult = {
     expected: string,
 }
 
-type ProblemAttemptResult = {
+type ProblemDebugResult = {
     all_ok: boolean,
     total_ran: number,
     failures: number,
-    individual_tests: TestRunResult[],
+    individual_tests: TestResult[],
 }
 
 function createTestingPostfix(test_input: string, result_file: string) {
@@ -47,10 +47,9 @@ async function createProcess(code: string, files: TestRunnerFiles): Promise<Deno
 }
 
 
-async function runTestCase(code: string, { input, output: expected }: TestCase, timeout = 2000): Promise<TestRunResult> {
+async function runTestCase(code: string, { input, output: expected }: TestCase, timeout = 2000): Promise<DebugTestResult> {
     const files = await allocateProblemTestProcessFiles();
     const postfix = createTestingPostfix(input, files.solution_out);
-
     const process = await createProcess(code + postfix, files);
 
     // Make sure the process is killed if it takes too long
@@ -73,7 +72,7 @@ async function runTestCase(code: string, { input, output: expected }: TestCase, 
     return { ok, stderr, stdout, answer, expected };
 }
 
-function processTestResults(results: TestRunResult[]): ProblemAttemptResult {
+function processTestResults(results: DebugTestResult[]): ProblemAttemptResult<DebugTestResult> {
     const failures = results.filter(res => !res.ok).length;
     return {
         failures,
@@ -83,16 +82,16 @@ function processTestResults(results: TestRunResult[]): ProblemAttemptResult {
     };
 }
 
-export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
-    const tests = problem.testCases.map(test => runTestCase(code, test));
-    const test_results: TestRunResult[] = await Promise.all(tests);
-
-    return processTestResults(test_results);
-}
-
-export async function debugProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
+export async function debugProblem(code: string, problem: Problem): Promise<ProblemAttemptResult<DebugTestResult>> {
     const tests = problem.testCases.slice(0, 5).map(test => runTestCase(code, test));
-    const test_results: TestRunResult[] = await Promise.all(tests);
+    const test_results: DebugTestResult[] = await Promise.all(tests);
 
     return processTestResults(test_results);
 }
+
+export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult<TestResult>> {
+    const tests = problem.testCases.map(test => runTestCase(code, test));
+    const test_results: DebugTestResult[] = await Promise.all(tests);
+    return processTestResults(test_results);
+}
+
