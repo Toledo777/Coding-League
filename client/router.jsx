@@ -2,7 +2,7 @@ import React from 'react';
 import Root from './root';
 import Error from './routes/error';
 import Home from './routes/home';
-import Solve from './routes/solve';
+import Solve from './routes/solve/solve';
 import { createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([

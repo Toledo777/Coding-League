@@ -1,27 +1,20 @@
 import React from 'react';
-import useFetch from '../hooks/useFetch';
 
-export default function Problem({ id }) {
-	let [error, loading, data] = useFetch('/api/problem/id/?id=' + id, []);
-
+export default function Problem({ problem }) {
 	return (
 		<div className='problem'>
-			<h3>
-				{error && error}
-				{loading && 'loading...' + id}
-			</h3>
 			<h3 className='header'>
-				<div dangerouslySetInnerHTML={{ __html: data.id }} />
-				<div dangerouslySetInnerHTML={{ __html: data.title }} />
+				{problem.title}
 			</h3>
+			<i>{problem._id}</i>
 			<div className='problem-content'>
 				<div className='description'>
-					<div dangerouslySetInnerHTML={{ __html: data.description }} />
-					<div dangerouslySetInnerHTML={{ __html: data.input_specification }} />
-					<div dangerouslySetInnerHTML={{ __html: data.output_specification }} />
-					<div dangerouslySetInnerHTML={{ __html: data.memory_limit }} />
-					<div dangerouslySetInnerHTML={{ __html: data.time_limit }} />
-					<div dangerouslySetInnerHTML={{ __html: data.note }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.description }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.input_specification }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.output_specification }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.memory_limit }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.time_limit }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.note }} />
 				</div>
 			</div>
 		</div>

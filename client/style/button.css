@@ -1,0 +1,59 @@
+/* Base button class */
+.btn {
+    background-color: var(--panel-color);
+    --glow-color: #0004;
+    --border-color: #AAA;
+    --border-color-active: #CCC;
+    border-radius: 0.25rem;
+    margin: var(--gap-m);
+    padding: var(--gap-m) calc(var(--gap-m) * 2);
+    border: none;
+    cursor: pointer;
+    font-size: medium;
+    transition: box-shadow 0.25s;
+    font-weight: bold;
+
+    /* This looks like redundant styling since the glow is hidden, */
+    /* but this forces CSS to animate it correctly */
+    box-shadow:
+        0px 0px 0px 1px var(--border-color) inset,
+        0px 0px 50px 1px #FFF0 inset,
+        0rem 0.1rem 0.25rem #0004,
+        0rem 0rem 0rem var(--glow-color);
+}
+
+.btn:hover,
+.btn:active {
+    box-shadow:
+        0px 0px 0px 1px var(--border-color-active) inset,
+        0px 0px 50px 1px #FFF6 inset,
+        0rem 0rem 0rem #0004,
+        0rem 0.1rem 0.25rem var(--glow-color);
+}
+
+/* Green button for confirmation/submission */
+.btn.confirm {
+    --glow-color: var(--confirm-color);
+    --border-color: #0008;
+    --border-color-active: #FFF8;
+    background-color: var(--confirm-color);
+    color: #000A;
+}
+
+/* Red button for confirming cancellation/deleting things */
+.btn.cancel {
+    --glow-color: var(--cancel-color);
+    --border-color: #FFFA;
+    --border-color-active: #FFFE;
+    background-color: var(--cancel-color);
+    color: #FFFF;
+}
+
+/* Warning button for less severe cancels */
+.btn.warn {
+    --glow-color: var(--warn-color);
+    --border-color: #0006;
+    --border-color-active: #FFF6;
+    background-color: var(--warn-color);
+    color: #000A;
+}

@@ -43,6 +43,8 @@
     "fetch": "^1.1.0",
     "mongoose": "^6.9.1",
     "react-ace": "^10.1.0",
+    "xterm": "^5.1.0",
+    "xterm-addon-fit": "^0.7.0",
     "recachegoose": "^9.1.0"
   },
   "type": "module"
