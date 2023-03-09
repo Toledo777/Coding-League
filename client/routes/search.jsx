@@ -33,12 +33,21 @@ export default function Search() {
 		});
 	}
 
+
+	let newestData = newData;
 	if (data.error === undefined) {
-		data.map((d) => {
+		newestData = [];
+		newData.map((d) => {
+			let canPush = true;
 			let diff = parseInt(d.tags[d.tags.length - 1].slice(1));
-			if (diff >= diffRange[0] && diff <= diffRange[1] && !newData.includes(d)) {
-				newData.push(d);
-				console.log('pushing');
+			if (diff >= diffRange[0] && diff <= diffRange[1]) {
+				console.log('can push');
+			}
+			else {
+				canPush = false;
+			}
+			if (canPush && !newestData.includes(d)) {
+				newestData.push(d);
 			}
 		});
 	}
@@ -60,7 +69,7 @@ export default function Search() {
 				key='filters'
 				filterChange={filterChange} />
 			<SearchBar doSearch={input => doSearch(input)}> </SearchBar>
-			<SearchHolder error={error} loading={loading} data={newData} ></SearchHolder>
+			<SearchHolder error={error} loading={loading} data={newestData} ></SearchHolder>
 		</div>
 	);
 }
