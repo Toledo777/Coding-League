@@ -63,9 +63,9 @@ export default function Filter({ filterChange }) {
 		calculateColor([diffMin, diffMax]);
 	}, []);
 
-	// useEffect(() => {
-	// 	filterChange(tags, [diffMin, diffMax]);
-	// }, [tags, diffMin, diffMax]);
+	useEffect(() => {
+		filterChange(tags, [diffMin, diffMax]);
+	}, [tags]);
 
 
 	const newSetter = () => {
