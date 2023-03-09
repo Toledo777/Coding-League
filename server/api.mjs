@@ -112,7 +112,6 @@ router.post('/answer', (req, res) => {
 router.get('/user', async(req, res) => {
 	// check for email
 	if (req.query.email) {
-		// check for valid mongo object id format
 		
 		const response = await user.findOne({email: req.query.email});
 		if (response) {
@@ -144,9 +143,7 @@ router.get('/user', async(req, res) => {
 
 
 router.post('/user/create', async(req, res) => {
-
 	// check for user data in body
-	console.log(req.body);
 	if (req.body.email) {
 		const userData = new user(req.body);
 		await userData.save();
@@ -157,7 +154,6 @@ router.post('/user/create', async(req, res) => {
 	else {
 		res.status(400).json({title: 'ERROR: Missing email or data in body'});
 	}
-	
 });
 
 /**
@@ -167,7 +163,6 @@ router.post('/user/create', async(req, res) => {
  */
 router.put('/user/update', express.json(), async (req, res) => {
 	// check for email
-	console.log(req.body)
 	const userData = req.body;
 	if (req.body.email) {
 		const response = await user.updateOne({email: userData.email}, userData);
@@ -188,7 +183,6 @@ router.put('/user/update', express.json(), async (req, res) => {
 	else {
 		res.status(400).json({ title: 'ERROR: Missing email parameter' });
 	}
-
 });
 
 export default router;
