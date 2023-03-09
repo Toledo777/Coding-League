@@ -17,23 +17,20 @@ export default function Search() {
 	console.log(diffRange);
 
 
-	let newData = data;
-	if (tags.length > 0 && data.error === undefined) {
-		newData = [];
-		data.map((d) => {
-			let canPush = true;
-			tags.map(t => {
-				if (!d.tags.includes(t)){
-					canPush = false;
+	let newData = [];
+	if (data.error === undefined){
+		newData = data.filter(problem => {
+			let valid = true;
+			tags.forEach(t => {
+				if (!problem.tags.includes(t)){
+					valid = false;
 				}
 			});
-			if (canPush && !newData.includes(d)){
-				newData.push(d);
+			if (valid){
+				return problem;
 			}
 		});
 	}
-
-
 
 	const filterChange = (newTags, newDiffRange) => {
 		setTags(newTags);
