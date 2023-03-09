@@ -1,30 +1,19 @@
 import React from 'react';
-import SearchCase from './SearchCase/searchCase';
-import useFetch from '../hooks/useFetch';
+import SearchResult from './SearchResult/searchResult';
 
 
-//count = how many problems to fetch
-//start = page to start on
-//title = search param
-//tag = also search param
-export default function SearchHolder({ count, start, title, tag }) {
-
-
-
-	let [error, loading, data] = useFetch('/api/problem/list?start=' + start + '&count=' + count, []);
-
-	//these logs are here for the linter, it was suggested to add title and tag as params for now because they will be used in filtering and searching
-	console.log(title);
-	console.log(tag);
-
+//error, loading, data = problem data from fetch passed in to SearchHolder
+export default function SearchHolder({ error, loading, data }) {
+	//TODO: implement a list type of "default" problems to show the user on the search page
+	// 	[error, loading, data] = useFetch('/api/problem/list?start=' + start + '&count=' + count, []);
 
 	return (
 		<div>
 			<h3>
-				{error && error}
+				{error && error.error}
 				{loading && 'loading...'}
 			</h3>
-			{data.map(d => <div key={d._id}> <SearchCase title={d.title} type={d.tags}></SearchCase> </div>)}
+			{data.map(d => <div key={d._id}> <SearchResult title={d.title} type={d.tags} id={d._id}></SearchResult> </div>)}
 		</div>
 	);
 }

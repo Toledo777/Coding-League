@@ -2,11 +2,18 @@ import express, { response } from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
+import { searchProblems, insertProblems } from './search/searchManager.mjs';
+import { problem } from './models/problem.mjs';
+import { create, insertBatch, search } from '@lyrasearch/lyra';
 
 dotenv.config();
 
 const router = express.Router();
-import { problem } from './models/problem.mjs';
+
+(async function() {
+	const dbFind = (await problem.find({}, { _id: 1, title: 1, tags: 1 })).map(({ _id, title, tags }) => ({ _id, title, tags }));
+	await insertProblems(dbFind);
+})();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 const ONE_DAY = 86400;
@@ -16,7 +23,6 @@ let problemTags;
 try {
 	problemTags = await fs.readFile('./server/assets/all_tags.json', 'utf-8');
 	problemTags = JSON.parse(problemTags);
-	console.log(problemTags);
 } catch (e) {
 	console.log(e);
 }
@@ -31,7 +37,6 @@ router.use(bodyParser.json());
  */
 router.get('/problem/random', async (req, res) => {
 	let response = await problem.aggregate([{ $sample: { size: 1 } }]);
-	console.log(response);
 	res.json(response[0]);
 });
 
@@ -93,7 +98,7 @@ router.get('/problem/tags', async (req, res) => {
  *  for now this acts only as a proxy for the code-runner
  */
 router.post('/problem/debug', async (req, res) => {
-	console.log(req.body);
+	//console.log(req.body);
 	const { code, problem_id } = req.body;
 	if (code != undefined) {
 		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
@@ -116,6 +121,29 @@ router.get('/allTags', async (req, res) => {
 		res.status(500).json({ error: 'tags unavailable' });
 	} else {
 		res.json(problemTags);
+	}
+});
+
+/**
+ * get json result containing JSON array of titles and IDs of problems returned from Lyra Search
+ * takes in a search query to search Lyra schema and a limit to specify search limit
+ * used for search bar on search page
+ */
+router.get('/searchProblems', async (req, res) => {
+	const limit = () => {
+		if (!req.query.limit) {
+			return 10;
+		} else {
+			return req.query.limit;
+		}
+	};
+	if (req.query.search === undefined) {
+		res.status(400).json({ error: 'missing search param' });
+	} else if (req.query.search === '') {
+		res.status(404).json({ error: 'Enter a title to search for problems' });
+	} else {
+		const distinctResults = await searchProblems(req.query.search, limit());
+		res.status(200).json(distinctResults);
 	}
 });
 
