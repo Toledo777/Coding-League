@@ -137,7 +137,7 @@ router.get('/searchProblems', async (req, res) => {
 	if (req.query.search === undefined) {
 		res.status(400).json({ error: 'missing search param' });
 	} else if (req.query.search === '') {
-		res.status(404).json({ error: 'not searching for anything' });
+		res.status(404).json({ error: 'Enter a title to search for problems' });
 	} else {
 		const distinctResults = await searchProblems(req.query.search);
 		res.status(200).json(distinctResults);

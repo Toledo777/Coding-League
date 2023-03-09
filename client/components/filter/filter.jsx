@@ -14,9 +14,6 @@ export default function Filter({ filterChange }) {
 	const [diffMin, setDiffMin] = useState(800);
 	const [diffMax, setDiffMax] = useState(3500);
 
-
-
-
 	// Update the tags state to currently selected options (or empty array when clicking 'Clear tags' button)
 	const setTagsHelper = (tagsList) => {
 		let choices = tagsList.map(({ value }) => value);
@@ -79,7 +76,7 @@ export default function Filter({ filterChange }) {
 			{error && error}
 			{loading && 'loading...'}
 			<select className='tagSelect' multiple={true} onInput={(event) => setTagsHelper(Array.from(event.target.selectedOptions))}>
-				{tagLabels.error === undefined && tagLabels.map((tag, index) => <option key={index} value={tag}>{tag}</option>)}
+				{tagLabels.map((tag, index) => <option key={index} value={tag}>{tag}</option>)}
 			</select>
 			<button className='clearTags' onClick={() => { clearTags(); }}>Clear tags</button>
 			<ul className='tags'>
