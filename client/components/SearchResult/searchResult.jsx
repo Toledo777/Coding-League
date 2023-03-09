@@ -2,14 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import './searchResult.css';
 export default function SearchResult({ title, type, id }) {
-
 	const navigate = useNavigate();
-
-	const routeChange = () => {
-		let path = '/solve/' + id;
-		navigate(path);
-	};
-
 	return (
 		<div className='outer'>
 			<div className='insideProblem'>
@@ -19,7 +12,7 @@ export default function SearchResult({ title, type, id }) {
 				<div dangerouslySetInnerHTML={{ __html: type }} />
 			</div>
 			<div className='insideButton'>
-				<button className='actualButton' onClick={routeChange}>
+				<button className='actualButton' onClick={() => navigate(`/solve/${id}`)}>
 					Code
 				</button>
 			</div>
