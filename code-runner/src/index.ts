@@ -27,6 +27,4 @@ const routes: Record<string, MatchHandler> = {
 
 console.log("Listening!");
 
-console.log(await fetchProblemById("233B"));
-
 await serve(router(routes), { addr: ":8000" });
