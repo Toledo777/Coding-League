@@ -40,7 +40,7 @@ export default function Solve() {
 				<Editor onChange={(value) => setSolution(value)} />
 			</div>
 			<div className='editor-buttons'>
-				<button className='debug btn' onClick={debugSolution}>Debug</button>
+				<button disabled={debugLoading} className='debug btn' onClick={debugSolution}>Debug</button>
 				<button className='submit btn confirm' onClick={debugSolution}>Submit</button>
 			</div>
 		</div>

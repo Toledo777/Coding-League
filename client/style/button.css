@@ -22,6 +22,17 @@
         0rem 0rem 0rem var(--glow-color);
 }
 
+
+.btn:disabled,
+.btn[disabled] {
+    background-image: url(loader.svg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #0000 !important;
+    text-shadow: none !important;
+}
+
 .btn:hover,
 .btn:active {
     box-shadow:
