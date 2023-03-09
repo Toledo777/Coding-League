@@ -130,16 +130,23 @@ router.get('/allTags', async (req, res) => {
 
 /**
  * get json result containing JSON array of titles and IDs of problems returned from Lyra Search
- * takes in a search query to searche Lyra schema
+ * takes in a search query to search Lyra schema and a limit to specify search limit
  * used for search bar on search page
  */
 router.get('/searchProblems', async (req, res) => {
+	const limit = () => {
+		if (!req.query.limit) {
+			return 10;
+		} else {
+			return req.query.limit;
+		}
+	};
 	if (req.query.search === undefined) {
 		res.status(400).json({ error: 'missing search param' });
 	} else if (req.query.search === '') {
 		res.status(404).json({ error: 'Enter a title to search for problems' });
 	} else {
-		const distinctResults = await searchProblems(req.query.search);
+		const distinctResults = await searchProblems(req.query.search, limit());
 		res.status(200).json(distinctResults);
 	}
 });

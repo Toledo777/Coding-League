@@ -8,9 +8,9 @@ const db = await create({
 	},
 });
 
-export async function searchProblems(term) {
-	const searchResults = await search(db, { term: term, limit: 6 });
-	return searchResults.hits.map((hit) => ({ _id: hit.document._id, title: hit.document.title, tags: hit.document.tags }));
+export async function searchProblems(term, limit) {
+	const searchResults = await search(db, { term: term, limit: limit });
+	return searchResults.hits.map(({document}) => document);
 }
 
 export async function insertProblems(items) {

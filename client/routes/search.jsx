@@ -10,7 +10,7 @@ export default function Search() {
 	const [diffRange, setDiffRange] = useState([800, 3500]);
 	const [title, setTitle] = useState('');
 
-	let [error, loading, data] = useFetch('/api/searchProblems?search=' + title, [], [title]);
+	let [error, loading, data] = useFetch(`/api/searchProblems?search=${title}&limit=100`, [], [title]);
 
 	const filteredProblems = useMemo(() => {
 		return data.filter(problem => {
