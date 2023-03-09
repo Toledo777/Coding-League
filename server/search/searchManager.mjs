@@ -1,14 +1,5 @@
 import { create, insertBatch, search } from '@lyrasearch/lyra';
 
-// const db = async create({
-// 	defaultLanguage: 'english',
-// 	schema: {
-// 		_id: 'string',
-// 		title: 'string',
-// 		description: 'string',
-// 	},
-// });
-
 const db = await create({
 	schema: {
 		_id: 'string',
