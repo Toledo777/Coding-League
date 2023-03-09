@@ -6,12 +6,11 @@ export default function Setup() {
 	const [skillLevel, setSkillLevel] = useState('-------');
 	const [bio, setBio] = useState('');
 	const [error, setError] = useState('');
-	//TODO: change useCredentials to not need setUser
-	const [user, setUser] = useCredentials();
+	const user = useCredentials();
 	//TODO: bind labels to radio button
 	async function submitProfile(e) {
 		e.preventDefault();
-		console.log('beginning: ' + user);
+		
 		if (user) {
 			if (skillLevel !== '-------') {
 				//TODO: check if username is unique via database

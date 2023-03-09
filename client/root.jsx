@@ -8,8 +8,10 @@ import { retrieveLoginCredentials } from './utils/authentication.mjs';
 export default function Root() {
 	// fetch google client id
 	let [error, loading, data] = useFetch('/auth/google-client-id', []);
-	const [user, setUser] = useCredentials();
+	const user = useCredentials();
 	const navigate = useNavigate();
+
+
 
 	// reword error message for user
 	if (error) {
@@ -27,20 +29,17 @@ export default function Root() {
 	 */
 	async function handleLogin(googleData) {
 		
-
 		// call POST request for logging in and then
 		// retrieve data as json and set user's name
 		const data = await retrieveLoginCredentials(googleData);
 
 		if (data.state === 'not-registered') {
 			// This path will redirect to profile setup page
-			console.log('redirect to setup page');
 			navigate('user/setup');
+		} else {
+			navigate('/');
 		}
-		// setUser will eventually be in else if for 'registered' state
-		setUser(data.user);
-
-		//TODO: reload page after completed
+		dispatchEvent(new Event('login'));
 	}
 
 	/** 
@@ -53,7 +52,7 @@ export default function Root() {
 				'Content-Type': 'application/json'
 			}
 		});
-		setUser(null);
+		dispatchEvent(new Event('login'));
 	}
 
 	return (

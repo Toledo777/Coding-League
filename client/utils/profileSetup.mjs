@@ -1,14 +1,18 @@
 function determineRank(skillLevel) {
 	let rank;
+	const BEGINNER = 100;
+	const INTERMEDIATE = 500;
+	const EXPERT = 1000;
+
 	switch (skillLevel) {
 	case ('Beginner'):
-		rank = 100;
+		rank = BEGINNER;
 		break;
 	case ('Intermediate'):
-		rank = 500;
+		rank = INTERMEDIATE;
 		break;
 	case ('Expert'):
-		rank = 100;
+		rank = EXPERT;
 		break;
 	default: 
 		throw new Error('did not specified right level');
