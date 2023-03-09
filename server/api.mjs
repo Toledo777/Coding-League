@@ -124,20 +124,21 @@ router.get('/user', async(req, res) => {
 		}
 	}
 
+	// check for username
 	else if (req.query.username) {
 		// check for valid mongo object id format
 		const response = await user.findOne({username: req.query.username});
 		if (response) {
 			res.json(response);
 		}
-		// no data found with ID
+		// no data found with username
 		else {
 			res.status(404).json({ title: 'No data found with that username' });
 		}
 	}
 	// missing id parameter
 	else {
-		res.status(400).json({ title: 'No ID input' });
+		res.status(400).json({ title: 'No parameter given' });
 	}
 });
 
