@@ -76,17 +76,35 @@ router.get('/problem/tags', async (req, res) => {
 router.post('/problem/debug', async (req, res) => {
 	console.log(req.body);
 	const { code, problem_id } = req.body;
-	if (code != undefined) {
+	if (code) {
 		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json'
 			}, method: 'POST', body: JSON.stringify({ code, problem_id })
 		});
-		const data = await response.json();
-		res.json(data);
+		res.json(await response.json());
 	}
 });
+
+/**
+ * Submits code for judgement
+ *  This route gives less feedback and is used for evaluation
+ */
+router.post('/problem/submit', async (req, res) => {
+	console.log(req.body);
+	const { code, problem_id } = req.body;
+	if (code) {
+		const response = await fetch(`${CODE_RUNNER_URI}/attempt_problem`, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}, method: 'POST', body: JSON.stringify({ code, problem_id })
+		});
+		res.json(await response.json());
+	}
+});
+
 
 /**
  * useless hello world, can be deleted in a later commit
