@@ -11,8 +11,6 @@ export default function Root() {
 	const user = useCredentials();
 	const navigate = useNavigate();
 
-
-
 	// reword error message for user
 	if (error) {
 		error = 'Error loading google authentification';
