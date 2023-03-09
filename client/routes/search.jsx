@@ -24,7 +24,7 @@ export default function Search() {
 			console.log('tag = ' + t);
 			data.map((d) => {
 				console.log(d.tags);
-				if (d.tags.includes(t)) {
+				if (d.tags.includes(t) && !newData.includes(d)) {
 					newData.push(d);
 				}
 			});
@@ -39,7 +39,7 @@ export default function Search() {
 		console.log('inside filter change');
 	};
 
-	function titleChange(input) {
+	function doSearch(input) {
 		setTitle(input);
 	}
 
@@ -50,7 +50,7 @@ export default function Search() {
 			<Filter
 				key='filters'
 				filterChange={filterChange} />
-			<SearchBar titleChange={input => titleChange(input)}> </SearchBar>
+			<SearchBar doSearch={input => doSearch(input)}> </SearchBar>
 			<SearchHolder error={error} loading={loading} data={newData} ></SearchHolder>
 		</div>
 	);

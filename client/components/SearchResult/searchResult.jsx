@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import './searchCase.css';
-export default function SearchCase({ title, type, id }) {
+import './searchResult.css';
+export default function SearchResult({ title, type, id }) {
 
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const routeChange = () => {
 		let path = '/solve/' + id;
