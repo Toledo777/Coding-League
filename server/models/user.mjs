@@ -6,7 +6,8 @@ const userSchema = {
 	avatar_uri: String,
 	wins: Number,
 	losses: Number,
-	rank: String
+	rank: String,
+	bio: String,
 };
 
 export var user = mongoose.model('user', userSchema);
