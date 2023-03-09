@@ -20,12 +20,16 @@ export default function Search() {
 	let newData = data;
 	if (tags.length > 0 && data.error === undefined) {
 		newData = [];
-		tags.map(t => {
-			data.map((d) => {
-				if (d.tags.includes(t) && !newData.includes(d)) {
-					newData.push(d);
+		data.map((d) => {
+			let canPush = true;
+			tags.map(t => {
+				if (!d.tags.includes(t)) {
+					canPush = false;
 				}
 			});
+			if (canPush && !newData.includes(d)) {
+				newData.push(d);
+			}
 		});
 	}
 

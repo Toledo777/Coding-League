@@ -10,11 +10,13 @@ export default function SearchBar({ doSearch }) {
 
 	return (
 		<div>
-			<label>
+			<label htmlFor='searchForm'>
 				Search:
+			</label>
+			<div className='searchForm'>
 				<input type='text' onChange={handleTextChange} />
 				<button onClick={() => doSearch(text)}>Submit</button>
-			</label>
+			</div>
 		</div>
 	);
 }
