@@ -14,6 +14,9 @@ export default function Filter({ filterChange }) {
 	const [diffMin, setDiffMin] = useState(800);
 	const [diffMax, setDiffMax] = useState(3500);
 
+
+
+
 	// Update the tags state to currently selected options (or empty array when clicking 'Clear tags' button)
 	const setTagsHelper = (tagsList) => {
 		let choices = tagsList.map(({ value }) => value);
@@ -64,10 +67,17 @@ export default function Filter({ filterChange }) {
 		filterChange(tags, [diffMin, diffMax]);
 	}, [tags, diffMin, diffMax]);
 
+
+	const newSetter = () => {
+		filterChange(tags, [diffMin, diffMax]);
+	};
+
 	return (
 		<div className='filter-pane'>
 			<h2>Filters</h2>
 			<h3>Tags</h3>
+			{error && error}
+			{loading && 'loading...'}
 			<select className='tagSelect' multiple={true} onInput={(event) => setTagsHelper(Array.from(event.target.selectedOptions))}>
 				{tagLabels.error === undefined && tagLabels.map((tag, index) => <option key={index} value={tag}>{tag}</option>)}
 			</select>
@@ -88,7 +98,8 @@ export default function Filter({ filterChange }) {
 				step='100'
 				value={[diffMin, diffMax]}
 				defaultValue={[diffMin, diffMax]}
-				onInput={(event) => { setDiffRangeHelper(event[0], event[1]); }} />
+				onInput={(event) => { setDiffRangeHelper(event[0], event[1]); }}
+				onThumbDragEnd={newSetter} />
 			<button className='clearRange' onClick={() => { clearDiffRange(); }}>Clear difficulty</button>
 			<p>Range: {diffMin} - {diffMax}</p>
 			<button className='resetParams' onClick={() => { clearFilters(); }}>Reset filters</button>

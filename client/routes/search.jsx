@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchBar from '../components/SearchBar/SearchBar';
 import Filter from '../components/filter/filter';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SearchHolder from '../components/searchHolder';
 import useFetch from '../hooks/useFetch';
 
@@ -21,9 +21,7 @@ export default function Search() {
 	if (tags.length > 0 && data.error === undefined) {
 		newData = [];
 		tags.map(t => {
-			console.log('tag = ' + t);
 			data.map((d) => {
-				console.log(d.tags);
 				if (d.tags.includes(t) && !newData.includes(d)) {
 					newData.push(d);
 				}
@@ -31,12 +29,19 @@ export default function Search() {
 		});
 	}
 
-
+	if (data.error === undefined) {
+		data.map((d) => {
+			let diff = parseInt(d.tags[d.tags.length - 1].slice(1));
+			if (diff >= diffRange[0] && diff <= diffRange[1] && !newData.includes(d)) {
+				newData.push(d);
+				console.log('pushing');
+			}
+		});
+	}
 
 	const filterChange = (newTags, newDiffRange) => {
 		setTags(newTags);
 		setDiffRange(newDiffRange);
-		console.log('inside filter change');
 	};
 
 	function doSearch(input) {
