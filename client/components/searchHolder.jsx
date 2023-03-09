@@ -2,19 +2,8 @@ import React from 'react';
 import SearchResult from './SearchResult/searchResult';
 
 
-//count = how many problems to fetch
-//start = page to start on
-//title = search param
-//tags = also search param
+//error, loading, data = problem data from fetch passed in to SearchHolder
 export default function SearchHolder({ error, loading, data }) {
-
-
-
-	//for the linter
-	// console.log(count);
-	// console.log(start);
-	// console.log(tags);
-
 	//TODO: implement a list type of "default" problems to show the user on the search page
 	// 	[error, loading, data] = useFetch('/api/problem/list?start=' + start + '&count=' + count, []);
 
