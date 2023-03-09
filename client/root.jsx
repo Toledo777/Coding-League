@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
 import useCredentials from './hooks/useCredentials';
@@ -9,6 +9,7 @@ export default function Root() {
 	// fetch google client id
 	let [error, loading, data] = useFetch('/auth/google-client-id', []);
 	const [user, setUser] = useCredentials();
+	const navigate = useNavigate();
 
 	// reword error message for user
 	if (error) {
@@ -25,6 +26,7 @@ export default function Root() {
 	 * handles google login, makes fetch to auth api
 	 */
 	async function handleLogin(googleData) {
+		
 
 		// call POST request for logging in and then
 		// retrieve data as json and set user's name
@@ -33,6 +35,7 @@ export default function Root() {
 		if (data.state === 'not-registered') {
 			// This path will redirect to profile setup page
 			console.log('redirect to setup page');
+			navigate('user/setup');
 		}
 		// setUser will eventually be in else if for 'registered' state
 		setUser(data.user);

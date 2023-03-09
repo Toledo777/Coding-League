@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import useCredentials from '../hooks/useCredentials';
-import {determineRank } from '../utils/profileSetup.mjs';
+import { determineRank } from '../utils/profileSetup.mjs';
 export default function Setup() {
 	const [nickname, setNickname] = useState('');
 	const [skillLevel, setSkillLevel] = useState('-------');
 	const [bio, setBio] = useState('');
+	const [error, setError] = useState('');
 	//TODO: change useCredentials to not need setUser
 	const [user, setUser] = useCredentials();
-
+	//TODO: bind labels to radio button
 	async function submitProfile(e) {
 		e.preventDefault();
 		console.log('beginning: ' + user);
 		if (user) {
 			if (skillLevel !== '-------') {
-				//TODO: check if username is unique
+				//TODO: check if username is unique via database
 				const username = nickname.trim() ? nickname : user.name;
-				try{
+				try {
 					const rank = determineRank(skillLevel);
-					console.log(user.email, username, user.picture, rank);
 					// await fetch('api/user/create', {
 					// 	method: 'POST',
 					// 	body: JSON.stringify({
@@ -31,9 +31,13 @@ export default function Setup() {
 					// 	}
 					// });
 				} catch (e) {
-					console.error(e);
+					setError('Error creating your account');
 				}
+			} else {
+				setError('Please select skill level');
 			}
+		} else {
+			setError('You are not signed in');
 		}
 	}
 
@@ -53,6 +57,7 @@ export default function Setup() {
 				<textarea id='bio' rows="4" cols="50" onChange={(e) => setBio(e.target.value.trim())}></textarea>
 				<input id='submit' onClick={(e) => submitProfile(e)} type='submit' />
 			</form>
+			<p>{error}</p>
 		</div>
 	);
 }
