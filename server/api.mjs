@@ -107,24 +107,20 @@ router.post('/answer', (req, res) => {
 
 /**
  * GET api to get all data on a user based on userID
- * to use call '/api/user?id= with' id
+ * to use call '/api/user?email= with' email
  */
 router.get('/user', async(req, res) => {
-	// check for id
-	if (req.query.id) {
+	// check for email
+	if (req.query.email) {
 		// check for valid mongo object id format
-		if (mongoose.Types.ObjectId.isValid(req.query.id)) {
-			const response = await user.findById(req.query.id);
-			if (response != undefined) {
-				res.json(response);
-			}
-			// no data found with ID
-			else {
-				res.status(404).json({ title: 'No data found' });
-			}
+		
+		const response = await user.findById(req.query.email);
+		if (response != undefined) {
+			res.json(response);
 		}
+		// no data found with ID
 		else {
-			res.status(400).json({title: 'Invalid ID'})
+			res.status(404).json({ title: 'No data found' });
 		}
 	}
 	// missing id parameter
@@ -132,6 +128,8 @@ router.get('/user', async(req, res) => {
 		res.status(400).json({ title: 'No ID input' });
 	}
 });
+
+
 
 router.post('/user/create', async(req, res) => {
 
