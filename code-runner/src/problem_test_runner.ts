@@ -10,10 +10,14 @@ type TestResult = {
     expected: string,
 }
 
-type ProblemDebugResult = {
+type ProblemTestResult = {
     all_ok: boolean,
     total_ran: number,
     failures: number,
+    runtime: number,
+}
+
+type ProblemDebugResult = ProblemTestResult & {
     individual_tests: TestResult[],
 }
 
@@ -47,7 +51,7 @@ async function createProcess(code: string, files: TestRunnerFiles): Promise<Deno
 }
 
 
-async function runTestCase(code: string, { input, output: expected }: TestCase, timeout = 2000): Promise<DebugTestResult> {
+async function runTestCase(code: string, { input, output: expected }: TestCase, timeout = 2000): Promise<TestResult> {
     const files = await allocateProblemTestProcessFiles();
     const postfix = createTestingPostfix(input, files.solution_out);
     const process = await createProcess(code + postfix, files);
@@ -72,26 +76,42 @@ async function runTestCase(code: string, { input, output: expected }: TestCase, 
     return { ok, stderr, stdout, answer, expected };
 }
 
-function processTestResults(results: DebugTestResult[]): ProblemAttemptResult<DebugTestResult> {
-    const failures = results.filter(res => !res.ok).length;
-    return {
+function processTestResults(tests: TestResult[], runtime: number, debug: true): ProblemDebugResult
+function processTestResults(tests: TestResult[], runtime: number, debug: false): ProblemTestResult
+function processTestResults(tests: TestResult[], runtime: number, debug: boolean) {
+    const failures = tests.filter(res => !res.ok).length;
+
+    const results: ProblemTestResult = {
         failures,
         all_ok: failures == 0,
-        total_ran: results.length,
-        individual_tests: results
+        total_ran: tests.length,
+        runtime
     };
+
+    if (debug) {
+        (results as ProblemDebugResult).individual_tests = tests;
+    }
+
+    return results;
 }
 
-export async function debugProblem(code: string, problem: Problem): Promise<ProblemAttemptResult<DebugTestResult>> {
+async function time<T>(fn: () => Promise<T>): Promise<[T, number]> {
+    const start = performance.now();
+    const res = await fn()
+    const end = performance.now();
+    return [res, end - start];
+}
+
+
+export async function debugProblem(code: string, problem: Problem): Promise<ProblemDebugResult> {
     const tests = problem.testCases.slice(0, 5).map(test => runTestCase(code, test));
-    const test_results: DebugTestResult[] = await Promise.all(tests);
-
-    return processTestResults(test_results);
+    const [results, runtime] = await time(() => Promise.all(tests));
+    return processTestResults(results, runtime, true);
 }
 
-export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult<TestResult>> {
+export async function attemptProblem(code: string, problem: Problem): Promise<ProblemTestResult> {
     const tests = problem.testCases.map(test => runTestCase(code, test));
-    const test_results: DebugTestResult[] = await Promise.all(tests);
-    return processTestResults(test_results);
+    const [results, runtime] = await time(() => Promise.all(tests));
+    return processTestResults(results, runtime, false);
 }
 
