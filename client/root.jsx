@@ -5,16 +5,18 @@ import useFetch from './hooks/useFetch';
 import useCredentials from './hooks/useCredentials';
 import { retrieveLoginCredentials } from './utils/authentication.mjs';
 
+//TODO: if user has nickname, once creds are fetch, use email to retrieve user from DB and use username
+
 export default function Root() {
 	// fetch google client id
 	let [error, loading, data] = useFetch('/auth/google-client-id', []);
 	const user = useCredentials();
 	const navigate = useNavigate();
 
-	// reword error message for user
-	if (error) {
-		error = 'Error loading google authentification';
-	}
+	// // reword error message for user
+	// if (error) {
+	// 	error = 'Error loading google authentification';
+	// }
 
 	// handles error google login fails
 	// TODO change from console.error to proper handling
@@ -59,14 +61,14 @@ export default function Root() {
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
 
-				{!user && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
+				{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 				{user && user.name}
 				{user && <button onClick={handleLogout}>Logout</button>}
 
 			</nav>
 			<main className='content'>
 				<h3>
-					{error}
+					{error && 'Error loading google authentification'}
 					{loading && 'Loading google authentication'}
 				</h3>
 				<Outlet />

@@ -10,7 +10,7 @@ const ENV_MODE = process.env.NODE_ENV || 'development';
 const router = express.Router();
 
 router.use(session({
-	secret: process.env.SECRET, //used to sign the session id
+	secret: process.env.SECRET || '0308710786', //used to sign the session id
 	name: 'id', //name of the session id cookie
 	saveUninitialized: false, //don't create session until something stored
 	resave: false,
@@ -26,7 +26,9 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 router.use(express.json());
 
-// returns google client id to be used in the client
+/**
+ * Returns google client id to be used in the client
+ */
 router.get('/google-client-id', (req, res) => {
 	let clientID = process.env.GOOGLE_CLIENT_ID;
 	res.json(clientID);
@@ -55,11 +57,12 @@ router.post('/login', async (req, res) => {
 	// Extract user data 
 	const { name, email, picture } = ticket.getPayload();
 	const user = { name, email, picture };
-	const response = userModel.findOne(email);
+	const response = userModel.findOne({email : user.email});
 
 	const state = response.email ? 'registered' : 'not-registered';
 	if (state === 'registered') {
 		// Update DB
+		console.log('registered user');
 	}
 
 	// {ACCORDING TO JAYA's DEMO} 

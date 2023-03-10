@@ -1,42 +1,48 @@
 import React, { useState } from 'react';
 import useCredentials from '../hooks/useCredentials';
-import { determineRank } from '../utils/profileSetup.mjs';
+import { determineRank } from '../utils/authentication.mjs';
+import { useNavigate } from 'react-router-dom';
 export default function Setup() {
 	const [nickname, setNickname] = useState('');
 	const [skillLevel, setSkillLevel] = useState('-------');
 	const [bio, setBio] = useState('');
-	const [error, setError] = useState('');
+	const [error, setMessage] = useState('');
 	const user = useCredentials();
+	const navigate = useNavigate();
+
+	//TODO: usePost hook instead of normal POST fetch
 	//TODO: bind labels to radio button
 	async function submitProfile(e) {
 		e.preventDefault();
 		
 		if (user) {
 			if (skillLevel !== '-------') {
-				//TODO: check if username is unique via database
 				const username = nickname.trim() ? nickname : user.name;
-				try {
-					const rank = determineRank(skillLevel);
-					// await fetch('api/user/create', {
-					// 	method: 'POST',
-					// 	body: JSON.stringify({
-					// 		email: user.email,
-					// 		username: username,
-					// 		avatar_uri: user.picture,
-					// 		rank: rank
-					// 	}),
-					// 	headers: {
-					// 		'Content-Type': 'application/json'
-					// 	}
-					// });
-				} catch (e) {
-					setError('Error creating your account');
-				}
+				const rank = determineRank(skillLevel);
+				console.log(username, skillLevel, rank, bio);
+
+				const res = await fetch('/api/user/create', {
+					method: 'POST',
+					body: JSON.stringify({
+						email: user.email,
+						username: username,
+						avatar_uri: user.picture,
+						wins: 0,
+						losses: 0,
+						rank: rank
+					}),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+				const msg = await res.json();
+				setMessage(msg.title);
+				navigate('/');
 			} else {
-				setError('Please select skill level');
+				setMessage('Please select skill level');
 			}
 		} else {
-			setError('You are not signed in');
+			setMessage('You are not signed in');
 		}
 	}
 
