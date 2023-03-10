@@ -22,4 +22,3 @@ const problemSchema = {
 };
 
 export var problem = mongoose.model('problem', problemSchema);
-
