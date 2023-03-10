@@ -1,34 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
 import useCredentials from './hooks/useCredentials';
 import { retrieveLoginCredentials } from './utils/authentication.mjs';
 
-//TODO: if user has nickname, once creds are fetch, use email to retrieve user from DB and use username
-
 export default function Root() {
 	// fetch google client id
 	let [error, loading, data] = useFetch('/auth/google-client-id', []);
 	const user = useCredentials();
 	const navigate = useNavigate();
-
-	// // reword error message for user
-	// if (error) {
-	// 	error = 'Error loading google authentification';
-	// }
+	const [authError, setAuthError] = useState();
 
 	// handles error google login fails
 	// TODO change from console.error to proper handling
-	function handleError(authErr) {
-		console.error(authErr);
+	function handleError(authErrMsg) {
+		console.error(authErrMsg);
+		setAuthError('Error occur logging into google. Try again.');
 	}
 
 	/**
 	 * handles google login, makes fetch to auth api
 	 */
 	async function handleLogin(googleData) {
-		
+		setAuthError();
 		// call POST request for logging in and then
 		// retrieve data as json and set user's name
 		const data = await retrieveLoginCredentials(googleData);
@@ -39,6 +34,8 @@ export default function Root() {
 		} else {
 			navigate('/');
 		}
+
+		// Trigger useCredentials() to fetch for user creds
 		dispatchEvent(new Event('login'));
 	}
 
@@ -52,6 +49,7 @@ export default function Root() {
 				'Content-Type': 'application/json'
 			}
 		});
+		// Trigger useCredentials() to fetch for user creds
 		dispatchEvent(new Event('login'));
 	}
 
@@ -63,6 +61,7 @@ export default function Root() {
 
 				{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 				{user && user.name}
+				{authError}
 				{user && <button onClick={handleLogout}>Logout</button>}
 
 			</nav>

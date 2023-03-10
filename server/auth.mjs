@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
 			return res.sendStatus(500);
 		}
 		req.session.user = user;
-		res.json({state, user});
+		res.json({state});
 	});
 });
 
@@ -80,7 +80,17 @@ router.post('/login', async (req, res) => {
  * Retrieves user info from session
  */ 
 router.get('/credentials', (req, res)=>{
-	req.session.user ? res.json(req.session.user): res.json({error: 'No user credentials available'});
+	if(req.session.user){
+		const user = userModel.findOne({email : req.session.user.email});
+		if(user.email){
+			res.json(user);
+		} else {
+			res.json(req.session.user);
+		}
+	} else {
+		res.json({error: 'No user credentials available'});
+	}
+	//req.session.user ? res.json(req.session.user): res.json({error: 'No user credentials available'});
 });
 
 //***** routes for authenticated users only *****\\
