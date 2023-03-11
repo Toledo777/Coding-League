@@ -14,11 +14,8 @@ eslint:
   script:
    - npm run lint
   rules:
-  - changes:
-    - build/*
-    - client/*
-    - server/*
-    - .gitlab-ci.yml
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging" || $CI_COMMIT_BRANCH == "staging"
+      when: on_success
 
 build-frontend:
   stage: build
