@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
 	const user = { email, picture };
 	const response = await userModel.findOne({email : user.email});
 
-	const state = response ? 'registered' : 'not-registered';
+	const isRegistered = response ? true : false;
 
 	// {ACCORDING TO JAYA's DEMO} 
 	// Note: you may want to save the session to a datastore like Redis in production.
@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
 			return res.sendStatus(500);
 		}
 		req.session.user = user;
-		res.json({state});
+		res.json({isRegistered});
 	});
 });
 

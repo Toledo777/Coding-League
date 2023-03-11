@@ -28,13 +28,14 @@ export default function Root() {
 
 		// call POST request for logging in and then
 		// retrieve data as json and set user's name
-		const data = await retrieveLoginCredentials(googleData);
+		const user = await retrieveLoginCredentials(googleData);
 
 		// Redirect user depending on their registered status
-		if (data.state === 'not-registered') {
-			navigate('user/setup');
-		} else {
+		if (user.isRegistered) {
 			navigate('/');
+			
+		} else {
+			navigate('user/setup');
 		}
 
 		// Trigger useCredentials() to fetch for user creds
@@ -51,6 +52,7 @@ export default function Root() {
 				'Content-Type': 'application/json'
 			}
 		});
+		navigate('/');
 		// Trigger useCredentials() to fetch for user creds
 		dispatchEvent(new Event('login'));
 	}
