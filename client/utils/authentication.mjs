@@ -5,6 +5,7 @@
  * @returns response data of user's credentials
  */
 async function retrieveLoginCredentials(googleData) {
+	
 	// call POST request for logging in
 	const res = await fetch('/auth/login', {
 		method: 'POST',
@@ -16,30 +17,30 @@ async function retrieveLoginCredentials(googleData) {
 		}
 	});
 
-	// Retrieve data as json and set user's name
+	// Retrieve and return user state (registered / not registered)
 	return await res.json();
 }
 
+/**
+ * Assign intial ranking depending on skill level user chose
+ * @param {String} skillLevel 
+ * @returns intial ranking
+ */
 function determineRank(skillLevel) {
-	let rank;
 	const BEGINNER = 100;
 	const INTERMEDIATE = 500;
 	const EXPERT = 1000;
 
 	switch (skillLevel) {
 	case ('Beginner'):
-		rank = BEGINNER;
-		break;
+		return BEGINNER;
 	case ('Intermediate'):
-		rank = INTERMEDIATE;
-		break;
+		return INTERMEDIATE;
 	case ('Expert'):
-		rank = EXPERT;
-		break;
+		return EXPERT;
 	default: 
-		throw new Error('did not specified right level');
+		throw new Error('did not specified correct skillLevel');
 	}
-	return rank;
 }
 
 export { retrieveLoginCredentials, determineRank };

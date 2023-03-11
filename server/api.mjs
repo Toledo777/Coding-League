@@ -145,8 +145,8 @@ router.post('/user/create', async (req, res) => {
 	// check for user data in body
 	if (req.body.email) {
 		const userData = new user(req.body);
-		console.log(userData);
-		// Check if username / email already exists before creating user
+
+		// Check if username / email already exists in DB before creating user
 		if (await user.exists({ username: userData.username })) {
 			res.status(409).json({ title: 'Username already exists' });
 		} else if (await user.exists({ email: userData.email })) {
@@ -172,7 +172,6 @@ router.put('/user/update', express.json(), async (req, res) => {
 
 		// if response from db
 		if (response.acknowledged) {
-			console.log('Account updated succesfully');
 			res.status(204).json({ title: 'Account updated' });
 		}
 

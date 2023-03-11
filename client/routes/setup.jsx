@@ -7,51 +7,53 @@ export default function Setup() {
 	const [username, setNickname] = useState('');
 	const [skillLevel, setSkillLevel] = useState('-------');
 	const [bio, setBio] = useState('');
-	const [error, setMessage] = useState('');
+	const [message, setMessage] = useState('');
 	const user = useCredentials();
 	const navigate = useNavigate();
 	const USERNAME_LIMIT = 100;
-	//TODO: usePost hook instead of normal POST fetch
+
 	//TODO: bind labels to radio button
 	async function submitProfile(e) {
 		e.preventDefault();
-		
-		if (user) {
-			if (skillLevel !== '-------') {
-				if(username.length > 0 && username.length < USERNAME_LIMIT){
-					const rank = determineRank(skillLevel);
-					console.log(username, skillLevel, rank, bio);
-	
-					const res = await fetch('/api/user/create', {
-						method: 'POST',
-						body: JSON.stringify({
-							email: user.email,
-							username: username,
-							avatar_uri: user.picture,
-							wins: 0,
-							losses: 0,
-							rank: rank,
-							bio: bio
-						}),
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					});
-					const msg = await res.json();
-					setMessage(msg.title);
-					if(res.ok){
-						navigate('/');
-					}
 
-				} else {
-					setMessage('Invalid username size');
-				}
-				
-			} else {
-				setMessage('Please select skill level');
-			}
-		} else {
+		if (!user) {
 			setMessage('You are not signed in');
+			return;
+		}
+		if (skillLevel === '-------') {
+			setMessage('Please select skill level');
+			return;
+		}
+		if (username.length === 0 && username.length > USERNAME_LIMIT) {
+			setMessage('Invalid username size');
+			return;
+		}
+
+		const rank = determineRank(skillLevel);
+
+		await postUser(rank);
+	}
+
+	async function postUser(rank) {
+		const res = await fetch('/api/user/create', {
+			method: 'POST',
+			body: JSON.stringify({
+				email: user.email,
+				username: username,
+				avatar_uri: user.picture,
+				wins: 0,
+				losses: 0,
+				rank: rank,
+				bio: bio
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		const msg = await res.json();
+		setMessage(msg.title);
+		if (res.ok) {
+			navigate('/');
 		}
 	}
 
@@ -71,7 +73,7 @@ export default function Setup() {
 				<textarea id='bio' rows="4" cols="50" onChange={(e) => setBio(e.target.value.trim())}></textarea>
 				<input id='submit' onClick={(e) => submitProfile(e)} type='submit' />
 			</form>
-			<p>{error}</p>
+			<p>{message}</p>
 		</div>
 	);
 }

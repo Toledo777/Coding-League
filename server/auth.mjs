@@ -55,15 +55,11 @@ router.post('/login', async (req, res) => {
 	}
 
 	// Extract user data 
-	const { name, email, picture } = ticket.getPayload();
-	const user = { name, email, picture };
+	const { email, picture } = ticket.getPayload();
+	const user = { email, picture };
 	const response = await userModel.findOne({email : user.email});
 
 	const state = response ? 'registered' : 'not-registered';
-	if (state === 'registered') {
-		// Update DB
-		console.log('registered user');
-	}
 
 	// {ACCORDING TO JAYA's DEMO} 
 	// Note: you may want to save the session to a datastore like Redis in production.
@@ -109,7 +105,7 @@ function isAuthenticated(req, res, next) {
 }
 
 /**
- * Used to have certain features accessible for authenticated users only
+ * Used to have certain features / pages accessible for authenticated users only
  */
 router.get('/protected',
 	isAuthenticated,

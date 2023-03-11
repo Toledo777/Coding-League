@@ -6,8 +6,10 @@ import useCredentials from './hooks/useCredentials';
 import { retrieveLoginCredentials } from './utils/authentication.mjs';
 
 export default function Root() {
+	
 	// fetch google client id
 	let [error, loading, data] = useFetch('/auth/google-client-id', []);
+
 	const user = useCredentials();
 	const navigate = useNavigate();
 	const [authError, setAuthError] = useState();
@@ -23,12 +25,13 @@ export default function Root() {
 	 */
 	async function handleLogin(googleData) {
 		setAuthError();
+
 		// call POST request for logging in and then
 		// retrieve data as json and set user's name
 		const data = await retrieveLoginCredentials(googleData);
 
+		// Redirect user depending on their registered status
 		if (data.state === 'not-registered') {
-			// This path will redirect to profile setup page
 			navigate('user/setup');
 		} else {
 			navigate('/');
