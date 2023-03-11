@@ -84,7 +84,7 @@ router.get('/credentials', async (req, res)=>{
 			res.json(req.session.user);
 		}
 	} else {
-		res.json({error: 'No user credentials available'});
+		res.json({notloggedIn: true});
 	}
 });
 

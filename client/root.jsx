@@ -71,7 +71,7 @@ export default function Root() {
 			</nav>
 			<main className='content'>
 				<h3>
-					{error && 'Error loading google authentification'}
+					{error && 'Error loading google authentication'}
 					{loading && 'Loading google authentication'}
 				</h3>
 				<Outlet />

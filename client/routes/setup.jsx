@@ -16,21 +16,30 @@ export default function Setup() {
 	async function submitProfile(e) {
 		e.preventDefault();
 
+		// Series of guard clauses
+
+		// Exit if useCredentials outputs null, meaning that user is not signed in
 		if (!user) {
 			setMessage('You are not signed in');
 			return;
 		}
+
+		// Exit if the selection is blank
 		if (skillLevel === '-------') {
 			setMessage('Please select skill level');
 			return;
 		}
+
+		// Exit if username given is blank or exceeds character limit
 		if (username.length === 0 && username.length > USERNAME_LIMIT) {
 			setMessage('Invalid username size');
 			return;
 		}
 
+		// Depending on skill level, return associated starting rank number
 		const rank = determineRank(skillLevel);
 
+		// Post the user into DB, post message depending on operation success
 		await postUser(rank);
 	}
 
