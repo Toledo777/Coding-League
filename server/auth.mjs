@@ -9,14 +9,18 @@ const SESSION_MAX_AGE = 86400000; // 1 day
 const ENV_MODE = process.env.NODE_ENV || 'development';
 const router = express.Router();
 
+// generate 5 digit number for secret if SECRET env variable is not provided
+// Credits to: https://stackoverflow.com/a/8084248
+const GENERATED_SECRET = (Math.random() + 1).toString(36).substring(7);
+
 router.use(session({
-	secret: process.env.SECRET || '0308710786', //used to sign the session id
+	secret: process.env.SECRET || GENERATED_SECRET, //used to sign the session id
 	name: 'id', //name of the session id cookie
 	saveUninitialized: false, //don't create session until something stored
 	resave: false,
 	cookie: {
 		maxAge: SESSION_MAX_AGE, //time in ms
-		secure: ENV_MODE === 'development' ? false: true, //should only sent over https, but set to false for testing and dev on localhost
+		secure: ENV_MODE === 'development' ? false : true, //should only sent over https, but set to false for testing and dev on localhost
 		httpOnly: true, //can't be read by clientside JS
 		sameSite: 'strict' //only sent for requests to same origin
 	}
@@ -57,7 +61,7 @@ router.post('/login', async (req, res) => {
 	// Extract user data 
 	const { email, picture } = ticket.getPayload();
 	const user = { email, picture };
-	const response = await userModel.findOne({email : user.email});
+	const response = await userModel.findOne({ email: user.email });
 
 	const isRegistered = response ? true : false;
 
@@ -68,23 +72,19 @@ router.post('/login', async (req, res) => {
 			return res.sendStatus(500);
 		}
 		req.session.user = user;
-		res.json({isRegistered});
+		res.json({ isRegistered });
 	});
 });
 
 /**
  * Retrieves user info from session
- */ 
-router.get('/credentials', async (req, res)=>{
-	if(req.session.user){
-		const user = await userModel.findOne({email : req.session.user.email});
-		if(user){
-			res.json(user);
-		} else {
-			res.json(req.session.user);
-		}
+ */
+router.get('/credentials', async (req, res) => {
+	if (req.session.user) {
+		const user = await userModel.findOne({ email: req.session.user.email });
+		user ? res.json(user) : res.json(req.session.user);
 	} else {
-		res.json({notloggedIn: true});
+		res.json({ notloggedIn: true });
 	}
 });
 
