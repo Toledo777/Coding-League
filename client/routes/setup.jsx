@@ -4,7 +4,7 @@ import { determineRank } from '../utils/authentication.mjs';
 import { useNavigate } from 'react-router-dom';
 
 export default function Setup() {
-	const [nickname, setNickname] = useState('');
+	const [username, setNickname] = useState('');
 	const [skillLevel, setSkillLevel] = useState('-------');
 	const [bio, setBio] = useState('');
 	const [error, setMessage] = useState('');
@@ -18,8 +18,7 @@ export default function Setup() {
 		
 		if (user) {
 			if (skillLevel !== '-------') {
-				const username = nickname.trim() ? nickname : user.name;
-				if(username.length < USERNAME_LIMIT){
+				if(username.length > 0 && username.length < USERNAME_LIMIT){
 					const rank = determineRank(skillLevel);
 					console.log(username, skillLevel, rank, bio);
 	
@@ -31,7 +30,8 @@ export default function Setup() {
 							avatar_uri: user.picture,
 							wins: 0,
 							losses: 0,
-							rank: rank
+							rank: rank,
+							bio: bio
 						}),
 						headers: {
 							'Content-Type': 'application/json'
@@ -39,9 +39,12 @@ export default function Setup() {
 					});
 					const msg = await res.json();
 					setMessage(msg.title);
-					navigate('/');
+					if(res.ok){
+						navigate('/');
+					}
+
 				} else {
-					setMessage('Name is too long');
+					setMessage('Invalid username size');
 				}
 				
 			} else {
@@ -55,7 +58,7 @@ export default function Setup() {
 	return (
 		<div>
 			<form id='profile-setup-form'>
-				<label htmlFor='nickname'>Nickname *Optional </label>
+				<label htmlFor='nickname'>Nickname </label>
 				<input id='nickname' type='text' onChange={(e) => setNickname(e.target.value.trim())} />
 				<label htmlFor='skill-level'>Skill Level </label>
 				<select id='skill-level' onChange={(e) => setSkillLevel(e.target.value.trim())}>

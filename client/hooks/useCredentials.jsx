@@ -3,11 +3,14 @@ export default function useCredentials() {
 	const [credentials, setCredentials] = useState(null);
 	const headers = { 'Accept': 'application/json' };
 	
-	const fetchCreds = () => {
-		fetch('/auth/credentials', { headers })
-			.then(res => res.json())
-			.then(creds => !creds.error ? setCredentials(creds): setCredentials(null))
-			.catch(e => console.error(e));
+	const fetchCreds = async () => {
+		try {
+			const res = await fetch('/auth/credentials', { headers });
+			const creds = await res.json();
+			!creds.error ? setCredentials(creds): setCredentials(null);
+		} catch(e){
+			console.error(e);
+		}
 	};
 	window.addEventListener('login', fetchCreds);
 

@@ -57,9 +57,9 @@ router.post('/login', async (req, res) => {
 	// Extract user data 
 	const { name, email, picture } = ticket.getPayload();
 	const user = { name, email, picture };
-	const response = userModel.findOne({email : user.email});
+	const response = await userModel.findOne({email : user.email});
 
-	const state = response.email ? 'registered' : 'not-registered';
+	const state = response ? 'registered' : 'not-registered';
 	if (state === 'registered') {
 		// Update DB
 		console.log('registered user');
@@ -79,10 +79,10 @@ router.post('/login', async (req, res) => {
 /**
  * Retrieves user info from session
  */ 
-router.get('/credentials', (req, res)=>{
+router.get('/credentials', async (req, res)=>{
 	if(req.session.user){
-		const user = userModel.findOne({email : req.session.user.email});
-		if(user.email){
+		const user = await userModel.findOne({email : req.session.user.email});
+		if(user){
 			res.json(user);
 		} else {
 			res.json(req.session.user);
@@ -90,7 +90,6 @@ router.get('/credentials', (req, res)=>{
 	} else {
 		res.json({error: 'No user credentials available'});
 	}
-	//req.session.user ? res.json(req.session.user): res.json({error: 'No user credentials available'});
 });
 
 //***** routes for authenticated users only *****\\

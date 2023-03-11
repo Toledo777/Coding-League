@@ -152,8 +152,7 @@ router.post('/user/create', async (req, res) => {
 		} else if (await user.exists({ email: userData.email })) {
 			res.status(409).json({ title: 'Email already exists' });
 		} else {
-			//TODO: uncomment out this once ready
-			//await userData.save();
+			await userData.save();
 			res.status(201).json({ title: 'Account created' });
 		}
 	} else {

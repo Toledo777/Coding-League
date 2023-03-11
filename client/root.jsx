@@ -13,7 +13,6 @@ export default function Root() {
 	const [authError, setAuthError] = useState();
 
 	// handles error google login fails
-	// TODO change from console.error to proper handling
 	function handleError(authErrMsg) {
 		console.error(authErrMsg);
 		setAuthError('Error occur logging into google. Try again.');
@@ -60,7 +59,7 @@ export default function Root() {
 				<Link to={'/solve/282A'}>Solve</Link>
 
 				{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
-				{user && user.name}
+				{user && user.username}
 				{authError}
 				{user && <button onClick={handleLogout}>Logout</button>}
 
