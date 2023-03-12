@@ -56,7 +56,9 @@ export default function Root() {
 			<nav>
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
-				<Link to={'/profile'}>Profile</Link>
+				
+				{/* temporarily hardcode route to user in the db */}
+				<Link to={'/profile/cooluser123'}>Profile</Link>
 
 				{!user && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 				{user && user.name}
