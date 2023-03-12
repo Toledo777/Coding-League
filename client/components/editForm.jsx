@@ -5,14 +5,15 @@ export default function EditForm({user}) {
 
     return(
         <form>
-            <label for="username">Username:</label>
-            <input type="text" name="username" value={user.username}></input>
+            <label htmlFor="formUsername">Username:</label>
+            <input type="text" name="formUsername" id="formUsername" value={user.username}></input>
 
-            <label for="avatar">Avatar link:</label>
-            <input type="text" name="avatar" value={user.avatar}></input>
+            <label htmlFor="formAvatar">Avatar link:</label>
+            <input type="text" name="formAvatar" id="formAvatar" value={user.avatar}></input>
 
-            <label for="bio">Bio:</label>
-            <input type="text" name="bio" value={user.bio}></input>
+            <label htmlFor="formBio">Bio:</label>
+            <input type="text" name="formBio" id="formBio" value={user.bio}></input>
+            
             <input type="button" name="submitBtn">Submit</input>
         </form>
     )
