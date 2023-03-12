@@ -8,13 +8,13 @@ export default function User({user}) {
             <div>
                 <h2>{user.username}</h2>
                 <img src={user.avatar} alt="profile avatar"/>
-                <p id="bio"></p>
+                <p>Bio: {user.bio}</p>
                 <p>Wins: {user.wins}</p>
                 <p>Losses: {user.losses}</p>
                 <p>Rank: {user.rank}</p>
             </div>
             <div id="previous answers">
-                <h2>Previous Answers</h2>
+                <h2>Previous Answers (this section is currently hardcoded until answers are stored in db)</h2>
                 <p>console.log("hello world")</p>
             </div>
         </>

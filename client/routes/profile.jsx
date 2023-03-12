@@ -21,6 +21,8 @@ export default function Profile() {
             {userLoading && <div>{userLoading}</div>}
             {userData && <User user={userData} />}
 			<button id="editBtn">Edit Profile</button>
+
+			{/* button that could be used hide userEdit form */}
 			<EditForm user={userData} />
 		</div>
 	);
