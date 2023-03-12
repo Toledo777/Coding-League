@@ -6,21 +6,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
-const ENV_MODE = process.env.NODE_ENV || 'development';
+const ENV_MODE = process.env.NODE_ENV || 'dev';
 const router = express.Router();
 
-// generate 5 digit number for secret if SECRET env variable is not provided
-// Credits to: https://stackoverflow.com/a/8084248
-const GENERATED_SECRET = (Math.random() + 1).toString(36).substring(7);
-
 router.use(session({
-	secret: process.env.SECRET || GENERATED_SECRET, //used to sign the session id
-	name: 'id', //name of the session id cookie
+	secret: process.env.SECRET, //used to sign the session id
+	name: 'session-id', //name of the session id cookie
 	saveUninitialized: false, //don't create session until something stored
 	resave: false,
 	cookie: {
 		maxAge: SESSION_MAX_AGE, //time in ms
-		secure: ENV_MODE === 'development' ? false : true, //should only sent over https, but set to false for testing and dev on localhost
+		secure: ENV_MODE === 'prod' ? true : false, //should only sent over https, but set to false for testing and dev on localhost
 		httpOnly: true, //can't be read by clientside JS
 		sameSite: 'strict' //only sent for requests to same origin
 	}
@@ -122,7 +118,7 @@ router.post('/logout', isAuthenticated, (req, res) => {
 		if (err) {
 			return res.sendStatus(500);
 		}
-		res.clearCookie('id');
+		res.clearCookie('session-id');
 		res.sendStatus(200);
 	});
 });
