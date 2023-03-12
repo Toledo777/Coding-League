@@ -32,3 +32,21 @@ Sprint 2:
     - More pages (search page, profile page, etc.)
     - Submitting a solution, having it run, display results
     - Ensuring that bugs discovered in other teammates’ code should be communicated with them to some extent to make them feel valued
+
+# Sprint 2
+
+## What went well
+- Robert:
+    - Having google authentication functional
+
+## What didn't go well
+
+## Champion Summary
+### Robert (unit test coverage):
+- I'll not be champion unit test coverage due to:
+    - how far we're into the project to see it feasible
+        - Causing headaches for other to work around it once implemented  
+    - how we're doing more of intergration testing then unit testing
+- I'll be championing API documentation instead
+    - It'll be a collection of references, tutorials, and examples of how to use our API.
+    - This will be done using Swagger.
