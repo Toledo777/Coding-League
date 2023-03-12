@@ -207,8 +207,8 @@ router.post('/user/create', async(req, res) => {
 	if (req.body.email) {
 		const userData = new user(req.body);
 		await userData.save();
-		console.log("Account Created!");
-		res.status(201).json({title: "Account created"});
+		console.log('Account Created!');
+		res.status(201).json({title: 'Account created'});
 	}
 
 	else {
@@ -230,8 +230,8 @@ router.put('/user/update', express.json(), async (req, res) => {
 
 		// if response from db
 		if (response.acknowledged) {
-			console.log("Account updated succesfully");
-			res.status(204).json({title: "Account updated"});
+			console.log('Account updated succesfully');
+			res.status(204).json({title: 'Account updated'});
 		}
 
 		// no data found with email
