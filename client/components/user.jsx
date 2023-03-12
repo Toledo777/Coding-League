@@ -1,6 +1,4 @@
 import React from 'react';
-import useFetch from '../hooks/useFetch';
-
 
 // component to display user data, take user as input
 export default function User({user}) {

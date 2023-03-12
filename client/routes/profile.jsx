@@ -3,6 +3,7 @@ import useCredentials from '../hooks/useCredentials';
 import useFetch from '../hooks/useFetch';
 import { useParams } from 'react-router-dom';
 import User from '../components/user'
+import EditForm from '../components/editForm';
 
 // profile page of a signed in user
 // TODO reroute to sign in if user is not signed in
@@ -19,6 +20,8 @@ export default function Profile() {
 			{userErr && <div>{userErr}</div>}
             {userLoading && <div>{userLoading}</div>}
             {userData && <User user={userData} />}
+			<button id="editBtn">Edit Profile</button>
+			<EditForm user={userData} />
 		</div>
 	);
 }
