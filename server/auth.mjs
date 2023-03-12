@@ -74,6 +74,9 @@ router.post('/login', async (req, res) => {
 
 /**
  * Retrieves user info from session
+ * If user's info is not in DB, return user info from session.
+ * User session info will be used during profile-setup for POST to DB once submitted
+ * User DB info will be used everywhere else once user registers.
  */
 router.get('/credentials', async (req, res) => {
 	if (req.session.user) {

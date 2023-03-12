@@ -31,10 +31,7 @@ export default function Root() {
 		const user = await retrieveLoginCredentials(googleData);
 
 		// Redirect user depending on their registered status
-		if (user.isRegistered) {
-			navigate('/');
-			
-		} else {
+		if (!user.isRegistered) {
 			navigate('user/setup');
 		}
 
