@@ -1,20 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+
 export default function useCredentials() {
 	const [credentials, setCredentials] = useState(null);
 	const headers = { 'Accept': 'application/json' };
 	
-	const fetchCreds = () => {
-		fetch('/auth/credentials', { headers })
-			.then(res => res.json())
-			.then(creds => !creds.error ? setCredentials(creds): setCredentials(null))
-			.catch(e => console.error(e));
-	};
-	window.addEventListener('login', fetchCreds);
+	// Attempts to fetch session credentials, used to then retrieve user data from DB
+	const fetchCreds = useCallback(async () => {
+		try {
+			const res = await fetch('/auth/credentials', { headers });
+			const user = await res.json();
+			!user.notloggedIn ? setCredentials(user): setCredentials(null);
+		} catch(e){
+			console.error(e);
+		}
+	});
+
+
 
 	useEffect(()=>{
-		fetchCreds();
+		fetchCreds();	
+		// Add listener so that fetchCreds could be triggered
+		window.addEventListener('login', fetchCreds, true);
 		return () =>{
-			window.removeEventListener('login', fetchCreds);
+			window.removeEventListener('login', fetchCreds, true);
 		};
 	}, []);
 	

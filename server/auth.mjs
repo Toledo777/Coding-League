@@ -6,17 +6,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
-const ENV_MODE = process.env.NODE_ENV || 'development';
+const ENV_MODE = process.env.NODE_ENV || 'dev';
 const router = express.Router();
 
 router.use(session({
-	secret: process.env.SECRET || '0308710786', //used to sign the session id
-	name: 'id', //name of the session id cookie
+	secret: process.env.SECRET, //used to sign the session id
+	name: 'session-id', //name of the session id cookie
 	saveUninitialized: false, //don't create session until something stored
 	resave: false,
 	cookie: {
 		maxAge: SESSION_MAX_AGE, //time in ms
-		secure: ENV_MODE === 'development' ? false: true, //should only sent over https, but set to false for testing and dev on localhost
+		secure: ENV_MODE === 'prod' ? true : false, //should only sent over https, but set to false for testing and dev on localhost
 		httpOnly: true, //can't be read by clientside JS
 		sameSite: 'strict' //only sent for requests to same origin
 	}
@@ -55,15 +55,11 @@ router.post('/login', async (req, res) => {
 	}
 
 	// Extract user data 
-	const { name, email, picture } = ticket.getPayload();
-	const user = { name, email, picture };
-	const response = userModel.findOne({email : user.email});
+	const { email, picture } = ticket.getPayload();
+	const user = { email, picture };
+	const response = await userModel.findOne({ email: user.email });
 
-	const state = response.email ? 'registered' : 'not-registered';
-	if (state === 'registered') {
-		// Update DB
-		console.log('registered user');
-	}
+	const isRegistered = response ? true : false;
 
 	// {ACCORDING TO JAYA's DEMO} 
 	// Note: you may want to save the session to a datastore like Redis in production.
@@ -72,15 +68,23 @@ router.post('/login', async (req, res) => {
 			return res.sendStatus(500);
 		}
 		req.session.user = user;
-		res.json({state, user});
+		res.json({ isRegistered });
 	});
 });
 
 /**
  * Retrieves user info from session
- */ 
-router.get('/credentials', (req, res)=>{
-	req.session.user ? res.json(req.session.user): res.json({error: 'No user credentials available'});
+ * If user's info is not in DB, return user info from session.
+ * User session info will be used during profile-setup for POST to DB once submitted
+ * User DB info will be used everywhere else once user registers.
+ */
+router.get('/credentials', async (req, res) => {
+	if (req.session.user) {
+		const user = await userModel.findOne({ email: req.session.user.email });
+		user ? res.json(user) : res.json(req.session.user);
+	} else {
+		res.json({ notloggedIn: true });
+	}
 });
 
 //***** routes for authenticated users only *****\\
@@ -100,7 +104,7 @@ function isAuthenticated(req, res, next) {
 }
 
 /**
- * Used to have certain features accessible for authenticated users only
+ * Used to have certain features / pages accessible for authenticated users only
  */
 router.get('/protected',
 	isAuthenticated,
@@ -117,7 +121,7 @@ router.post('/logout', isAuthenticated, (req, res) => {
 		if (err) {
 			return res.sendStatus(500);
 		}
-		res.clearCookie('id');
+		res.clearCookie('session-id');
 		res.sendStatus(200);
 	});
 });
