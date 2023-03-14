@@ -89,7 +89,7 @@ router.get('/credentials', async (req, res) => {
 
 //***** routes for authenticated users only *****\\
 
-/**
+/** 
  * Checks if user is authenticated by checking its session
  * @param {Object} req 
  * @param {Object} res 
