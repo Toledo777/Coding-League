@@ -5,38 +5,43 @@ import usePut from '../hooks/usePut';
 // component to display form to edit user data, takes a user as input to prepopulate form
 export default function EditForm({user}) {
     const [updatedUser, setUpdatedUser] = useState(user);
+
+    // this is the data that is displayed and present in the form
+    const [formData, setFormData] = useState(user);
     // const [error, loading, data] = usePut("/api/user/update", updatedUser, user);
 
 
-    // if the user ever gets changed, directly call setUpdatedUser
+    // if the user ever gets changed, update the form and the updatedUser
+    // user props is the source of truth
     useEffect(() => {
-        setUpdatedUser(user);
+        // setUpdatedUser(user);
+        setFormData(user);
       }, [user]);
 
     function handleSubmit(e) {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const formUsername = formData.get("formUsername");
-        const formAvatar = formData.get("formAvatar");
-        const formBio = formData.get("formBio");
+        // const formData = new FormData(e.target);
+        // const formUsername = formData.get("formUsername");
+        // const formAvatar = formData.get("formAvatar");
+        // const formBio = formData.get("formBio");
         
-        const formUser = {username: formUsername, avatar: formAvatar, bio: formBio};
+        // const formUser = {username: formUsername, avatar: formAvatar, bio: formBio};
 
         // update the user with new data from form if any
-        setUpdatedUser({ ...updatedUser, ...formUser });
+        setUpdatedUser({ ...updatedUser, ...formData });
     }
 
     return(
         <>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="formUsername">Username:</label>
-                <input type="text" name="formUsername" id="formUsername" value={updatedUser.username}/>
+                <input type="text" name="formUsername" id="formUsername" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
 
                 <label htmlFor="formAvatar">Avatar link:</label>
-                <input type="text" name="formAvatar" id="formAvatar" value={updatedUser.avatar}/>
+                <input type="text" name="formAvatar" id="formAvatar" value={formData.avatar} onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}/>
 
                 <label htmlFor="formBio">Bio:</label>
-                <input type="text" name="formBio" id="formBio" value={updatedUser.bio}/>
+                <input type="text" name="formBio" id="formBio" value={formData.bio} onChange={(e) => setFormData({ ...formData, bio: e.target.value })}/>
 
                 <input type="submit" name="submitBtn" id="submitBtn" value="Confirm"/>
             </form>
