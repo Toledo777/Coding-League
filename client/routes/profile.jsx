@@ -1,5 +1,4 @@
 import React from 'react';
-import useCredentials from '../hooks/useCredentials';
 import useFetch from '../hooks/useFetch';
 import { useParams } from 'react-router-dom';
 import User from '../components/user'
