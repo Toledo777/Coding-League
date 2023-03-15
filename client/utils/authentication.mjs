@@ -27,9 +27,9 @@ async function retrieveLoginCredentials(googleData) {
  * @returns intial ranking
  */
 function determineRank(skillLevel) {
-	const BEGINNER = 100;
-	const INTERMEDIATE = 500;
-	const EXPERT = 1000;
+	const BEGINNER = 800;
+	const INTERMEDIATE = 1000;
+	const EXPERT = 1500;
 
 	switch (skillLevel) {
 	case ('Beginner'):
