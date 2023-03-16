@@ -4,11 +4,11 @@ import usePut from '../hooks/usePut';
 
 // component to display form to edit user data, takes a user as input to prepopulate form
 export default function EditForm({user}) {
-    const [updatedUser, setUpdatedUser] = useState(user);
+    const [updatedUser, setUpdatedUser] = useState();
 
     // this is the data that is displayed and present in the form
     const [formData, setFormData] = useState(user);
-    const [error, loading, data] = usePut("/api/user/update", updatedUser, null, [user]);
+    const [error, loading, data] = usePut("/api/user/update", updatedUser, null, [updatedUser]);
 
 
     // if the user ever gets changed, update the form and the updatedUser
@@ -24,7 +24,8 @@ export default function EditForm({user}) {
 
         // update the user with new data from form if any
         console.log(formData);
-        setUpdatedUser({ ...updatedUser, ...formData });
+        setUpdatedUser(formData);
+        console.log(updatedUser);
     }
 
     return(
@@ -41,6 +42,9 @@ export default function EditForm({user}) {
 
                 <input type="submit" name="submitBtn" id="submitBtn" value="Confirm"/>
             </form>
+
+            {error && <div>{error}</div>}
+            {loading && <div>{loading}</div>}
         </>
     )
 }
