@@ -17,7 +17,7 @@ export default function Root() {
 	// handles error google login fails
 	function handleError(authErrMsg) {
 		console.error(authErrMsg);
-		setAuthError('Error occur logging into google. Try again.');
+		setAuthError('An error occured logging into Google. Try again.');
 	}
 
 	/**

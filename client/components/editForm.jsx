@@ -8,7 +8,7 @@ export default function EditForm({user}) {
 
     // this is the data that is displayed and present in the form
     const [formData, setFormData] = useState(user);
-    // const [error, loading, data] = usePut("/api/user/update", updatedUser, user);
+    const [error, loading, data] = usePut("/api/user/update", updatedUser, null, [user]);
 
 
     // if the user ever gets changed, update the form and the updatedUser
