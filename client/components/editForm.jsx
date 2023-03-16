@@ -18,16 +18,12 @@ export default function EditForm({user}) {
         setFormData(user);
       }, [user]);
 
+
     function handleSubmit(e) {
         e.preventDefault();
-        // const formData = new FormData(e.target);
-        // const formUsername = formData.get("formUsername");
-        // const formAvatar = formData.get("formAvatar");
-        // const formBio = formData.get("formBio");
-        
-        // const formUser = {username: formUsername, avatar: formAvatar, bio: formBio};
 
         // update the user with new data from form if any
+        console.log(formData);
         setUpdatedUser({ ...updatedUser, ...formData });
     }
 

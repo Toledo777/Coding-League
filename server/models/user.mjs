@@ -7,7 +7,7 @@ const userSchema = {
 	wins: Number,
 	losses: Number,
 	rank: String,
-	bio: String,
+	bio: String
 };
 
 export var user = mongoose.model('user', userSchema);
