@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router';
 import useFetch from '../hooks/useFetch';
@@ -22,6 +23,8 @@ export default function Home() {
 				{loading && 'loading...'}
 			</h3>
 			<button onClick={routeChange}>Random Problem :)</button>
+			<p>Welcome to Coding League. To test your skills navigate to the solve page to try a random coding challenge!</p>
+			
 		</div>
 	);
 }
