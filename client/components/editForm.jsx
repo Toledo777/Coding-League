@@ -15,9 +15,9 @@ export default function EditForm({user}) {
 
     const [formData, setFormData] = useState(user);
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        submitData(formData);
+        await submitData(formData);
     }
 
     async function submitData(updatedUser) {
