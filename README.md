@@ -19,6 +19,10 @@ Features (so far):
   - Users can sign in using their google account
   - If first time user, redirect to setup page so users can choose username, starting skill level, and bio
   - Subsequent sign-ins will retireve info from database
+- Search page:
+  - Users can search for coding problems by title
+  - They can then filter the search results by tags and by specifying a difficulty range
+  - Finally, they can click "code" on one of the problem results to navigate to the coding page with that problem loaded in
 
 ## Technology Stack
 - Languages
@@ -30,7 +34,9 @@ Features (so far):
 - Front-end tools
   - react-route
 - Back-end tools
-  - jest, supertest, mongoose, mockingoose, eslint, compression
+  - jest, supertest, mongoose, mockingoose, eslint, compression, LyraSearch
+
+
 ## Getting Started
 
 ### Required ENV variables
