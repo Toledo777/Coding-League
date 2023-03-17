@@ -48,13 +48,13 @@ export default function EditForm({user}) {
         <>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="formUsername">Username:</label>
-                <input type="text" required name="formUsername" id="formUsername" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
+                <input type="text" required name="formUsername" id="formUsername" value={formData.username || ''} onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
 
                 <label htmlFor="formAvatar">Avatar link:</label>
-                <input type="text" required name="formAvatar" id="formAvatar" value={formData.avatar} onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}/>
+                <input type="text" required name="formAvatar" id="formAvatar" value={formData.avatar || ''} onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}/>
 
                 <label htmlFor="formBio">Bio:</label>
-                <input type="text" required name="formBio" id="formBio" value={formData.bio} onChange={(e) => setFormData({ ...formData, bio: e.target.value })}/>
+                <input type="text" required name="formBio" id="formBio" value={formData.bio || ''} onChange={(e) => setFormData({ ...formData, bio: e.target.value })}/>
 
                 <input type="submit" required name="submitBtn" id="submitBtn" value="Confirm"/>
             </form>
