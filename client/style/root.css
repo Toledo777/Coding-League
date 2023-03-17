@@ -28,8 +28,9 @@ body {
     grid-template-rows: auto 1fr;
 }
 
-main {
+main.content {
     display: grid;
+    overflow: auto;
 }
 
 body {
