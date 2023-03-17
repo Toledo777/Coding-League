@@ -5,7 +5,7 @@
 
 :root {
     font-family: Arial, Helvetica, sans-serif;
-    color-scheme: light dark;
+    color-scheme: dark;
     color: var(--text-color);
     --gap-s: 0.25rem;
     --gap-m: calc(var(--gap-s) * 2);
