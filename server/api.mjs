@@ -1,13 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { problem } from './models/problem.mjs';
+import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
-
 dotenv.config();
 
 const router = express.Router();
-import { problem } from './models/problem.mjs';
-
-
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 const ONE_DAY = 86400;
 
@@ -101,6 +99,91 @@ router.get('/hello_world', (req, res) => {
 router.post('/answer', (req, res) => {
 	console.log(req.query.answer);
 	res.status(200);
+});
+
+/**
+ * GET api to get all data on a user based on userID
+ * to use call '/api/user?email= with' or '/api/user?username= '
+ */
+router.get('/user', async (req, res) => {
+	// check for email
+	if (req.query.email) {
+
+		const response = await user.findOne({ email: req.query.email });
+		if (response) {
+			res.json(response);
+		}
+		// no data found with ID
+		else {
+			res.status(404).json({ title: 'No data found with that email' });
+		}
+	}
+
+	// check for username
+	else if (req.query.username) {
+		// check for valid mongo object id format
+		const response = await user.findOne({ username: req.query.username });
+		if (response) {
+			res.json(response);
+		}
+		// no data found with username
+		else {
+			res.status(404).json({ title: 'No data found with that username' });
+		}
+	}
+	// missing id parameter
+	else {
+		res.status(400).json({ title: 'No parameter given' });
+	}
+});
+
+/**
+ * POST api to post new user into database
+ * Checks if username / email exists before creating one.
+ */
+router.post('/user/create', async (req, res) => {
+	// check for user data in body
+	if (req.body.email) {
+		const userData = new user(req.body);
+
+		// Check if username / email already exists in DB before creating user
+		if (await user.exists({ username: userData.username })) {
+			res.status(409).json({ title: 'Username already exists' });
+		} else if (await user.exists({ email: userData.email })) {
+			res.status(409).json({ title: 'Email already exists' });
+		} else {
+			await userData.save();
+			res.status(201).json({ title: 'Account created' });
+		}
+	} else {
+		res.status(400).json({ title: 'ERROR: Missing email or data in body' });
+	}
+});
+
+/**
+ * PUT api to update user data already present in database
+ * uses email to update user
+ */
+router.put('/user/update', express.json(), async (req, res) => {
+	// check for email
+	const userData = req.body;
+	if (req.body.email) {
+		const response = await user.updateOne({ email: userData.email }, userData);
+
+		// if response from db
+		if (response.acknowledged) {
+			res.status(204).json({ title: 'Account updated' });
+		}
+
+		// no data found with email
+		else {
+			res.status(404).json({ title: 'No data found' });
+		}
+	}
+	// missing id parameter
+	else {
+		res.status(400).json({ title: 'ERROR: Missing email parameter' });
+	}
 });
 
 export default router;

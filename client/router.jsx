@@ -3,6 +3,8 @@ import Root from './root';
 import Error from './routes/error';
 import Home from './routes/home';
 import Solve from './routes/solve/solve';
+import Profile from './routes/profile';
+import Setup from './routes/setup';
 import { createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -12,7 +14,9 @@ const router = createBrowserRouter([
 		errorElement: <Error />,
 		children: [
 			{ path: '/', element: <Home /> },
-			{ path: '/solve/:id', element: <Solve /> }
+			{ path: '/solve/:id', element: <Solve /> },
+			{ path: '/profile/:username', element: <Profile /> },
+			{ path: '/user/setup', element: <Setup /> }
 		]
 	},
 ], { window });
