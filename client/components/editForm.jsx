@@ -1,15 +1,10 @@
+import { IconSquareRoundedNumber1Filled } from '@tabler/icons-react';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import usePut from '../hooks/usePut';
 
 // component to display form to edit user data, takes a user as input to prepopulate form
 export default function EditForm({user}) {
-    const [updatedUser, setUpdatedUser] = useState();
-
-    // this is the data that is displayed and present in the form
-    const [formData, setFormData] = useState(user);
-    const [error, loading, data] = usePut("/api/user/update", updatedUser, null, [updatedUser]);
-
+    const [error, setError] = useState(false);
 
     // if the user ever gets changed, update the form and the updatedUser
     // user props is the source of truth
@@ -18,14 +13,35 @@ export default function EditForm({user}) {
         setFormData(user);
       }, [user]);
 
+    const [formData, setFormData] = useState(user);
 
     function handleSubmit(e) {
         e.preventDefault();
+        submitData(formData);
+    }
 
-        // update the user with new data from form if any
-        console.log(formData);
-        setUpdatedUser(formData);
-        console.log(updatedUser);
+    async function submitData(updatedUser) {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const url = "/api/user/update";
+
+        try {
+            const response = await fetch(url, {
+              method: 'PUT',
+              headers,
+              body: JSON.stringify(updatedUser),
+            });
+
+            // display an error message to user if api response is not ok
+            if (! response.ok) {
+                setError(true);
+            }
+
+          } catch (error) {
+                setError(true);
+                throw new Error(error);
+          }
     }
 
     return(
@@ -43,8 +59,7 @@ export default function EditForm({user}) {
                 <input type="submit" name="submitBtn" id="submitBtn" value="Confirm"/>
             </form>
 
-            {error && <div>{error}</div>}
-            {loading && <div>{loading}</div>}
+            {error && <div>Error updating profile</div>}
         </>
     )
 }
