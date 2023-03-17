@@ -21,6 +21,13 @@
 
 body {
     background-color: var(--bg-color);
+    /* display: grid;
+    min-height: 0px;
+    overflow: hidden;
+    width: calc(100vw - 1rem);
+    height: calc(100vh - 1rem);
+    
+    These style attributes mess up the search results, so they're commented them out for now */
 }
 
 #root {
@@ -33,10 +40,24 @@ main.content {
     overflow: auto;
 }
 
-body {
-    display: grid;
-    min-height: 0px;
-    overflow: hidden;
-    width: calc(100vw - 1rem);
-    height: calc(100vh - 1rem);
+.description {
+    margin: 5px;
+}
+
+nav {
+    padding: 5px 10px;
+}
+
+
+
+/* styling nav bar links */
+nav a {
+    margin: 0 15px;
+    /* color: white; */
+    font-size: 2em;
+    text-decoration: none;
+}
+
+button {
+    margin: 5 10px;
 }

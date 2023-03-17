@@ -2,6 +2,7 @@ import React from 'react';
 import Root from './root';
 import Error from './routes/error';
 import Home from './routes/home';
+import Search from './routes/search';
 import Solve from './routes/solve/solve';
 import Profile from './routes/profile';
 import Setup from './routes/setup';
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
 		children: [
 			{ path: '/', element: <Home /> },
 			{ path: '/solve/:id', element: <Solve /> },
+			{ path: '/search', element: <Search /> },
 			{ path: '/profile/:username', element: <Profile /> },
 			{ path: '/user/setup', element: <Setup /> }
 		]

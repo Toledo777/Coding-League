@@ -1,1 +1,1 @@
-import mockingoose from "mockingoose";
+import mockingoose from 'mockingoose';
