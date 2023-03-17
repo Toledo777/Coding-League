@@ -38,8 +38,14 @@ Sprint 2:
 ## What went well
 - Robert:
     - Having google authentication functional
+- Gabriel:
+    - Working with Alex (and towards the end, Noah) on the search page
+    - Populating the tags multi-select element with all possible tags + filtering posts in realtime on tag selection
 
 ## What didn't go well
+- Gabriel
+    - Using the original dual-slider component I installed for selecting a difficulty range
+    - After switching to the actually usable component, hooking it up to the search results, but we got it eventually
 
 ## Champion Summary
 ### Robert (unit test coverage):
@@ -50,3 +56,12 @@ Sprint 2:
 - I'll be championing API documentation instead
     - It'll be a collection of references, tutorials, and examples of how to use our API.
     - This will be done using Swagger.
+
+### Gabriel (CI/CD pipeline):
+- Everything has so far been going smoothly for the pipeline on GitLab
+    - Towards the end of the sprint, per the teachers request, I modified the linter stage/job to run less frequently
+        - I made no modifications to other stages/jobs as they only run on MR to staging or commit to staging
+- Azure sometimes gives me problems, but as of right now it seems to be stable
+    - I experimented with restricting access to our testing website to only users authenticated through our school's Microsoft group on Azure
+        - This had to be changed since it was interfering with our MongoDB connection. Alas, anyone can access it now.
+    - On some occasions, some of the environment variables I had set up on Azure reverted to older versions or were gone entirely. I'm not sure why.
