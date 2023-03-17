@@ -1,4 +1,3 @@
-import { IconSquareRoundedNumber1Filled } from '@tabler/icons-react';
 import React from 'react';
 import { useState, useEffect } from 'react';
 
@@ -25,7 +24,7 @@ export default function EditForm({user}) {
         const headers = {
             'Content-Type': 'application/json'
         };
-        const url = "/api/user/update";
+        const url = '/api/user/update';
 
         try {
             const response = await fetch(url, {
@@ -49,15 +48,15 @@ export default function EditForm({user}) {
         <>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="formUsername">Username:</label>
-                <input type="text" name="formUsername" id="formUsername" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
+                <input type="text" required name="formUsername" id="formUsername" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
 
                 <label htmlFor="formAvatar">Avatar link:</label>
-                <input type="text" name="formAvatar" id="formAvatar" value={formData.avatar} onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}/>
+                <input type="text" required name="formAvatar" id="formAvatar" value={formData.avatar} onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}/>
 
                 <label htmlFor="formBio">Bio:</label>
-                <input type="text" name="formBio" id="formBio" value={formData.bio} onChange={(e) => setFormData({ ...formData, bio: e.target.value })}/>
+                <input type="text" required name="formBio" id="formBio" value={formData.bio} onChange={(e) => setFormData({ ...formData, bio: e.target.value })}/>
 
-                <input type="submit" name="submitBtn" id="submitBtn" value="Confirm"/>
+                <input type="submit" required name="submitBtn" id="submitBtn" value="Confirm"/>
             </form>
 
             {error && <div>Error updating profile</div>}
