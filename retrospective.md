@@ -45,6 +45,8 @@ Sprint 2:
 - Matthew:
     - Initial Google auth setup
     - Getting all the apis related to users working.
+- Noah
+    - Styling work recieved valuable feedback for accecibility
 
 ## What didn't go well
 - Robert
@@ -79,3 +81,13 @@ Sprint 2:
     - I have made comments about colors as well as keyboard accesibility. I also made comment about increasing font size  in browser breaking styling.
 - I think one area that I could work on more is using more semantic elements. This is especially important for users using screen readers.
 - Overall, since we only have 3 sprints, it might be idealistic to think we can check all the boxes in terms of accesibility. There will be compromises. However, I hope that by discusing the subject, both my teammates and myself can learn a bit more about it.
+
+### Noah (Performance)
+ - Some performance pitfalls in db access were caught
+ - Modified some components responsibilities to share fetch results across components
+ - Styles were made with reducing reflow in mind
+ - The largets performance issues I've currently identified are:
+    1. JS Bundle size
+        - ReactJS is huge and should be replaced with any of the much better alternatives, the fact this is industry standard is mildly depressing.
+        - Our build system does not perform tree shaking correctly about 50% of downloaded code goes unused
+    2. Cold starts on azure take 15-30 seconds, and the VM goes cold pretty quickly, finding a way to mitigate or fix this would be of great benefit to the user experience.
