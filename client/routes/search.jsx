@@ -19,7 +19,7 @@ export default function Search() {
 			let diff = parseInt(d.tags[d.tags.length - 1].slice(1));
 			return diff <= diffRange[1] && diff >= diffRange[0];
 		});
-	}, [data, tags]);
+	}, [data, tags, diffRange]);
 
 	const filterChange = (newTags, newDiffRange) => {
 		setTags(newTags);
