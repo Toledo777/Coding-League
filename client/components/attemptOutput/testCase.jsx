@@ -1,35 +1,34 @@
 import React, { useState } from 'react';
 import { IconCircleX, IconCircleCheck, IconCaretRight, IconCaretDown } from '@tabler/icons-react';
-export default function TestCaseView({ testCase, index }) {
+import TermView from '../terminal/termView';
+import SplitPane from '../splitPane/splitPane';
+import './attemptOutput.css';
+
+export default function TestCase({ testCase, index }) {
 	const [expanded, setExpanded] = useState(false);
 	const { ok, stderr, stdout, answer, expected } = testCase;
-	console.log(answer);
 
-	return <div>
+	return <div className='test-case'>
 		<div className='case-heading'>
-
 			<span className='case-status'>
 				{ok ? <IconCircleCheck color='green' /> : <IconCircleX color='red' />}
 			</span>
+
 			<span className='case-label'>Test Case #{index}</span>
 
 			<span className='dropdown-toggle' onClick={() => setExpanded(!expanded)}>
 				{expanded ? <IconCaretDown /> : <IconCaretRight />}
 			</span>
-			{expanded && <div>
+			{expanded && <>
 				<div>
 					expected: <code>{expected}</code>
 					but received: <code>{answer}</code>
 				</div>
-				<div className='stderr-container'>
-					<div>stderr</div>
-					<code className='stderr'>{stderr}</code>
-				</div>
-				<div className='stdout-container'>
-					<div>stdout</div>
-					<code className='stdout'>{stdout}</code>
-				</div>
-			</div>}
+				<SplitPane labels={['stderr', 'stdout']} value={stderr.length ? 'stderr' : 'stdout'}>
+					<TermView data={stderr} label="Stderr" />
+					<TermView data={stdout} label="Stdout" />
+				</SplitPane>
+			</>}
 		</div>
 	</div >;
 }

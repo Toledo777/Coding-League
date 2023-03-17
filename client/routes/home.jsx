@@ -24,7 +24,6 @@ export default function Home() {
 			</h3>
 			<button onClick={routeChange}>Random Problem :)</button>
 			<p>Welcome to Coding League. To test your skills navigate to the solve page to try a random coding challenge!</p>
-			
 		</div>
 	);
 }

@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export default function usePost(url, body, defaultValue, deps = []) {
+export default function usePost(url, defaultValue = null) {
 	// This allows for dynamic updating deps
-	if (typeof body === 'function') body = body();
 
-	const [error, setError] = useState();
-	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState(defaultValue);
 
 	const headers = {
@@ -13,13 +12,16 @@ export default function usePost(url, body, defaultValue, deps = []) {
 		'Content-Type': 'application/json'
 	};
 
-	useEffect(() => {
+	const send = (body) => {
+		setData(defaultValue);
 		setLoading(true);
+		setError(null);
 		fetch(url, { headers, method: 'POST', body: JSON.stringify(body) })
 			.then(res => res.json())
 			.then(data => setData(data))
 			.finally(() => setLoading(false))
 			.catch(e => setError(e.toString()));
-	}, deps);
-	return [error, loading, data];
+	};
+
+	return [error, loading, data, send];
 }

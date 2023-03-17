@@ -1,30 +1,43 @@
+* {
+    min-height: 0;
+    min-width: 0;
+}
+
 :root {
     font-family: Arial, Helvetica, sans-serif;
-    color-scheme: light dark;
+    color-scheme: dark;
     color: var(--text-color);
+    --gap-s: 0.25rem;
+    --gap-m: calc(var(--gap-s) * 2);
+
+    --confirm-color: rgb(79, 225, 79);
+    --warn-color: yellow;
+    --cancel-color: rgb(215, 51, 51);
+
+    --text-color: #FFF;
+    --panel-color: rgba(60, 60, 60, 1);
+    --bg-color: #FFF1;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text-color: #FFF;
-
-    }
-
-    nav {
-        background-color: darkslategray;
-    }
+body {
+    background-color: var(--bg-color);
+    /* display: grid;
+    min-height: 0px;
+    overflow: hidden;
+    width: calc(100vw - 1rem);
+    height: calc(100vh - 1rem);
+    
+    These style attributes mess up the search results, so they're commented them out for now */
 }
 
-@media (prefers-color-scheme: light) {
-    :root {
-        --text-color: #000;
-        background-color: white;
-    }
+#root {
+    display: grid;
+    grid-template-rows: auto 1fr;
 }
 
-/* styling for problem description + editor */
-.problem-content {
-    display: flex;
+main.content {
+    display: grid;
+    overflow: auto;
 }
 
 .description {
