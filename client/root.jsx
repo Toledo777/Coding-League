@@ -17,7 +17,7 @@ export default function Root() {
 	// handles error google login fails
 	function handleError(authErrMsg) {
 		console.error(authErrMsg);
-		setAuthError('Error occur logging into google. Try again.');
+		setAuthError('An error occured logging into Google. Try again.');
 	}
 
 	/**
@@ -59,6 +59,9 @@ export default function Root() {
 			<nav>
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
+				
+				{/* temporarily hardcode route to user in the db */}
+				<Link to={'/profile/cooluser123'}>Profile</Link>
 
 				{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 				{user && user.username}
