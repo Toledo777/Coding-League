@@ -10,7 +10,7 @@
     border: none;
     cursor: pointer;
     font-size: medium;
-    transition: box-shadow 0.25s;
+    transition: box-shadow 0.25s, transform 0.1s, filter 0.1s;
     font-weight: bold;
 
     /* This looks like redundant styling since the glow is hidden, */
@@ -56,4 +56,9 @@
     --border-color-active: #FFF6;
     background-color: var(--warn-color);
     color: #000A;
+}
+
+.btn:active {
+    filter: brightness(1.1);
+    transform: scale(0.98);
 }
