@@ -11,12 +11,19 @@ import './solve.css';
 
 export default function Solve() {
 	// Get the problem id from the route
-	const params = useParams();
-	const { id } = params;
+	const { id } = useParams();
 	const [error, loading, problem] = useFetch(`/api/problem/id/?id=${id}`);
 	const [solution, setSolution] = useState('');
-	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
 
+	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
+	const [submitError, submitLoading, submitResult, sendSubmit] = usePost('/api/problem/submit');
+
+	const submitSolution = () => {
+		sendSubmit({
+			code: solution,
+			problem_id: id
+		});
+	};
 
 	const debugSolution = () => {
 		sendDebug({
@@ -26,22 +33,27 @@ export default function Solve() {
 	};
 
 	return <div className='solve'>
-		<SplitPane labels={['problem', 'output']}>
+		<SplitPane labels={['problem', 'debug', 'submission']}>
 			{loading && 'Loading...' || error || <Problem problem={problem} />}
 			<div>
 				{<AttemptOutput result={debugResult} />}
-				{debugError && <div>{debugError}</div>}
+				{debugError && { debugError }}
 				{debugLoading && <Loading />}
+			</div>
+			<div>
+				{<AttemptOutput result={submitResult} />}
+				{submitError && { submitError }}
+				{submitLoading && <Loading />}
 			</div>
 		</SplitPane>
 
 		<div className='editor-container panel'>
 			<div className='editor-sizer'>
-				<Editor onChange={(value) => setSolution(value)} />
+				<Editor onChange={setSolution} />
 			</div>
 			<div className='editor-buttons'>
 				<button disabled={debugLoading} className='debug btn' onClick={debugSolution}>Debug</button>
-				<button className='submit btn confirm' onClick={debugSolution}>Submit</button>
+				<button disabled={submitLoading} className='submit btn confirm' onClick={submitSolution}>Submit</button>
 			</div>
 		</div>
 	</div>;
