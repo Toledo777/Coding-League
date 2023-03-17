@@ -34,7 +34,6 @@
     "supertest": "^6.3.3"
   },
   "dependencies": {
-    "@esbuild/darwin-arm64": "^0.17.12",
     "@lyrasearch/lyra": "^0.4.11",
     "@react-oauth/google": "^0.8.0",
     "@tabler/icons-react": "^2.5.0",
