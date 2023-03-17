@@ -167,7 +167,6 @@ router.post('/user/create', async (req, res) => {
 router.put('/user/update', express.json(), async (req, res) => {
 	// check for email
 	const userData = req.body;
-	console.log(userData);
 	if (req.body.email) {
 		const response = await user.updateOne({ email: userData.email }, userData);
 

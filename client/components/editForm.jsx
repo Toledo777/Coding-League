@@ -17,10 +17,11 @@ export default function EditForm({user}) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        await submitData(formData);
+        await submitUser(formData);
     }
 
-    async function submitData(updatedUser) {
+    // sends put request and updates user
+    async function submitUser(updatedUser) {
         const headers = {
             'Content-Type': 'application/json'
         };
