@@ -32,6 +32,18 @@ export async function build(ctx = getCtx()) {
 }
 
 export async function watch() {
+
+	// Make sure we can kill the process,
+	// This fixes an issue on ubuntu
+	process.on('SIGTERM', stopHandler);
+	process.on('SIGINT', stopHandler);
+	process.on('SIGHUP', stopHandler);
+
+	function stopHandler() {
+		console.log('Stopped forcefully');
+		process.exit(0);
+	}
+
 	let ctx = await getCtxDev();
 
 	let start = performance.now();
