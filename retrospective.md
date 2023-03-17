@@ -38,6 +38,7 @@ Sprint 2:
 ## What went well
 - Robert:
     - Having google authentication functional
+    - Apply compression and caching for API data
 - Gabriel:
     - Working with Alex (and towards the end, Noah) on the search page
     - Populating the tags multi-select element with all possible tags + filtering posts in realtime on tag selection
@@ -46,6 +47,8 @@ Sprint 2:
     - Getting all the apis related to users working.
 
 ## What didn't go well
+- Robert
+    - Have caching disabled when in development environment (reverted the addition to investigate an issue. Didn't have time re-implementing it) 
 - Gabriel
     - Using the original dual-slider component I installed for selecting a difficulty range
     - After switching to the actually usable component, hooking it up to the search results, but we got it eventually

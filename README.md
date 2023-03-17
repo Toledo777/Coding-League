@@ -17,12 +17,16 @@ Features (so far):
   - If fail: fix the answer and re-submit.
 - Google authentication:
   - Users can sign in using their google account
-  - If first time user, redirect to setup page so users can choose username, starting skill level, and bio
+  - If first time user, redirect to setup page so users can enter their username, starting skill level, and bio
   - Subsequent sign-ins will retireve info from database
 - Search page:
   - Users can search for coding problems by title
   - They can then filter the search results by tags and by specifying a difficulty range
   - Finally, they can click "code" on one of the problem results to navigate to the coding page with that problem loaded in
+- Profile page:
+  - A page for specific registered users can be viewed.
+  - Displays email (TODO: seen only by that user), username, avatar, bio, and their previous answers
+  - User can edit their profile settings by changing username and bio. Will get updated in database. 
 
 ## Technology Stack
 - Languages
