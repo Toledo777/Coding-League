@@ -1,7 +1,21 @@
 /* Tags Selected List */
 .tags {
-  list-style: none;
-  text-indent: -2em;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tags>* {
+  background-color: green;
+  display: inline;
+  margin: 0.2rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 50rem;
+}
+
+.tags_container {
+  display: flex;
+  align-items: center;
 }
 
 /* Difficulty Slider */
@@ -22,8 +36,8 @@
   transform: translate(-50%, -50%) scale(1.25);
 }
 
-#diffSlider .range-slider__range {
-  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+.range-slider__range {
+  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end)) !important;
   background-size: 200% 100%;
   background-position: 50% 0;
 }

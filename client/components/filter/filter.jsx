@@ -71,6 +71,13 @@ export default function Filter({ filterChange }) {
 
 	return (
 		<div className='filter-pane'>
+			<div className='tags_container'>
+				<span>Tags:</span>
+				<div className='tags'>
+					{tags.map((tag, index) => <span key={index}>{tag}</span>)}
+					<span key={'add tag'}>+</span>
+				</div >
+			</div>
 			<h2>Filters</h2>
 			<h3>Tags</h3>
 			{error && error}
@@ -79,17 +86,9 @@ export default function Filter({ filterChange }) {
 				{tagLabels.map((tag, index) => <option key={index} value={tag}>{tag}</option>)}
 			</select>
 			<button className='clearTags' onClick={() => { clearTags(); }}>Clear tags</button>
-			<ul className='tags'>
-				{tags.length > 0
-					? tags.map((tag, index) => <li key={index}>{tag}</li>)
-					: <li key={0}>all</li>
-				}
-			</ul>
 			<h3>Difficulty</h3>
 			<RangeSlider
 				className='diffSlider'
-				id="diffSlider"
-				style='--gradient-start: rgba(0,0,255,1.0); --gradient-end: rgba(255,0,0,1.0);'
 				min='800'
 				max='3500'
 				step='100'
