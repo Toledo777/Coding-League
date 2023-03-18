@@ -21,13 +21,11 @@
 
 body {
     background-color: var(--bg-color);
-    /* display: grid;
+    display: grid;
     min-height: 0px;
     overflow: hidden;
     width: calc(100vw - 1rem);
     height: calc(100vh - 1rem);
-    
-    These style attributes mess up the search results, so they're commented them out for now */
 }
 
 #root {
@@ -56,8 +54,4 @@ nav a {
     /* color: white; */
     font-size: 2em;
     text-decoration: none;
-}
-
-button {
-    margin: 5 10px;
 }

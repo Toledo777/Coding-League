@@ -5,14 +5,15 @@
     border: none;
     outline: none;
     background-color: #0000;
+    width: calc(100% - 3rem);
 }
 
 .panel.search_bar {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     padding: 0px;
     border-radius: 10rem;
-    width: fit-content;
 }
 
 .search_bar:focus-within {
