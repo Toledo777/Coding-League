@@ -1,0 +1,30 @@
+.search_bar>input {
+    font-size: large;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10rem;
+    border: none;
+    outline: none;
+    background-color: #0000;
+}
+
+.panel.search_bar {
+    display: flex;
+    flex-direction: row;
+    padding: 0px;
+    border-radius: 10rem;
+    width: fit-content;
+}
+
+.search_bar:focus-within {
+    outline: 1px solid white;
+}
+
+.search_bar>button {
+    margin: 0px;
+    padding: 0px;
+    aspect-ratio: 1;
+    border-radius: 10rem;
+    width: 2rem;
+    height: 2rem;
+    color: black;
+}
