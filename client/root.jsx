@@ -4,6 +4,8 @@ import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
 import useCredentials from './hooks/useCredentials';
 import { retrieveLoginCredentials } from './utils/authentication.mjs';
+//TODO: Remove determineRank function
+//TODO: remove redirect to registration (and delete registration page itself)
 
 export default function Root() {
 

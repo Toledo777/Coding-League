@@ -3,7 +3,7 @@ import session from 'express-session';
 import { OAuth2Client } from 'google-auth-library';
 import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
-
+//TODO: in /login, have user be create if not in DB. If they are, update DB. Also remove state variable.
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
 const ENV_MODE = process.env.NODE_ENV || 'dev';
