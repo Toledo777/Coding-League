@@ -6,17 +6,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
-const ENV_MODE = process.env.NODE_ENV || 'development';
+const ENV_MODE = process.env.NODE_ENV || 'dev';
 const router = express.Router();
 
 router.use(session({
 	secret: process.env.SECRET, //used to sign the session id
-	name: 'id', //name of the session id cookie
+	name: 'session-id', //name of the session id cookie
 	saveUninitialized: false, //don't create session until something stored
 	resave: false,
 	cookie: {
 		maxAge: SESSION_MAX_AGE, //time in ms
-		secure: ENV_MODE === 'development' ? false: true, //should only sent over https, but set to false for testing and dev on localhost
+		secure: ENV_MODE === 'prod' ? true : false, //should only sent over https, but set to false for testing and dev on localhost
 		httpOnly: true, //can't be read by clientside JS
 		sameSite: 'strict' //only sent for requests to same origin
 	}
@@ -25,6 +25,14 @@ router.use(session({
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 router.use(express.json());
+
+/**
+ * Returns google client id to be used in the client
+ */
+router.get('/google-client-id', (req, res) => {
+	let clientID = process.env.GOOGLE_CLIENT_ID;
+	res.json(clientID);
+});
 
 /**
  * Return user data by first verify ID Token, then determine user's registration status.
@@ -47,15 +55,11 @@ router.post('/login', async (req, res) => {
 	}
 
 	// Extract user data 
-	const { name, email, picture } = ticket.getPayload();
-	const user = { name, email, picture };
+	const { email, picture } = ticket.getPayload();
+	const user = { email, picture };
+	const response = await userModel.findOne({ email: user.email });
 
-	const response = userModel.findOne(email);
-
-	const state = response.email ? 'registered' : 'not-registered';
-	if (state === 'registered') {
-		// Update DB
-	}
+	const isRegistered = response ? true : false;
 
 	// {ACCORDING TO JAYA's DEMO} 
 	// Note: you may want to save the session to a datastore like Redis in production.
@@ -64,20 +68,28 @@ router.post('/login', async (req, res) => {
 			return res.sendStatus(500);
 		}
 		req.session.user = user;
-		res.json({state, user});
+		res.json({ isRegistered });
 	});
 });
 
 /**
  * Retrieves user info from session
- */ 
-router.get('/credentials', (req, res)=>{
-	req.session.user ? res.json(req.session.user): res.json({error: 'No user credentials available'});
+ * If user's info is not in DB, return user info from session.
+ * User session info will be used during profile-setup for POST to DB once submitted
+ * User DB info will be used everywhere else once user registers.
+ */
+router.get('/credentials', async (req, res) => {
+	if (req.session.user) {
+		const user = await userModel.findOne({ email: req.session.user.email });
+		user ? res.json(user) : res.json(req.session.user);
+	} else {
+		res.json({ notloggedIn: true });
+	}
 });
 
 //***** routes for authenticated users only *****\\
 
-/**
+/** 
  * Checks if user is authenticated by checking its session
  * @param {Object} req 
  * @param {Object} res 
@@ -92,7 +104,7 @@ function isAuthenticated(req, res, next) {
 }
 
 /**
- * Used to have certain features accessible for authenticated users only
+ * Used to have certain features / pages accessible for authenticated users only
  */
 router.get('/protected',
 	isAuthenticated,
@@ -109,7 +121,7 @@ router.post('/logout', isAuthenticated, (req, res) => {
 		if (err) {
 			return res.sendStatus(500);
 		}
-		res.clearCookie('id');
+		res.clearCookie('session-id');
 		res.sendStatus(200);
 	});
 });

@@ -25,8 +25,12 @@ app.get('/api', (req, res) => {
 /**
  * React router will deal with the routes client side
  */
-app.get('/*', (_, res) => {
-	res.sendFile('index.html', { root: 'dist' });
+app.get('/*', (req, res) => {
+	if (req.accepts('html')) {
+		res.sendFile('index.html', { root: 'dist' });
+	} else {
+		res.status(404).send('404: Not found');
+	}
 });
 
 export default app;
