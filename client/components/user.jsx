@@ -18,8 +18,8 @@ export default function User({ user }) {
 			</div>
 			<div id="previous answers">
 				<h2>Previous Answers (this section is currently hardcoded until answers are stored in db)</h2>
-				<p>console.log('hello world')</p>
+				<p>console.log(hello world)</p>
 			</div>
 		</>
-	)
+	);
 }
