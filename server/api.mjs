@@ -2,6 +2,7 @@ import express, { response } from 'express';
 import bodyParser from 'body-parser';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
+import { userAnswer } from './models/userAnswer.mjs';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
 
@@ -95,8 +96,8 @@ router.get('/problem/tags', async (req, res) => {
 });
 
 /**
- * Submits code to be ran by the code-runner
- *  for now this acts only as a proxy for the code-runner
+ * Submits code for debugging to be ran by the code-runner
+ * for now this acts only as a proxy for the code-runner
  */
 router.post('/problem/debug', async (req, res) => {
 	const { code, problem_id } = req.body;
@@ -108,6 +109,28 @@ router.post('/problem/debug', async (req, res) => {
 			}, method: 'POST', body: JSON.stringify({ code, problem_id })
 		});
 		const data = await response.json();
+		res.json(data);
+	}
+});
+
+/**
+ * Submits code solution to be ran by the code-runner
+ * will update user answer row in userAnswerSchema if applicable (or create new row if non-existent)
+ */
+router.post('/problem/submit', async (req, res) => {
+	const { email, problem_id, code, results } = req.body;
+	if (code != undefined) {
+		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}, method: 'POST', body: JSON.stringify({ code, problem_id })
+		});
+		const data = await response.json();
+
+		// check if user answer needs to be updated in userAnswerSchema
+		// or if a new row needs to be created in userAnswerSchema
+
 		res.json(data);
 	}
 });
