@@ -9,12 +9,12 @@ import EditForm from '../components/editForm';
 export default function Profile() {
     // Get the username from the route
 	const params = useParams();
-	const { username } = params;
+	const { id } = params;
 	// fetch user with data to pass to user component
-	const [userErr, userLoading, userData] = useFetch('/api/user?username=' + username, '');
+	const [userErr, userLoading, userData] = useFetch('/api/user?id=' + id, '');
 
 	return (
-		<div>
+		<>
 			<h1>Profile Page</h1>
 			{userErr && <div>{userErr}</div>}
             {userLoading && <div>{userLoading}</div>}
@@ -22,7 +22,7 @@ export default function Profile() {
 			<button id="editBtn">Edit Profile</button>
 
 			{/* button that could be used hide userEdit form */}
-			<EditForm user={userData} />
-		</div>
+			{/* <EditForm user={userData} /> */}
+		</>
 	);
 }

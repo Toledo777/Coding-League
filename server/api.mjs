@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
+import mongoose from 'mongoose';
 dotenv.config();
 
 const router = express.Router();
