@@ -118,20 +118,51 @@ router.post('/problem/debug', async (req, res) => {
  * will update user answer row in userAnswerSchema if applicable (or create new row if non-existent)
  */
 router.post('/problem/submit', async (req, res) => {
-	const { email, problem_id, code, results } = req.body;
-	if (code != undefined) {
-		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
+	const { email, problem_id, code } = req.body;
+	if (code != undefined && email != undefined) {
+		const submitResp = await fetch(`${CODE_RUNNER_URI}/attempt_problem`, {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json'
 			}, method: 'POST', body: JSON.stringify({ code, problem_id })
 		});
-		const data = await response.json();
+		const results = await submitResp.json();
 
-		// check if user answer needs to be updated in userAnswerSchema
-		// or if a new row needs to be created in userAnswerSchema
+		// let answer = await fetch();
+
+		// if user has not correctly solved the problem yet
+		if (!answer.pass_test){
+			let solved = false;
+			let points = 0;
+			if (results.all_ok){
+				solved = true;
+				const allAttempts = await userAnswer.find({ problem_id: problem_id });
+				const passAttempts = allAttempts.filter(attempt => {
+					return attempt.pass_test === true;
+				});
+				// do math here for points
+				points = (allAttempts.count/passAttempts.count)*100;
+			}
+			const updateAnsResp = await userAnswer.updateOne({ email: email, problem_id: problem_id }, { code: code, pass_test: solved });
+			// const updateExpResp = await user.updateOne({ email: email }, { exp:  });
+		}
 
 		res.json(data);
+	}
+});
+
+/**
+ * Checks if user has already submitted an answer for the given problem
+ */
+router.get('/problem/solution', async (req, res) => {
+	const { email, problem_id } = req.body;
+	let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
+	if (answer){
+		res.json(answer);
+	} else {
+		answer = new userAnswer({ email: email, problem_id: problem_id, code: '', pass_test: false });
+		answer.save();
+		res.json(answer);
 	}
 });
 
