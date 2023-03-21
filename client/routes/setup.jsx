@@ -50,9 +50,7 @@ export default function Setup() {
 				email: user.email,
 				username: username,
 				avatar_uri: user.picture,
-				wins: 0,
-				losses: 0,
-				rank: rank,
+				exp: 0,
 				bio: bio
 			}),
 			headers: {
