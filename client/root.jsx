@@ -3,9 +3,6 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import useFetch from './hooks/useFetch';
 import useCredentials from './hooks/useCredentials';
-import { retrieveLoginCredentials } from './utils/authentication.mjs';
-//TODO: Remove determineRank function
-//TODO: remove redirect to registration (and delete registration page itself)
 
 export default function Root() {
 
@@ -30,15 +27,24 @@ export default function Root() {
 
 		// call POST request for logging in and then
 		// retrieve data as json and set user's name
-		const user = await retrieveLoginCredentials(googleData);
-
-		// Redirect user depending on their registered status
-		if (!user.isRegistered) {
-			navigate('user/setup');
+		// call POST request for logging in
+		const res = await fetch('/auth/login', {
+			method: 'POST',
+			body: JSON.stringify({
+				token: googleData.credential
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		if (!res.ok) {
+			const set = await res.json();
+			setAuthError(set.error);
+		} else {
+			// Trigger useCredentials() to fetch for user creds, and display user's name
+			dispatchEvent(new Event('login'));
 		}
 
-		// Trigger useCredentials() to fetch for user creds
-		dispatchEvent(new Event('login'));
 	}
 
 	/** 
@@ -52,7 +58,7 @@ export default function Root() {
 			}
 		});
 		navigate('/');
-		// Trigger useCredentials() to fetch for user creds
+		// Trigger useCredentials() to fetch for user creds, and show google login component
 		dispatchEvent(new Event('login'));
 	}
 
@@ -62,14 +68,17 @@ export default function Root() {
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
 				<Link to={'/search'}>Search</Link>
-				
+
 				{/* temporarily hardcode route to user in the db */}
 				<Link to={'/profile/cooluser123'}>Profile</Link>
-
-				{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
-				{user && user.username}
-				{authError}
-				{user && <button onClick={handleLogout}>Logout</button>}
+				<div className='user'>
+					{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
+					<p>{user && user.username}</p>
+					{user && <img src={user.avatar_uri} alt='user profile' referrerPolicy='no-referrer'></img>}
+					{authError}
+					{user && <button onClick={handleLogout}>Logout</button>}
+				</div>
+				
 				<h3>
 					{error && 'Error loading google authentication'}
 					{loading && 'Loading google authentication'}

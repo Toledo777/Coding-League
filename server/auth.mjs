@@ -3,7 +3,7 @@ import session from 'express-session';
 import { OAuth2Client } from 'google-auth-library';
 import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
-//TODO: in /login, have user be create if not in DB. If they are, update DB. Also remove state variable.
+//TODO: figure out why secure true doesn't work on production
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
 const ENV_MODE = process.env.NODE_ENV || 'dev';
@@ -51,40 +51,54 @@ router.post('/login', async (req, res) => {
 		audience: process.env.GOOGLE_CLIENT_ID
 	});
 	if (!ticket) {
-		return res.sendStatus(401).json({ state: 'invalid' });
+		return res.sendStatus(401).json({ error: 'Google ticket invalid' });
 	}
 
 	// Extract user data 
-	const { email, picture } = ticket.getPayload();
-	const user = { email, picture };
-	const response = await userModel.findOne({ email: user.email });
+	const { email, picture, name } = ticket.getPayload();
+	const user = { email, picture, name };
 
-	const isRegistered = response ? true : false;
+	let response = await userModel.findOne({ email: user.email });
+	if (!response) {
+		// If no response: Newly registered user 
+
+		// Create a new user into DB.
+		const newUser = new userModel({ email: user.email, username: user.name, avatar_uri: user.picture, exp: 0 });
+		try {
+			await newUser.save();
+			// Once save. Re-find that user in DB
+			response = await userModel.findOne({ email: user.email });
+			if (!response) {
+				return res.sendStatus(500).json({ error: 'Could not find user after creating one.' });
+			}
+		} catch {
+			res.sendStatus(500).json({ error: 'Error on user creation' });
+		}
+
+	} else {
+		// TODO: If response: Returning user. Update their DB info.
+	}
 
 	// {ACCORDING TO JAYA's DEMO} 
 	// Note: you may want to save the session to a datastore like Redis in production.
+
+	// Add user details into session
 	req.session.regenerate((err) => {
 		if (err) {
-			return res.sendStatus(500);
+			console.error(err);
+			return res.sendStatus(500).json({ error: 'Error trying to regenerate session' });
 		}
-		req.session.user = user;
-		res.json({ isRegistered });
+		req.session.user = response;
+		return res.sendStatus(200);
 	});
 });
 
 /**
  * Retrieves user info from session
- * If user's info is not in DB, return user info from session.
- * User session info will be used during profile-setup for POST to DB once submitted
- * User DB info will be used everywhere else once user registers.
+ * If user's info not in session, return value for client to handle non-login credentials
  */
 router.get('/credentials', async (req, res) => {
-	if (req.session.user) {
-		const user = await userModel.findOne({ email: req.session.user.email });
-		user ? res.json(user) : res.json(req.session.user);
-	} else {
-		res.json({ notloggedIn: true });
-	}
+	req.session.user ? res.json(req.session.user) : res.json({ notloggedIn: true });
 });
 
 //***** routes for authenticated users only *****\\
