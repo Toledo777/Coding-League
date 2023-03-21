@@ -143,8 +143,15 @@ router.post('/problem/submit', async (req, res) => {
 				// do math here for points
 				points = (allAttempts.count/passAttempts.count)*100;
 			}
-			const updateAnsResp = await userAnswer.updateOne({ email: email, problem_id: problem_id }, { code: code, pass_test: solved });
-			// const updateExpResp = await user.updateOne({ email: email }, { exp:  });
+
+			// upsert user answer into userAnswer schema
+			const updateAnsResp = await userAnswer.findOneAndUpdate({ email: email, problem_id: problem_id },
+				{ email: email, problem_id: problem_id, code: code, pass_test: solved},
+				{upsert: true});
+
+			// update user points by taking their current points and adding points from this new solution
+			// const fetchUser = await user.findOne({ email: email });
+			// const updateExpResp = await user.updateOne({ email: email }, { exp: fetchUser.exp + points });
 		}
 
 		res.json(data);
@@ -158,11 +165,11 @@ router.get('/problem/solution', async (req, res) => {
 	const { email, problem_id } = req.body;
 	let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
 	if (answer){
+		// already attempted, has submission
 		res.json(answer);
 	} else {
-		answer = new userAnswer({ email: email, problem_id: problem_id, code: '', pass_test: false });
-		answer.save();
-		res.json(answer);
+		// no submission, hasn't attempted
+		res.json();
 	}
 });
 
