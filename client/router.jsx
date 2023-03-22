@@ -7,7 +7,7 @@ import Solve from './routes/solve/solve';
 import Profile from './routes/profile';
 import Setup from './routes/setup';
 import { createBrowserRouter } from 'react-router-dom';
-import Leaderboard from './components/leaderboards/leaderboardGlobal';
+import Leaderboard from './routes/leaderboard';
 
 const router = createBrowserRouter([
 	{
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 			{ path: '/search', element: <Search /> },
 			{ path: '/profile/:username', element: <Profile /> },
 			{ path: '/user/setup', element: <Setup /> },
-			{ path: '/leaderboard', element: <Leaderboard></Leaderboard> }
+			{ path: '/leaderboard/:option', element: <Leaderboard></Leaderboard> }
 		]
 	},
 ], { window });
