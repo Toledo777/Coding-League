@@ -75,8 +75,6 @@ export default function Root() {
 				<Link to={'/'}>Home</Link>
 				<Link to={'/search'}>Search</Link>
 
-				{/* temporarily hardcode route to user in the db */}
-				<Link to={'/profile/cooluser123'}>Profile</Link>
 				<div className='user' onClick={viewProfile}>
 					{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 					<p>{user && user.username}</p>
