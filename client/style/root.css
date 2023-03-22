@@ -46,12 +46,25 @@ nav {
     padding: 5px 10px;
 }
 
-
-
 /* styling nav bar links */
 nav a {
     margin: 0 15px;
     /* color: white; */
     font-size: 2em;
     text-decoration: none;
+}
+
+nav .user {
+    display: flex;
+    flex-direction: row;
+    margin-right: 0;
+}
+
+nav .user>p {
+    margin-right: 10px;
+}
+
+nav .user>img {
+    width: 45px;
+    height: 45px;
 }
