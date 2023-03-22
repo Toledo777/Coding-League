@@ -1,7 +1,7 @@
 import React from 'react';
 import useFetch from '../hooks/useFetch';
 import { useParams } from 'react-router-dom';
-import User from '../components/user';
+import User from '../components/user/user';
 import EditForm from '../components/editForm';
 
 // profile page of a signed in user
@@ -10,7 +10,6 @@ export default function Profile() {
 	// Get the username from the route
 	const params = useParams();
 	const { id } = params;
-	console.log(id);
 	// fetch user with data to pass to user component
 	const [userErr, userLoading, userData] = useFetch('/api/user?id=' + id, '');
 

@@ -19,6 +19,13 @@ export default function Solve() {
 
 
 	const debugSolution = () => {
+		const response = fetch('auth/protected');
+
+		// check if user is signed in
+		if (!response.ok) {
+			alert("Please sign in to submit your code.");
+		}
+
 		sendDebug({
 			code: solution,
 			problem_id: id
