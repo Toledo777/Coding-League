@@ -1,6 +1,7 @@
 import express from 'express';
 import api from '../server/api.mjs';
 import auth from '../server/auth.mjs';
+import api_doc from './api_doc.mjs';
 import compression from 'compression';
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(compression());
 app.use(express.static('dist'));
 
 app.use('/api', api);
+app.use('/api/docs', api_doc);
 app.use('/auth', auth);
 
 /**

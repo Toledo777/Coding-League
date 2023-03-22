@@ -3,6 +3,7 @@ import session from 'express-session';
 import { OAuth2Client } from 'google-auth-library';
 import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
+
 //TODO: figure out why secure true doesn't work on production
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
@@ -29,6 +30,14 @@ router.use(express.json());
 /**
  * Returns google client id to be used in the client
  */
+
+/**
+ * @swagger
+ * /auth/google-client-id:
+ * 		get:
+ * 			summary: Retrieve google client ID for client-side to use google authentication
+ */
+
 router.get('/google-client-id', (req, res) => {
 	let clientID = process.env.GOOGLE_CLIENT_ID;
 	res.json(clientID);
