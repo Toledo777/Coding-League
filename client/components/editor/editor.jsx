@@ -12,7 +12,7 @@ export default function Editor({ onChange }) {
 	const editorRef = useRef();
 
 	const [value, setValue] = useState(`function solve() {
-		console.log("Your Code Here!!!");\n}`);
+		console.log("Your Code Here!");\n}`);
 
 	// This is a hack to force the editor to update it's size based on it's parent during load,
 	useEffect(() => {

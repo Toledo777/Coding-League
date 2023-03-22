@@ -6,12 +6,19 @@ export default function Leaderboard({ global }) {
 
 	let [error, loading, users] = [];
 
+	//if a global leaderboard is requested through the nav bar
 	if (global) {
-		[error, loading, users] = useFetch('/api/users?count=5', []);
+		[error, loading, users] = useFetch('/api/users?count=10', []);
+		//sort by descending
+		users.sort((a, b) => b.rank - a.rank);
+
 	}
+	//otherwise a user-based leaderboard showing a few users above and below you
 	else {
 		[error, loading, users] = useFetch('/api/users?count=1', []);
 	}
+
+
 
 	return (
 		<div>
