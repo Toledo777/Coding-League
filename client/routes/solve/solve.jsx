@@ -6,6 +6,7 @@ import AttemptOutput from '../../components/attemptOutput/attemptOutput';
 import Editor from '../../components/editor/editor';
 import SplitPane from '../../components/splitPane/splitPane';
 import useFetch from '../../hooks/useFetch';
+import useCredentials from '../../hooks/useCredentials';
 import Loading from '../../components/loader/loader';
 import './solve.css';
 
@@ -17,6 +18,7 @@ export default function Solve() {
 	const [solution, setSolution] = useState('');
 	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
 
+	const user = useCredentials();
 
 	const debugSolution = () => {
 		sendDebug({
@@ -27,12 +29,14 @@ export default function Solve() {
 
 	const handleSolutionChange = (value) => {
 		setSolution(value);
-		window.localStorage.setItem(id, value);
+		window.localStorage.setItem(`${id}-${user.email}`, value);
 	};
 
 	useEffect(() => {
-		setSolution(window.localStorage.getItem(id));
-	}, []);
+		if (user.email !== undefined){
+			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
+		}
+	});
 
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
