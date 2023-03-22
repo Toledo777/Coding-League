@@ -62,7 +62,7 @@ export default function Root() {
 				
 				{/* temporarily hardcode route to user in the db */}
 				<Link to={'/profile/640617c088ab3d8cf157cf9f'}>Profile</Link>
-
+				
 				{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 				{user && user.username}
 				{authError}

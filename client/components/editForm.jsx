@@ -1,6 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+
+// NOTE: This feature has been removed, I'll keep the component in case the feature is ever reintroduced later.
+
 // component to display form to edit user data, takes a user as input to prepopulate form
 export default function EditForm({user}) {
     const [error, setError] = useState(false);
