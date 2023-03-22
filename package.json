@@ -48,9 +48,11 @@
     "mongoose": "^6.9.1",
     "react-ace": "^10.1.0",
     "react-range-slider-input": "^3.0.7",
+    "recachegoose": "^9.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.2",
     "xterm": "^5.1.0",
-    "xterm-addon-fit": "^0.7.0",
-    "recachegoose": "^9.1.0"
+    "xterm-addon-fit": "^0.7.0"
   },
   "type": "module"
 }
