@@ -7,8 +7,8 @@ export default function User({user}) {
         <>
             <div>
                 <h2>{user.username}</h2>
-                <img src={user.avatar} alt="profile avatar"/>
-                <p>Rank: {user.rank}</p>
+                <img src={user.avatar_uri} alt="profile avatar"/>
+                <p>Rank: {user.exp}</p>
             </div>
             <div id="previous answers">
                 <h2>Previous Answers (this section is currently hardcoded until answers are stored in db)</h2>
