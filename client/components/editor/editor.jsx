@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { default as Ace } from 'react-ace';
 import './editor.css';
 
@@ -11,6 +11,9 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 export default function Editor({ onChange }) {
 	const editorRef = useRef();
 
+	const [value, setValue] = useState(`function solve() {
+		console.log("Your Code Here!!!");\n}`);
+
 	// This is a hack to force the editor to update it's size based on it's parent during load,
 	useEffect(() => {
 		editorRef.current.editor.resize();
@@ -22,7 +25,7 @@ export default function Editor({ onChange }) {
 			ref={editorRef}
 			mode='javascript'
 			theme='dracula'
-			onChange={() => onChange(editorRef.current.editor.getValue())}
+			onChange={(e) => onChange(editorRef.current.editor.getValue(), setValue(e))}
 			name='aceEditorComponent'
 			showGutter={true}
 			width="unset"
@@ -34,6 +37,7 @@ export default function Editor({ onChange }) {
 				enableBasicAutocompletion: true,
 				useWorker: false
 			}}
+			value={value}
 		/>
 	);
 }
