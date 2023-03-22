@@ -5,7 +5,6 @@ const userSchema = {
 	username: String,
 	avatar_uri: String,
 	exp: Number,
-	bio: String
 };
 
 export var user = mongoose.model('user', userSchema);
