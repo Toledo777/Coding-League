@@ -53,8 +53,8 @@ export default function Filter({ filterChange }) {
 	return (
 		<div className='filter-pane'>
 			<TagSelector tagsChange={setTags} />
-			<h2>Filters</h2>
 			<h3>Difficulty</h3>
+			<p> {diffMin} - {diffMax}</p>
 			<RangeSlider
 				className='diffSlider'
 				min='800'
@@ -63,9 +63,6 @@ export default function Filter({ filterChange }) {
 				value={[diffMin, diffMax]}
 				defaultValue={[diffMin, diffMax]}
 				onInput={range => { setDiffRangeHelper(...range); }} />
-			<button className='clearRange' onClick={() => { clearDiffRange(); }}>Clear difficulty</button>
-			<p>Range: {diffMin} - {diffMax}</p>
-			<button className='resetParams' onClick={() => { clearFilters(); }}>Reset filters</button>
 		</div>
 	);
 }
