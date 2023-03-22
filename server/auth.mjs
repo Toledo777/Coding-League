@@ -56,18 +56,16 @@ router.post('/login', async (req, res) => {
 
 	// Extract user data 
 	const { email, picture, name } = ticket.getPayload();
-	const user = { email, picture, name };
+	// const user = { email, picture, name };
+	const user = new userModel({ email: email, username: name, avatar_uri: picture, exp: 0 });
 
-	let response = await userModel.findOne({ email: user.email });
+	let response = await userModel.findOne({ email: email });
 	if (!response) {
-		// If no response: Newly registered user 
-
-		// Create a new user into DB.
-		const newUser = new userModel({ email: user.email, username: user.name, avatar_uri: user.picture, exp: 0 });
+		// If no response: Newly registered use. Create a new user into DB.
 		try {
-			await newUser.save();
+			await user.save();
 			// Once save. Re-find that user in DB
-			response = await userModel.findOne({ email: user.email });
+			response = await userModel.findOne({ email: email });
 			if (!response) {
 				return res.sendStatus(500).json({ error: 'Could not find user after creating one.' });
 			}
@@ -76,7 +74,7 @@ router.post('/login', async (req, res) => {
 		}
 
 	} else {
-		// TODO: If response: Returning user. Update their DB info.
+		await userModel.updateOne({ email: email }, response);
 	}
 
 	// {ACCORDING TO JAYA's DEMO} 
