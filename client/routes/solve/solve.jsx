@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Problem from '../../components/problem';
 import { useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost';
@@ -25,6 +25,15 @@ export default function Solve() {
 		});
 	};
 
+	const handleSolutionChange = (value) => {
+		setSolution(value);
+		window.localStorage.setItem(id, value);
+	};
+
+	useEffect(() => {
+		setSolution(window.localStorage.getItem(id));
+	}, []);
+
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
 			{loading && 'Loading...' || error || <Problem problem={problem} />}
@@ -37,7 +46,7 @@ export default function Solve() {
 
 		<div className='editor-container panel'>
 			<div className='editor-sizer'>
-				<Editor onChange={(value) => setSolution(value)} />
+				<Editor onChange={(value) => handleSolutionChange(value)} solution={solution} />
 			</div>
 			<div className='editor-buttons'>
 				<button className='debug btn' onClick={debugSolution}>Debug</button>

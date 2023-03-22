@@ -161,7 +161,7 @@ router.post('/problem/submit', async (req, res) => {
 });
 
 /**
- * Checks if user has already submitted an answer for the given problem
+ * Checks if user has already submitted an answer for the given problem and return it
  */
 router.get('/problem/solution', async (req, res) => {
 	const { email, problem_id } = req.body;
