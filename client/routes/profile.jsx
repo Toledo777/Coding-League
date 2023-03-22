@@ -9,7 +9,7 @@ import EditForm from '../components/editForm';
 export default function Profile() {
 	// Get the username from the route
 	const params = useParams();
-	const { username } = params;
+	const username = 'Gabriel';
 	// fetch user with data to pass to user component
 	const [userErr, userLoading, userData] = useFetch(`/api/user?username=${username}`, '');
 

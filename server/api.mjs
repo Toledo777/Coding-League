@@ -132,29 +132,31 @@ router.post('/problem/submit', async (req, res) => {
 
 		// if user has not correctly solved the problem yet
 		if (!answer.pass_test) {
-			let solved = false;
+
+			// upsert user answer into userAnswer schema
+			const updateAnsResp = await userAnswer.findOneAndUpdate({ email: email, problem_id: problem_id },
+				{ email: email, problem_id: problem_id, code: code, pass_test: results.all_ok },
+				{ upsert: true });
+
 			let points = 0;
 			if (results.all_ok) {
-				solved = true;
 				const allAttempts = await userAnswer.find({ problem_id: problem_id });
 				const passAttempts = allAttempts.filter(attempt => {
 					return attempt.pass_test === true;
 				});
 				// do math here for points
-				points = (allAttempts.count / passAttempts.count) * 100;
+				points = 100 * (allAttempts.count / passAttempts.count);
+				if (allAttempts.count === 1) {
+					points += 1000;
+				}
 			}
-
-			// upsert user answer into userAnswer schema
-			const updateAnsResp = await userAnswer.findOneAndUpdate({ email: email, problem_id: problem_id },
-				{ email: email, problem_id: problem_id, code: code, pass_test: solved },
-				{ upsert: true });
 
 			// update user points by taking their current points and adding points from this new solution
 			const fetchUser = await user.findOne({ email: email });
-			const updateExpResp = await user.updateOne({ email: email }, { exp: fetchUser.exp + points });
+			const updateExpResp = await user.updateOne({ email: email }, { exp: (fetchUser.exp ?? 0) + points });
 		}
 
-		res.json(data);
+		res.json(results);
 	}
 });
 
