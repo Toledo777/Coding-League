@@ -30,6 +30,8 @@ export default function TagSelector({ tagsChange }) {
 			menuOpen && <>
 				<span className='close_click_catcher' onClick={() => setMenuOpen(false)} />
 				<div className='add_tag_modal panel'>
+					{loading && 'loading'}
+					{error && error}
 					{
 						allTags.filter(t => !tags.includes(t)).map(
 							tag => <span
