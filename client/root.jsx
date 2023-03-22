@@ -65,7 +65,7 @@ export default function Root() {
 	// event handler to route to profile
 	const viewProfile = () => {
 		// construct path to user's profile
-		let path = '/profile' + user.id;
+		let path = '/profile/' + user._id;
 		navigate(path);
 	}
 
