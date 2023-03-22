@@ -4,7 +4,7 @@ const userSchema = {
 	email: String,
 	username: String,
 	avatar_uri: String,
-	exp: String,
+	exp: Number,
 };
 
 export var user = mongoose.model('user', userSchema);
