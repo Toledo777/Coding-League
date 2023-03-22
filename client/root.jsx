@@ -61,7 +61,7 @@ export default function Root() {
 				<Link to={'/solve/282A'}>Solve</Link>
 				
 				{/* temporarily hardcode route to user in the db */}
-				<Link to={'/profile/cooluser123'}>Profile</Link>
+				<Link to={'/profile/640617c088ab3d8cf157cf9f'}>Profile</Link>
 
 				{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 				{user && user.username}
