@@ -2,7 +2,8 @@ import React from 'react';
 import Root from './root';
 import Error from './routes/error';
 import Home from './routes/home';
-import Solve from './routes/solve';
+import Search from './routes/search';
+import Solve from './routes/solve/solve';
 import Profile from './routes/profile';
 import Setup from './routes/setup';
 import { createBrowserRouter } from 'react-router-dom';
@@ -16,7 +17,8 @@ const router = createBrowserRouter([
 			{ path: '/', element: <Home /> },
 			{ path: '/solve/:id', element: <Solve /> },
 			{ path: '/profile/:id', element: <Profile /> },
-			{ path: '/user/setup', element: <Setup />}
+			{ path: '/user/setup', element: <Setup />},
+			{ path: '/search', element: <Search /> },
 		]
 	},
 ], { window });

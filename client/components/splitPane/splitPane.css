@@ -1,0 +1,55 @@
+.split-pane {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    max-height: 100%;
+    overflow: auto;
+    padding: 0px;
+}
+
+.pane-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    max-height: 100%;
+    overflow: auto;
+    padding: 0.25rem;
+    background-color: var(--panel-color);
+    border-radius: 0px 0.25rem 0.25rem;
+    box-shadow:
+        0px 0px 0px 1px #AAA inset,
+        0rem 0.25rem 0.25rem #0004;
+    margin: 0px var(--gap-s) var(--gap-s) var(--gap-s);
+    padding: var(--gap-s);
+}
+
+.pane-button {
+    border-radius: 0.25rem 0.25rem 0rem 0rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #AAA;
+    background-color: #222;
+    margin-bottom: -1px;
+    z-index: 500;
+}
+
+.pane-button.selected {
+    background-color: var(--panel-color);
+}
+
+/* I'm so sorry for this css... */
+/* I think it might break if anybody were to so much as sneeze in it's general direction */
+/* This places an element just below the active panel to cover the border so that it looks seamless */
+.pane-button.selected::after {
+    display: block;
+    content: "";
+    height: 3px;
+    margin-top: -2px;
+    margin-bottom: -1px;
+    width: calc(100% + 1rem);
+    transform: translate(calc(-0.5rem), 5px);
+    background-color: var(--panel-color);
+}
+
+.pane-selector {
+    z-index: 2;
+    margin: var(--gap-s) var(--gap-s) 0px var(--gap-s);
+}
