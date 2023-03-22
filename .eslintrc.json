@@ -4,20 +4,23 @@
         "es2021": true,
         "jest": true
     },
-    "extends": [
-        "eslint:recommended"
-    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
     "ignorePatterns": [
-        "code-runner/**"
+        "code-runner/**",
+        "node_modules",
+        "dist",
+        ".vscode",
+        "package-lock.json",
+        "project-java-script.jar"
     ],
     "plugins": [
         "react"
     ],
     "rules": {
+        "react/prop-types": "off",
         "indent": [
             "error",
             "tab"

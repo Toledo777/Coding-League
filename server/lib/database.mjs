@@ -1,11 +1,15 @@
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
+import cachegoose from 'recachegoose';
 dotenv.config();
 
 // database url
 const mongoDB = process.env.ATLAS_URI;
 mongoose.set('strictQuery', false);
 
+cachegoose(mongoose, {
+	engine: 'memory'
+});
 
 // database connection function
 async function dbConnect() {
@@ -22,7 +26,7 @@ async function dbConnect() {
 			console.log('Connected to database');
 		}
 		catch (error) {
-			console.log('Error: Couldn\'t connect');
+			console.log('Error: Could not connect to database');
 			process.exit();
 		}
 	}
