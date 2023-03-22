@@ -31,13 +31,15 @@ export default function Solve() {
 		setSolution(value);
 		if (user){
 			window.localStorage.setItem(`${id}-${user.email}`, value);
+			window.localStorage.setItem(`${user.email}-recentProblem`, id);
 		}
 	};
 
 	useEffect(() => {
-		{!user
-			? setSolution('')
-			: setSolution(window.localStorage.getItem(`${id}-${user.email}`));
+		if (user){
+			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
+		} else {
+			setSolution('');
 		}
 	}, [user]);
 

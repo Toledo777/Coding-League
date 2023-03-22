@@ -54,11 +54,19 @@ export default function Root() {
 		dispatchEvent(new Event('login'));
 	}
 
+	function getProbId(){
+		if (user){
+			return window.localStorage.getItem(`${user.email}-recentProblem`);
+		} else {
+			return '282A';
+		}
+	}
+
 	return (
 		<GoogleOAuthProvider clientId={data}>
 			<nav className='panel'>
 				<Link to={'/'}>Home</Link>
-				<Link to={'/solve/282A'}>Solve</Link>
+				<Link to={`/solve/${getProbId()}`}>Solve</Link>
 				<Link to={'/search'}>Search</Link>
 				
 				{/* temporarily hardcode route to user in the db */}
