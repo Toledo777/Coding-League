@@ -58,7 +58,6 @@ export default function Root() {
 		<GoogleOAuthProvider clientId={data}>
 			<nav>
 				<Link to={'/'}>Home</Link>
-				<Link to={'/solve/282A'}>Solve</Link>
 				
 				{/* temporarily hardcode route to user in the db */}
 				<Link to={'/profile/640617c088ab3d8cf157cf9f'}>Profile</Link>
