@@ -31,12 +31,12 @@ export default function Solve() {
 		setSolution(value);
 		if (user){
 			window.localStorage.setItem(`${id}-${user.email}`, value);
-			window.localStorage.setItem(`${user.email}-recentProblem`, id);
 		}
 	};
 
 	useEffect(() => {
 		if (user){
+			window.localStorage.setItem(`${user.email}-recentProblem`, id);
 			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
 		} else {
 			setSolution('');
