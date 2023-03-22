@@ -29,14 +29,17 @@ export default function Solve() {
 
 	const handleSolutionChange = (value) => {
 		setSolution(value);
-		window.localStorage.setItem(`${id}-${user.email}`, value);
+		if (user){
+			window.localStorage.setItem(`${id}-${user.email}`, value);
+		}
 	};
 
 	useEffect(() => {
-		if (user.email !== undefined){
-			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
+		{!user
+			? setSolution('')
+			: setSolution(window.localStorage.getItem(`${id}-${user.email}`));
 		}
-	});
+	}, [user]);
 
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
