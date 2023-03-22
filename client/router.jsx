@@ -18,7 +18,6 @@ const router = createBrowserRouter([
 			{ path: '/solve/:id', element: <Solve /> },
 			{ path: '/search', element: <Search /> },
 			{ path: '/profile/:username', element: <Profile /> },
-			// { path: '/user/setup', element: <Setup /> },
 			{ path: '/leaderboard/:option', element: <Leaderboard></Leaderboard> }
 		]
 	},

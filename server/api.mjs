@@ -202,11 +202,13 @@ router.get('/user', async (req, res) => {
 /**
  * GET api to call the top X users
  * to use call '/api/users?count=X 
- * (still in development until we implement elo/ranking/whatever correctly)
+ * sorted by descending order
  */
 router.get('/users', async (req, res) => {
 	const response = await user.aggregate([
+		{ $sort: { exp: -1 } },
 		{ $limit: parseInt(req.query.count) }
+
 	]);
 	if (response) {
 		res.json(response);
@@ -216,20 +218,25 @@ router.get('/users', async (req, res) => {
 	}
 });
 
-
 /**
- * GET api to find a user's current position in the db
- * to use call '/api/userPosition?username=
+ * GET api to call X users with higher and lower exp compared to a user
+ * to use call '/api/userNeighbors?count=X
  */
-router.get('/userPosition', async (req, res) => {
-	const response = await user.findOne({ username: req.query.username });
+router.get('/userNeighbors', async (req, res) => {
+	let response = await user.aggregate([
+		{ $match: { exp: { $gt: parseInt(req.query.userExp) } } },
+		{ $sort: { exp: 1 } },
+		{ $limit: parseInt(req.query.count / 2) },
+		{ $sort: { exp: -1 } }
+	]);
 	if (response) {
 		res.json(response);
 	}
 	else {
-		res.status(404).json({ title: 'No data found with that username' });
+		res.status(404).json({ title: 'No users found' });
 	}
 });
+
 
 /**
  * POST api to post new user into database

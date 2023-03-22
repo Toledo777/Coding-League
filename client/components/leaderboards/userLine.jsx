@@ -10,7 +10,7 @@ export default function userLine({ user }) {
 	let navigate = useNavigate();
 	return (
 		<div onClick={toUser}>
-			{user.username} | {user.rank} | {parseInt(user.wins) / parseInt(user.losses)}
+			{user.username} | {user.exp}
 		</div>
 	);
 }
