@@ -125,7 +125,13 @@ function isAuthenticated(req, res, next) {
 router.get('/protected',
 	isAuthenticated,
 	function (req, res) {
-		res.sendStatus(200);
+		if (!req.session.user) {
+			res.sendStatus(401);
+		}
+		else {
+			res.sendStatus(200);
+		}
+		
 	}
 );
 
