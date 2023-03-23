@@ -4,9 +4,8 @@ import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
-
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
-import { create, insertBatch, search } from '@lyrasearch/lyra';
+import { userAnswer } from './models/userAnswer.mjs';
 
 dotenv.config();
 const router = express.Router();
@@ -174,7 +173,7 @@ router.get('/user', async (req, res) => {
 		if (response) {
 			res.json(response);
 		}
-		// no data found with ID
+		// no data found with email
 		else {
 			res.status(404).json({ title: 'No data found with that email' });
 		}
@@ -228,6 +227,7 @@ router.post('/user/create', async (req, res) => {
 router.put('/user/update', express.json(), async (req, res) => {
 	// check for email
 	const userData = req.body;
+	console.log(req.query.email);
 	if (req.body.email) {
 		const response = await user.updateOne({ email: userData.email }, userData);
 
@@ -247,7 +247,29 @@ router.put('/user/update', express.json(), async (req, res) => {
 	}
 });
 
-router.get('/user/problems', async (req, res) =>  {}
-);
+// return all answers associated with user
+router.get('/user/answers', async (req, res) =>  {
+	if (req.query.email) {
+			const response = await userAnswer.find({email: req.query.email});
+			console.log(response);
+
+			// check if email exist
+			let emailExist = await user.exists({ email: req.query.email})
+
+			if (emailExist) {
+				// return data
+				res.status(200).json(response);
+			}
+
+			// no problems found with email
+			else {
+				res.status(404).json({ title: "No user associated with this email was found" });
+			}
+	}
+	// missing id parameter
+	else {
+		res.status(400).json({ title: 'No parameter given' });
+	}
+});
 
 export default router;
