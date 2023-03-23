@@ -1,0 +1,164 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Coding League's express APIs",
+    "version": "0.1.0",
+    "description": "This page contains information about our website and how our APIs are used used.",
+    "license": {
+      "name": "MIT",
+      "url": "https://spdx.org/licenses/MIT.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Development server"
+    },
+    {
+      "url": "https://codingleague.azurewebsites.net",
+      "description": "Production server"
+    },
+    {
+      "url": "https://codingleaguetesting.azurewebsites.net",
+      "description": "Deployed testing server"
+    }
+  ],
+  "paths": {
+    "/auth/google-client-id": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Retrieve google client ID",
+        "description": "Retrieve google client ID from environment variable for client-side to use google authentication.",
+        "responses": {
+          "200": {
+            "description": "Returns google client ID from environment",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "XXX-YYY.apps.googleusercontent.com"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Login the user to our site",
+        "description": "Login the user by verifying their Google token, then setting user session",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "description": "User's Google login token for route to verify and extract",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user's token is valid. The user is created / found in database, and successfully generates session"
+          },
+          "401": {
+            "description": "Returns 401 if either no token was provided in parameters, or the ticket is invalid"
+          },
+          "500": {
+            "description": "Returns 500 if errors occur during user creation process, or during session generation process."
+          }
+        }
+      }
+    },
+    "/auth/credentials": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Retrieve user session info",
+        "description": "Retrieve user info that's contained inside the session. If the session doesn't exists return a value to indicate user not logged in",
+        "responses": {
+          "200": {
+            "description": "Returns user values from session.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/protected": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "verify user's authentication",
+        "description": "Checks if user is in session. Used by client-side to restrict features to authenticated users only.",
+        "responses": {
+          "200": {
+            "description": "User is in session and authentication. Allows to view content"
+          },
+          "401": {
+            "description": "User is NOT in session, and NOT authentication. Not allowed to view content."
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "logout the user from our site",
+        "description": "logout the user by clearing server session",
+        "responses": {
+          "200": {
+            "description": "User successfully logged out."
+          },
+          "401": {
+            "description": "User is not autenticated to do this action."
+          },
+          "500": {
+            "description": "Error occur trying to destroy session."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@outlook.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "avatar_uri": {
+            "type": "string",
+            "example": "https://lh3.googleusercontent.com/a-/AOh14GgR3T_470A9pQ9ivIgxdNbNn-dkKoQEhr71DRBKWA=s96-c"
+          },
+          "exp": {
+            "type": "number",
+            "example": 1500
+          }
+        }
+      }
+    }
+  }
+}

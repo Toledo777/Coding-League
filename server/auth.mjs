@@ -30,14 +30,6 @@ router.use(express.json());
 /**
  * Returns google client id to be used in the client
  */
-
-/**
- * @swagger
- * /auth/google-client-id:
- * 		get:
- * 			summary: Retrieve google client ID for client-side to use google authentication
- */
-
 router.get('/google-client-id', (req, res) => {
 	let clientID = process.env.GOOGLE_CLIENT_ID;
 	res.json(clientID);
@@ -65,8 +57,6 @@ router.post('/login', async (req, res) => {
 
 	// Extract user data 
 	const { email, picture, name } = ticket.getPayload();
-	// const user = { email, picture, name };
-	
 
 	let response = await userModel.findOne({ email: email });
 	if (!response) {
