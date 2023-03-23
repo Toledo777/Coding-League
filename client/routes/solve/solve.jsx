@@ -22,10 +22,10 @@ export default function Solve() {
 		const response = await fetch('/auth/protected');
 
 		// check if user is signed in
-		console.log(response);
 		if (!response.ok) {
 			alert("Please sign in to submit your code.");
 		}
+
 		else {
 			console.log("signed in");
 			sendDebug({
@@ -33,7 +33,6 @@ export default function Solve() {
 				problem_id: id
 			});
 		}
-	
 	};
 
 	return <div className='solve'>
