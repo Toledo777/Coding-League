@@ -68,6 +68,7 @@ export default function Root() {
 				<Link to={'/'}>Home</Link>
 				<Link to={'/solve/282A'}>Solve</Link>
 				<Link to={'/search'}>Search</Link>
+				<Link to={'/history'}>History</Link>
 
 				{/* temporarily hardcode route to user in the db */}
 				<Link to={'/profile/cooluser123'}>Profile</Link>

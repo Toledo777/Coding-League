@@ -247,4 +247,7 @@ router.put('/user/update', express.json(), async (req, res) => {
 	}
 });
 
+router.get('/user/problems', async (req, res) =>  {}
+);
+
 export default router;
