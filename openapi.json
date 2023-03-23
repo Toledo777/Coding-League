@@ -134,6 +134,171 @@
           }
         }
       }
+    },
+    "/api/problem/random": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "summary": "retrieve random problem from DB",
+        "description": "get random problem from a range between all of the problems in DB",
+        "responses": {
+          "200": {
+            "description": "Either returns a problem or no problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/problem/list": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "summary": "Retrieves list of problems",
+        "description": "Fetches number of problems starting at query start in DB's list of problems",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start",
+            "description": "starting index of the DB list to fetch",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "count",
+            "description": "ending index of the DB list to fetch",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return list of problems fetched"
+          }
+        }
+      }
+    },
+    "/api/problem/debug": {
+      "post": {
+        "tags": [
+          "API"
+        ],
+        "summary": "Submit code to be ran by code-runner",
+        "requestBody": {
+          "description": "contains the problem's id and user submitted code",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "returns results outputted by code runner"
+          }
+        }
+      }
+    },
+    "/api/allTags": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "summary": "Get all existing problem tags",
+        "description": "Get json result containing string array of all possible coding problem tags. Used in react to populate the tag multiselect field in the filter component of the search page",
+        "responses": {
+          "200": {
+            "description": "returns all the tags available for a problem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "implementation",
+                    "constructive algorithms",
+                    "math",
+                    "..."
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error if the json containing the problems is not available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "tags unavailable"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/searchProblems": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "summary": "Retrieve problem based on user's query",
+        "description": "Retrieve problems containing JSON array of titles and IDs of problems returned from Lyra Search.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "limit on how many problems the API should search for.",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 15
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "user's string input for API to search for in DB",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Apple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return list of distinct results"
+          },
+          "400": {
+            "description": "Error if the search param is missing"
+          },
+          "404": {
+            "description": "Error if the search param input is empty"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -156,6 +321,77 @@
           "exp": {
             "type": "number",
             "example": 1500
+          }
+        }
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "1234E"
+          },
+          "description": {
+            "type": "string",
+            "example": "Let's define pi(n) as the following permutation"
+          },
+          "inputSpecification": {
+            "type": "string",
+            "example": "The first line of the input contains two integers n and m"
+          },
+          "memoryLimit": {
+            "type": "number",
+            "example": 256
+          },
+          "notes": {
+            "type": "string",
+            "example": "Consider the first example"
+          },
+          "outputSpecification": {
+            "type": "string",
+            "example": "Print n integers f(p1(n)),f(p2(n)),…,f(pn(n))"
+          },
+          "sampleTests": {
+            "type": "string",
+            "example": "input 4 4 1 2 3 4 output 3 4 6 5"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "math",
+              "2000"
+            ]
+          },
+          "testCases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "input": {
+                  "type": "string",
+                  "example": "44\\n 1 2 3 4"
+                },
+                "output": {
+                  "type": "string",
+                  "example": "3 4 6 5"
+                }
+              }
+            }
+          },
+          "timeLimit": {
+            "type": "integer",
+            "example": 2
+          },
+          "title": {
+            "type": "string",
+            "example": "E. Special Permutation"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://codeforces.com/problemset/problem/1234/E"
           }
         }
       }
