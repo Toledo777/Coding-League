@@ -215,10 +215,7 @@ router.get('/users', async (req, res) => {
 	//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
 	if (req.session.user) {
 		let something = response.find(({ username }) => username === req.session.user.username);
-		if (something) {
-			console.log('in the list');
-		}
-		else {
+		if (!something) {
 			person = await user.findOne({ username: req.session.user.username });
 		}
 	}

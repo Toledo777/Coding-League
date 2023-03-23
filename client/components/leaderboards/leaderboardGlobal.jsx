@@ -6,10 +6,6 @@ export default function Leaderboard({ global }) {
 
 	let [error, loading, users] = [];
 
-
-
-
-
 	//if a global leaderboard is requested through the nav bar
 	if (global) {
 		[error, loading, users] = useFetch('/api/users?count=15', []);
