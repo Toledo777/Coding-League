@@ -5,6 +5,7 @@ import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
 
+
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
 import { create, insertBatch, search } from '@lyrasearch/lyra';
 
@@ -203,15 +204,34 @@ router.get('/user', async (req, res) => {
  * GET api to call the top X users
  * to use call '/api/users?count=X 
  * sorted by descending order
+ * if a user is not in the leaderboard top X, they will be added to the bottom
  */
 router.get('/users', async (req, res) => {
+	let person = '';
 	const response = await user.aggregate([
 		{ $sort: { exp: -1 } },
-		{ $limit: parseInt(req.query.count) }
-
+		{ $limit: parseInt(5) },
 	]);
+	//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
+	if (req.session.user) {
+		let something = response.find(({ username }) => username === req.session.user.username);
+		if (something) {
+			console.log('in the list');
+		}
+		else {
+			person = await user.findOne({ username: req.session.user.username });
+		}
+	}
+
 	if (response) {
-		res.json(response);
+		//if a person was created to be added
+		if (person) {
+			let together = [...response, person];
+			res.json(together);
+		}
+		else {
+			res.json(response);
+		}
 	}
 	else {
 		res.status(404).json({ title: 'No users found' });
@@ -223,18 +243,47 @@ router.get('/users', async (req, res) => {
  * to use call '/api/userNeighbors?count=X
  */
 router.get('/userNeighbors', async (req, res) => {
-	let response = await user.aggregate([
-		{ $match: { exp: { $gt: parseInt(req.query.userExp) } } },
-		{ $sort: { exp: 1 } },
-		{ $limit: parseInt(req.query.count / 2) },
-		{ $sort: { exp: -1 } }
-	]);
-	if (response) {
-		res.json(response);
+	//if a user is logged in they will get the higher and lower leaderboard
+	if (req.session.user) {
+		let person = await user.findOne({ username: req.session.user.username });
+		let userExp = person.exp;
+
+		let response = await user.aggregate([
+			{ $match: { exp: { $gt: parseInt(userExp) } } },
+			{ $sort: { exp: 1 } },
+			{ $limit: parseInt(req.query.count) },
+			{ $sort: { exp: -1 } }
+		]);
+		let response2 = await user.aggregate([
+			{ $match: { exp: { $lt: parseInt(userExp) } } },
+			{ $sort: { exp: -1 } },
+			{ $limit: parseInt(req.query.count) },
+		]);
+
+		let together = [...response, person, ...response2];
+
+		if (together) {
+			res.json(together);
+		}
+		else {
+			res.status(404).json({ title: 'No users found' });
+		}
 	}
+	//if a user is not logged in they will get a default 15 user global leaderboard
 	else {
-		res.status(404).json({ title: 'No users found' });
+		const response = await user.aggregate([
+			{ $sort: { exp: -1 } },
+			{ $limit: parseInt(15) },
+		]);
+		if (response) {
+			res.json(response);
+		}
+		else {
+			res.status(404).json({ title: 'No users found' });
+		}
 	}
+
+
 });
 
 

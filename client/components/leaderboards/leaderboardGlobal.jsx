@@ -1,5 +1,4 @@
 import React from 'react';
-// import useCredentials from '../../hooks/useCredentials';
 import useFetch from '../../hooks/useFetch';
 import UserLine from './userLine';
 
@@ -7,17 +6,18 @@ export default function Leaderboard({ global }) {
 
 	let [error, loading, users] = [];
 
+
+
+
+
 	//if a global leaderboard is requested through the nav bar
 	if (global) {
 		[error, loading, users] = useFetch('/api/users?count=15', []);
 	}
-	//otherwise a user-based leaderboard showing a few users above and below you
+	//if a user is logged in and they request a local leaderboard, if they arent logged in the api will send them a global one
 	else {
-		// users = useCredentials();
-		[error, loading, users] = useFetch('/api/userNeighbors?count=6&userExp=900', []);
+		[error, loading, users] = useFetch('/api/userNeighbors?count=3', []);
 	}
-
-
 
 	return (
 		<div>
