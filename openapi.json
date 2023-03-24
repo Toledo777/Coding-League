@@ -33,12 +33,27 @@
         "description": "Retrieve google client ID from environment variable for client-side to use google authentication.",
         "responses": {
           "200": {
-            "description": "Returns google client ID from environment",
+            "description": "Return google client ID from environment",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string",
                   "example": "XXX-YYY.apps.googleusercontent.com"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns error if client ID not found in environment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "example": "google client ID not found"
+                    }
+                  }
                 }
               }
             }
@@ -52,12 +67,12 @@
           "authentication"
         ],
         "summary": "Login the user to our site",
-        "description": "Login the user by verifying their Google token, then setting user session",
+        "description": "Login the user by first verifying their Google token, inserting / updating their info into database, then set cookie session.",
         "parameters": [
           {
             "in": "query",
             "name": "token",
-            "description": "User's Google login token for route to verify and extract",
+            "description": "User's Google ID token for the route to verify and extract info from",
             "required": true,
             "schema": {
               "type": "string"
@@ -66,13 +81,61 @@
         ],
         "responses": {
           "200": {
-            "description": "The user's token is valid. The user is created / found in database, and successfully generates session"
+            "description": "The user's token is valid. The user is created or updated in the database. And the session is successfully generated."
           },
           "401": {
-            "description": "Returns 401 if either no token was provided in parameters, or the ticket is invalid"
+            "description": "Returns 401 error if either no token was provided in parameters, or the ticket is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "No Ticket in Query": {
+                    "value": {
+                      "error": "no token"
+                    }
+                  },
+                  "Invalid token ID": {
+                    "value": {
+                      "error": "Google ticket invalid"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Returns 500 if errors occur during user creation process, or during session generation process."
+            "description": "Returns 500 if errors occur during user creation process, or during session generation process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "General User Creation Error": {
+                    "value": {
+                      "error": "Error on user creation"
+                    }
+                  },
+                  "No User Found After Creation": {
+                    "value": {
+                      "error": "Could not find user after creating one"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -299,6 +362,81 @@
           }
         }
       }
+    },
+    "/api/user": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "summary": "Retrieve specific user",
+        "description": "Retrieve user in our database base on either email or username",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "description": "user's email address",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "example@gmail.com"
+          },
+          {
+            "in": "query",
+            "name": "username",
+            "description": "user's name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "John Doe"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a user and all its info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Response with error if no queries are given",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No parameter given"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response with error if no user is found in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No data found with that username"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -392,6 +530,27 @@
           "url": {
             "type": "string",
             "example": "https://codeforces.com/problemset/problem/1234/E"
+          }
+        }
+      },
+      "userAnswer": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@outlook.com"
+          },
+          "problem_id": {
+            "type": "string",
+            "example": "1234E"
+          },
+          "submission": {
+            "type": "string",
+            "example": "console.log('hi');"
+          },
+          "pass_test": {
+            "type": "boolean",
+            "example": false
           }
         }
       }
