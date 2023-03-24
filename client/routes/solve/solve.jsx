@@ -17,11 +17,20 @@ export default function Solve() {
 	const [error, loading, problem] = useFetch(`/api/problem/id/?id=${id}`);
 	const [solution, setSolution] = useState('');
 	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
+	const [submitError, submitLoading, submitResult, sendSubmission] = usePost('/api/problem/submit');
 
 	const user = useCredentials();
 
 	const debugSolution = () => {
 		sendDebug({
+			code: solution,
+			problem_id: id
+		});
+	};
+
+	const submitSolution = () => {
+		sendSubmission({
+			email: user.email,
 			code: solution,
 			problem_id: id
 		});
@@ -47,9 +56,11 @@ export default function Solve() {
 		<SplitPane labels={['problem', 'output']}>
 			{loading && 'Loading...' || error || <Problem problem={problem} />}
 			<div>
-				{<AttemptOutput result={debugResult} />}
+				{<AttemptOutput result={debugResult || submitResult} />}
 				{debugError && <div>{debugError}</div>}
+				{submitError && <div>{submitError}</div>}
 				{debugLoading && <Loading />}
+				{submitLoading && <Loading />}
 			</div>
 		</SplitPane>
 
@@ -59,7 +70,7 @@ export default function Solve() {
 			</div>
 			<div className='editor-buttons'>
 				<button className='debug btn' onClick={debugSolution}>Debug</button>
-				<button className='submit btn confirm' onClick={debugSolution}>Submit</button>
+				<button className='submit btn confirm' onClick={submitSolution}>Submit</button>
 			</div>
 		</div>
 	</div>;

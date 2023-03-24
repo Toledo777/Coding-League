@@ -128,32 +128,48 @@ router.post('/problem/submit', async (req, res) => {
 		});
 		const results = await submitResp.json();
 
-		// let answer = await fetch();
+		// fetch user answer and store solved variable representing their previous solved state
+		let answerData = await userAnswer.findOne({ email: email, problem_id: problem_id });
+		let solved;
 
-		// if user has not correctly solved the problem yet
-		if (!answer.pass_test) {
+		// if the user hasn't answered yet, make a new userAnswer and set solved state to false
+		if (!answerData) {
+			answerData = new userAnswer({ email: email, problem_id: problem_id, submission: code, pass_test: false });
+			answerData.save();
+			solved = false;
+		}
+		// if user has answered, set their previous solved state to what is in the stored userAnswer document
+		else {
+			solved = answerData.pass_test;
+		}
 
-			// upsert user answer into userAnswer schema
-			const updateAnsResp = await userAnswer.findOneAndUpdate({ email: email, problem_id: problem_id },
-				{ email: email, problem_id: problem_id, code: code, pass_test: results.all_ok },
-				{ upsert: true });
+		// check if posted answer is finished parsing and the user has never submitted a correct answer yet
+		if (results && !solved) {
+			// save users submitted code
+			await userAnswer.updateOne({ email: email, problem_id: problem_id }, { submission: code, pass_test: results.all_ok });
 
-			let points = 0;
+			// all of this only runs if they've answered it successfully for the first time
 			if (results.all_ok) {
-				const allAttempts = await userAnswer.find({ problem_id: problem_id });
-				const passAttempts = allAttempts.filter(attempt => {
-					return attempt.pass_test === true;
-				});
-				// do math here for points
-				points = 100 * (allAttempts.count / passAttempts.count);
-				if (allAttempts.count === 1) {
-					points += 1000;
-				}
-			}
+				// initialize points
+				let points = 0;
 
-			// update user points by taking their current points and adding points from this new solution
-			const fetchUser = await user.findOne({ email: email });
-			const updateExpResp = await user.updateOne({ email: email }, { exp: (fetchUser.exp ?? 0) + points });
+				// fetch all attempts and pass attempts for calculating points (TODO: optimize :S)
+				let allAttempts = await userAnswer.find({ problem_id: problem_id });
+				allAttempts = allAttempts.length;
+				let passAttempts = await userAnswer.find({ problem_id: problem_id, pass_test: true });
+				passAttempts = passAttempts.length;
+
+				// do math here for points
+				if (passAttempts > 1 && allAttempts > 1) {
+					points = 100 + (100 * (allAttempts / passAttempts));
+				} else {
+					points = 1100;
+				}
+
+				// update user points by taking their current points and adding points from this new solution
+				const fetchUser = await user.findOne({ email: email });
+				const updateExpResp = await user.updateOne({ email: email }, { exp: (fetchUser.exp ?? 0) + points });
+			}
 		}
 
 		res.json(results);
@@ -164,14 +180,19 @@ router.post('/problem/submit', async (req, res) => {
  * Checks if user has already submitted an answer for the given problem and return it
  */
 router.get('/problem/solution', async (req, res) => {
-	const { email, problem_id } = req.body;
-	let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
-	if (answer) {
-		// already attempted, has submission
-		res.json(answer);
+	const email = req.query.email;
+	const problem_id = req.query.id;
+	if (email && problem_id) {
+		let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
+		if (answer) {
+			// already attempted, has submission
+			res.json(answer);
+		} else {
+			// no submission, hasn't attempted
+			res.json({ 'error': 'no attempts' });
+		}
 	} else {
-		// no submission, hasn't attempted
-		res.json();
+		res.status(400).json({ 'error': 'missing params' });
 	}
 });
 
