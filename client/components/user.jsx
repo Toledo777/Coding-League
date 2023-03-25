@@ -11,9 +11,6 @@ export default function User({user}) {
                 <h2>{user.username}</h2>
                 <img src={user.avatar} alt="profile avatar"/>
                 <p>Email: {user.email}</p>
-                <p>Bio: {user.bio}</p>
-                <p>Wins: {user.wins}</p>
-                <p>Losses: {user.losses}</p>
                 <p>Rank: {user.rank}</p>
             </div>
             <div id="previous answers">
