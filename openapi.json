@@ -29,8 +29,8 @@
         "tags": [
           "authentication"
         ],
-        "summary": "Retrieve google client ID",
-        "description": "Retrieve google client ID from environment variable for client-side to use google authentication.",
+        "summary": "Retrieve Google Client ID",
+        "description": "Retrieve google client ID from environment variable for our client-side to use Google Authentication components.",
         "responses": {
           "200": {
             "description": "Return google client ID from environment",
@@ -44,7 +44,7 @@
             }
           },
           "404": {
-            "description": "Returns error if client ID not found in environment",
+            "description": "Response with error if client ID is not found in environment",
             "content": {
               "application/json": {
                 "schema": {
@@ -66,13 +66,13 @@
         "tags": [
           "authentication"
         ],
-        "summary": "Login the user to our site",
-        "description": "Login the user by first verifying their Google token, inserting / updating their info into database, then set cookie session.",
+        "summary": "Login the user to Coding League",
+        "description": "Login the user to Coding League by first verifying their Google token, then inserting or updating their info into database, then setting their cookie session.",
         "parameters": [
           {
             "in": "query",
             "name": "token",
-            "description": "User's Google ID token for the route to verify and extract info from",
+            "description": "User's Google ID token to verify and extract info from",
             "required": true,
             "schema": {
               "type": "string"
@@ -81,10 +81,10 @@
         ],
         "responses": {
           "200": {
-            "description": "The user's token is valid. The user is created or updated in the database. And the session is successfully generated."
+            "description": "OK response if the user's token is valid. The user is successfully created or updated in the database. And the session is successfully generated."
           },
           "401": {
-            "description": "Returns 401 error if either no token was provided in parameters, or the ticket is invalid",
+            "description": "Responds with 401 status if either no token was provided in parameters, or the ticket is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -111,7 +111,7 @@
             }
           },
           "500": {
-            "description": "Returns 500 if errors occur during user creation process, or during session generation process.",
+            "description": "Respond with 500 status if errors occur during user creation process, or during session generation process.",
             "content": {
               "application/json": {
                 "schema": {
@@ -146,7 +146,7 @@
           "authentication"
         ],
         "summary": "Retrieve user session info",
-        "description": "Retrieve user info that's contained inside the session. If the session doesn't exists return a value to indicate user not logged in",
+        "description": "Retrieve user info that's contained inside the session. If the session doesn't exists, respond with a value indicating the current user is not logged in",
         "responses": {
           "200": {
             "description": "Returns user values from session.",
@@ -154,6 +154,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "User Logged In": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "User Not Logged In": {
+                    "value": {
+                      "notLoggedIn": true
+                    }
+                  }
                 }
               }
             }
@@ -166,14 +176,14 @@
         "tags": [
           "authentication"
         ],
-        "summary": "verify user's authentication",
-        "description": "Checks if user is in session. Used by client-side to restrict features to authenticated users only.",
+        "summary": "Verifies user's authentication",
+        "description": "Checks if the current user is in session. Used by our client-side to restrict features to authenticated users only",
         "responses": {
           "200": {
             "description": "User is in session and authentication. Allows to view content"
           },
           "401": {
-            "description": "User is NOT in session, and NOT authentication. Not allowed to view content."
+            "description": "User is NOT in session, and NOT authentication. Not allowed to view restricted content"
           }
         }
       }
@@ -183,17 +193,17 @@
         "tags": [
           "authentication"
         ],
-        "summary": "logout the user from our site",
-        "description": "logout the user by clearing server session",
+        "summary": "Logout the user from Coding League",
+        "description": "Logs out the current user by clearing their session cookie",
         "responses": {
           "200": {
-            "description": "User successfully logged out."
+            "description": "User has successfully logged out from Coding League"
           },
           "401": {
-            "description": "User is not autenticated to do this action."
+            "description": "User is not in session or autenticated to do this action"
           },
           "500": {
-            "description": "Error occur trying to destroy session."
+            "description": "Error occured when trying to destroy session"
           }
         }
       }
@@ -203,11 +213,11 @@
         "tags": [
           "API"
         ],
-        "summary": "retrieve random problem from DB",
-        "description": "get random problem from a range between all of the problems in DB",
+        "summary": "Retrieve a random problem from our Database",
+        "description": "Get random problem from a range between all of the problems in our Database",
         "responses": {
           "200": {
-            "description": "Either returns a problem or no problem.",
+            "description": "Return a problem, or null (if not found)",
             "content": {
               "application/json": {
                 "schema": {
@@ -224,13 +234,13 @@
         "tags": [
           "API"
         ],
-        "summary": "Retrieves list of problems",
+        "summary": "Retrieve list of problems",
         "description": "Fetches number of problems starting at query start in DB's list of problems",
         "parameters": [
           {
             "in": "query",
             "name": "start",
-            "description": "starting index of the DB list to fetch",
+            "description": "starting index of our Database problems to fetch",
             "required": true,
             "schema": {
               "type": "integer"
@@ -239,7 +249,7 @@
           {
             "in": "query",
             "name": "count",
-            "description": "ending index of the DB list to fetch",
+            "description": "ending index of our Database problems to fetch",
             "required": true,
             "schema": {
               "type": "integer"
@@ -248,7 +258,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Return list of problems fetched"
+            "description": "Respond with a list of problems fetched from our Database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Problem"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -259,13 +279,24 @@
           "API"
         ],
         "summary": "Submit code to be ran by code-runner",
+        "description": "Using the code submitted by user, run the code-runner and output the results based on the problem's test cases",
         "requestBody": {
-          "description": "contains the problem's id and user submitted code",
+          "description": "Contains the problem's id and user submitted code",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "example": "console.log('hi');"
+                  },
+                  "problem_id": {
+                    "type": "string",
+                    "example": "1234E"
+                  }
+                }
               }
             }
           }
@@ -282,11 +313,11 @@
         "tags": [
           "API"
         ],
-        "summary": "Get all existing problem tags",
-        "description": "Get json result containing string array of all possible coding problem tags. Used in react to populate the tag multiselect field in the filter component of the search page",
+        "summary": "Retrieve all stored problem tags",
+        "description": "Get list of all problem tags. Used in our client-side to populate the filter component of the search page.",
         "responses": {
           "200": {
-            "description": "returns all the tags available for a problem",
+            "description": "Respond with all the available problem tags",
             "content": {
               "application/json": {
                 "schema": {
@@ -305,7 +336,7 @@
             }
           },
           "500": {
-            "description": "Error if the json containing the problems is not available",
+            "description": "Respond with 500 status if the json containing the problem tags is not available",
             "content": {
               "application/json": {
                 "schema": {
@@ -334,7 +365,7 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "limit on how many problems the API should search for.",
+            "description": "The limit on how many problems this API should search for",
             "schema": {
               "type": "integer"
             },
@@ -343,7 +374,7 @@
           {
             "in": "query",
             "name": "search",
-            "description": "user's string input for API to search for in DB",
+            "description": "User's query as input for API to search in our Database",
             "schema": {
               "type": "string"
             },
@@ -355,10 +386,10 @@
             "description": "Return list of distinct results"
           },
           "400": {
-            "description": "Error if the search param is missing"
+            "description": "Respond with 400 status if search parameters are missing"
           },
           "404": {
-            "description": "Error if the search param input is empty"
+            "description": "Respond with 404 status if search parameter's input is empty"
           }
         }
       }
@@ -374,7 +405,7 @@
           {
             "in": "query",
             "name": "email",
-            "description": "user's email address",
+            "description": "User's email address",
             "schema": {
               "type": "string"
             },
@@ -384,7 +415,7 @@
           {
             "in": "query",
             "name": "username",
-            "description": "user's name",
+            "description": "User's name",
             "schema": {
               "type": "string"
             },
@@ -394,7 +425,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Respond with a user and all its info",
+            "description": "Respond by returning the user's info",
             "content": {
               "application/json": {
                 "schema": {
@@ -404,7 +435,7 @@
             }
           },
           "400": {
-            "description": "Response with error if no queries are given",
+            "description": "Respond with 400 status if no queries are given",
             "content": {
               "application/json": {
                 "schema": {
@@ -420,7 +451,7 @@
             }
           },
           "404": {
-            "description": "Response with error if no user is found in database",
+            "description": "Respond with 404 status if no user is found in Database, with the input given",
             "content": {
               "application/json": {
                 "schema": {
