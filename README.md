@@ -15,6 +15,18 @@ Features (so far):
 - One submitted, user solution will be run by a debugger to determine if it passes certain test cases that are unique to each problem.
   - If pass: move onto a next coding problem.
   - If fail: fix the answer and re-submit.
+- Google authentication:
+  - Users can sign in using their google account
+  - If first time user, redirect to setup page so users can enter their username, starting skill level, and bio
+  - Subsequent sign-ins will retireve info from database
+- Search page:
+  - Users can search for coding problems by title
+  - They can then filter the search results by tags and by specifying a difficulty range
+  - Finally, they can click "code" on one of the problem results to navigate to the coding page with that problem loaded in
+- Profile page:
+  - A page for specific registered users can be viewed.
+  - Displays email (TODO: seen only by that user), username, avatar, bio, and their previous answers
+  - User can edit their profile settings by changing username and bio. Will get updated in database. 
 
 ## Technology Stack
 - Languages
@@ -26,8 +38,20 @@ Features (so far):
 - Front-end tools
   - react-route
 - Back-end tools
-  - jest, supertest, mongoose, mockingoose, eslint
+  - jest, supertest, mongoose, mockingoose, eslint, compression, LyraSearch
+
+
 ## Getting Started
+
+### Required ENV variables
+- ATLAS_URI (URI for connecting to mongoDB Atlas)
+- CODE_RUNNER_URI (deployed website that code will be run from)
+- GOOGLE_CLIENT_ID (ID used for Google authentication functionality)
+- SECRET (used by express session to salt the session id)
+
+### Optional ENV variables
+- NODE_ENV (determines the current environment (dev / prod). If not in ENV, default is set)
+
 ### Running Server
 
 ```sh
