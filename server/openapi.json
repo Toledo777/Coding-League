@@ -278,7 +278,7 @@
         "tags": [
           "API"
         ],
-        "summary": "Submit code to be ran by code-runner",
+        "summary": "Submit code to be ran by code-runner.",
         "description": "Using the code submitted by user, run the code-runner and output the results based on the problem's test cases",
         "requestBody": {
           "description": "Contains the problem's id and user submitted code",
@@ -290,7 +290,7 @@
                 "properties": {
                   "code": {
                     "type": "string",
-                    "example": "console.log('hi');"
+                    "example": "console.log(2+2);"
                   },
                   "problem_id": {
                     "type": "string",
@@ -303,7 +303,53 @@
         },
         "responses": {
           "200": {
-            "description": "returns results outputted by code runner"
+            "description": "Returns results outputted by code runner. Showcasing number of tests run, how many tests failed, and a boolean if they all passed or not",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "all_ok": {
+                      "type": "boolean"
+                    },
+                    "total_ran": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "failures": {
+                      "type": "number"
+                    },
+                    "individual_tests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ok": {
+                            "type": "boolean"
+                          },
+                          "stdout": {
+                            "type": "string",
+                            "example": 4
+                          },
+                          "stderr": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "answer": {
+                            "type": "string",
+                            "example": "console.log(2+2);"
+                          },
+                          "expected": {
+                            "type": "string",
+                            "example": 4
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
