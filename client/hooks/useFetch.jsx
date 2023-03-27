@@ -6,6 +6,9 @@ export default function useFetch(url, defaultValue, deps = []) {
 	const [data, setData] = useState(defaultValue);
 	const headers = { 'Accept': 'application/json' };
 
+
+	if (typeof url === 'function') url = url();
+
 	useEffect(() => {
 		setLoading(true);
 		fetch(url, { headers })

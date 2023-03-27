@@ -1,16 +1,16 @@
 import React from 'react';
 import Board from '../components/leaderboards/leaderboardGlobal';
-import { useParams } from 'react-router-dom';
+import SplitPane from '../components/splitPane/splitPane';
+//import { useParams } from 'react-router-dom';
 
 export default function Leaderboard() {
-	const params = useParams();
-	let { option } = params;
 
 
 
 	return (
-		<div>
-			<Board global={option}></Board>
-		</div>
+		<SplitPane labels={['global', 'current']}>
+			<Board global={'global'}></Board>
+			<Board global={'current'}></Board>
+		</SplitPane>
 	);
 }
