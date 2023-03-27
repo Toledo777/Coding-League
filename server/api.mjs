@@ -39,7 +39,7 @@ router.use(bodyParser.json());
 router.use(requestIp.mw());
 
 // limit API requests for each IP address individually (max 30 requests every 1 minute)
-const [timeout, limit] = [60*1000, 5]; // 5 requests across 1 minute
+const [timeout, limit] = [60 * 1000, 5]; // 5 requests across 1 minute
 const codeRunnerLimiter = rateLimit({
 	windowMs: timeout,
 	max: limit,
@@ -48,6 +48,9 @@ const codeRunnerLimiter = rateLimit({
 	},
 	standardHeaders: true
 });
+
+// values for calculating score
+const [base, firstClear] = [100, 1000];
 
 /**
  * gets random problems in a range given by req.query.start (2941 is equal to the amount of problems in our db)
@@ -178,9 +181,9 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 
 				// do math here for points
 				if (passAttempts > 1 && allAttempts > 1) {
-					points = 100 + (100 * (allAttempts / passAttempts));
+					points = base + (base * (allAttempts / passAttempts));
 				} else {
-					points = 1100;
+					points = base + firstClear;
 				}
 
 				// update user points by taking their current points and adding points from this new solution
