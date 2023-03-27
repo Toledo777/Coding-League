@@ -23,7 +23,7 @@ export default function Search() {
 		return data.filter(problem => {
 			return tags.every(t => problem.tags.includes(t));
 		}).filter((d) => {
-			let diff = parseInt(d.tags[d.tags.length - 1].slice(1));
+			let diff = parseInt(d.tags[d.tags.length - 1]?.slice(1));
 			return diff <= diffRange[1] && diff >= diffRange[0];
 		});
 	}, [data, tags, diffRange]);
