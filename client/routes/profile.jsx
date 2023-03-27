@@ -17,8 +17,8 @@ export default function Profile() {
 		<>
 			<h1>Profile Page</h1>
 			{userErr && <div>{userErr}</div>}
-            {userLoading && <div>{userLoading}</div>}
-            {userData && <User user={userData} />}
+			{userLoading && <div>{userLoading}</div>}
+			{userData && <User user={userData} />}
 		</>
 	);
 }

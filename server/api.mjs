@@ -197,7 +197,7 @@ router.get('/user', async (req, res) => {
 		}
 
 		else {
-			res.status(400).json({title: 'Invalid ID'})
+			res.status(400).json({title: 'Invalid ID'});
 		}
 	}
 
