@@ -67,7 +67,7 @@ export default function Root() {
 		// construct path to user's profile
 		let path = '/profile/' + user._id;
 		navigate(path);
-	}
+	};
 
 	return (
 		<GoogleOAuthProvider clientId={data}>
