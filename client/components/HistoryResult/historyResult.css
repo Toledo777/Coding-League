@@ -5,3 +5,7 @@
 .history_result>h3 {
     margin: 0px;
 }
+
+.history_result>pre {
+    background-color: rgb(83, 79, 79);
+}
