@@ -42,6 +42,7 @@ export default function History() {
         <>
             <h1>Problem History</h1>
             {data && <ul> {data.map( (problem, index) => <li key={index}><HistoryResult passed={problem.pass_test} submission={problem.submission} id={problem.problem_id} /></li>)}</ul>}
+            {!data && <h3>No problem history</h3>}
         </>
     )
 }
