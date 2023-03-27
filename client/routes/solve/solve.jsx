@@ -32,7 +32,8 @@ export default function Solve() {
 		sendSubmission({
 			email: user.email,
 			code: solution,
-			problem_id: id
+			problem_id: id,
+			problem_title: problem.title
 		});
 	};
 

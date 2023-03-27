@@ -118,7 +118,7 @@ router.post('/problem/debug', async (req, res) => {
  * will update user answer row in userAnswerSchema if applicable (or create new row if non-existent)
  */
 router.post('/problem/submit', async (req, res) => {
-	const { email, problem_id, code } = req.body;
+	const { email, problem_id, problem_title, code } = req.body;
 	if (code != undefined && email != undefined) {
 		const submitResp = await fetch(`${CODE_RUNNER_URI}/attempt_problem`, {
 			headers: {
@@ -134,7 +134,7 @@ router.post('/problem/submit', async (req, res) => {
 
 		// if the user hasn't answered yet, make a new userAnswer and set solved state to false
 		if (!answerData) {
-			answerData = new userAnswer({ email: email, problem_id: problem_id, submission: code, pass_test: false });
+			answerData = new userAnswer({ email: email, problem_id: problem_id, problem_title: problem_title, submission: code, pass_test: false });
 			answerData.save();
 			solved = false;
 		}
