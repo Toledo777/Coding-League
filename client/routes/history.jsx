@@ -41,7 +41,7 @@ export default function History() {
     return(
         <>
             <h1>Problem History</h1>
-            {data && <ul> {data.map( (problem, index) => <li key={index}><HistoryResult title={problem.title} type={problem.type} id={problem.problem_id} /></li>)}</ul>}
+            {data && <ul> {data.map( (problem, index) => <li key={index}><HistoryResult passed={problem.pass_test} submission={problem.submission} id={problem.problem_id} /></li>)}</ul>}
         </>
     )
 }

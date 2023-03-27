@@ -1,0 +1,7 @@
+.history_result {
+    flex-direction: column;
+}
+
+.history_result>h3 {
+    margin: 0px;
+}
