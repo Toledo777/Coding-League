@@ -2,7 +2,6 @@ import React from 'react';
 import useFetch from '../hooks/useFetch';
 import { useParams } from 'react-router-dom';
 import User from '../components/user/user';
-import EditForm from '../components/editForm';
 
 // profile page of a signed in user
 // TODO reroute to sign in if user is not signed in
