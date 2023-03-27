@@ -4,33 +4,47 @@ import useCredentials from '../hooks/useCredentials';
 export default function History() {
 	const user = useCredentials();
 
-	const[data , setData] = useState();
+	const [data, setData] = useState();
 	// messages to help user
-	const[message, setMessage] = useState();
+	const [message, setMessage] = useState();
 	// error messages, unexpected behavior
-	const[error, setError] = useState();
-   
+	const [error, setError] = useState();
+
 	// fetch problem history
-	useEffect( () => {
+	useEffect(() => {
 		setupHistory();
-		// setupMessages();
 	}, [user]);
 
 	const setupHistory = async () => {
-		if (user.email) {
+		if (user) {
 			try {
 				const response = await fetch(`/api/user/answers?email=${user.email}`);
 				if (response.ok) {
 					const jsonData = await response.json();
-					setData(jsonData);
+
+					// check for data
+					console.log(jsonData);
+					if (jsonData.length != 0) {
+						setMessage('');
+						setData(jsonData);
+					}
+                    
+					// fetch succeded but there are no problems in history
+					else {
+						setMessage('No problem history. Time to start coding :)');
+					}
 				}
+
+				// error while fetching
 				else {
 					setError('Error fetching problem history');
 				}
 			}
-    
-			catch(e) {
+
+			// error getting response
+			catch (e) {
 				console.error(e.toString());
+				setError(error);
 			}
 		}
 
@@ -39,19 +53,10 @@ export default function History() {
 		}
 	};
 
-	const setupMessages = () => {
-		if (!user) {
-			setMessage('Please login to view problem history');
-		}
-
-		else if (!data) {
-			setMessage('No problem history. Time to start coding :)');
-		}
-	};
-	return(
+	return (
 		<>
 			<h1>Problem History</h1>
-			{data && <ul> {data.map( (problem, index) => <li key={index}><HistoryResult passed={problem.pass_test} submission={problem.submission} id={problem.problem_id} /></li>)}</ul>}
+			{data && <ul> {data.map((problem, index) => <li key={index}><HistoryResult passed={problem.pass_test} submission={problem.submission} id={problem.problem_id} /></li>)}</ul>}
 			{!error && <h3>{message}</h3>}
 			{error && <h3>{error}</h3>}
 		</>
