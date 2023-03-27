@@ -58,8 +58,8 @@ export default function Solve() {
 			{loading && 'Loading...' || error || <Problem problem={problem} />}
 			<div>
 				{<AttemptOutput result={debugResult || submitResult} />}
-				{debugError && <div>{debugError}</div>}
-				{submitError && <div>{submitError}</div>}
+				{debugError && <div>{debugError.message}</div>}
+				{submitError && <div>{submitError.message}</div>}
 				{debugLoading && <Loading />}
 				{submitLoading && <Loading />}
 			</div>

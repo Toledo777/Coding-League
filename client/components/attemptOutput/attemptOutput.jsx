@@ -7,10 +7,6 @@ export default function AttemptOutput({ result }) {
 		return <div>Empty :</div>;
 	}
 
-	// if (result.statusCode === 429) {
-	// 	return <div>Too many submissions! Try again in 1 minute.</div>;
-	// }
-
 	const {
 		all_ok,
 		total_ran,

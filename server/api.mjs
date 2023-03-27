@@ -39,9 +39,10 @@ router.use(bodyParser.json());
 router.use(requestIp.mw());
 
 // limit API requests for each IP address individually (max 30 requests every 1 minute)
+const [timeout, limit] = [60*1000, 5]; // 5 requests across 1 minute
 const codeRunnerLimiter = rateLimit({
-	windowMs: 60 * 1000, // 1 minute
-	max: 5, // 5 requests per minute per IP address
+	windowMs: timeout,
+	max: limit,
 	keyGenerator: (req, res) => {
 		return req.clientIp; // rateLimit has req.ip but apparently it's not helpful, hence the requestIp.mw() above
 	},
