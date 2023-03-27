@@ -251,7 +251,6 @@ router.put('/user/update', express.json(), async (req, res) => {
 router.get('/user/answers', async (req, res) =>  {
 	if (req.query.email) {
 			const response = await userAnswer.find({email: req.query.email});
-			console.log(response);
 
 			// check if email exist
 			let emailExist = await user.exists({ email: req.query.email})

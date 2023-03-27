@@ -5,6 +5,8 @@ export default function History() {
     // temporarily hardcode problem while api for problems is not done
     let problemHistory = [{title: "test", type: "type test", id: "test id"}];
 
+    
+
     return(
         <>
             <h1>Problem History</h1>
