@@ -272,15 +272,14 @@ router.get('/userNeighbors', async (req, res) => {
 			{ $sort: { exp: -1 } },
 			{ $limit: parseInt(15) },
 		]);
+		console.log(response);
 		if (response) {
-			res.json(response);
+			res.json([{ username: 'error', exp: 'nothing found' }]);
 		}
 		else {
 			res.status(404).json({ title: 'No users found' });
 		}
 	}
-
-
 });
 
 

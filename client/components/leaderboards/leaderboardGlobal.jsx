@@ -22,11 +22,9 @@ export default function Leaderboard({ global }) {
 
 	[error, loading, users] = useFetch(url, [{ id: '', username: 'error', exp: 'no users found' }], [url]);
 
-
 	if (users == undefined || users.count == 0) {
 		users = [{ username: 'error', exp: 'no users found' }];
 	}
-
 
 	return (
 		<div>
