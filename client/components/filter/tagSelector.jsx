@@ -21,11 +21,11 @@ export default function TagSelector({ tagsChange }) {
 
 	return <div className='tag_selector'>
 		<div className='selected'>
-			{tags.map(tag => <span className='tag' key={tag}
-				onClick={() => removeTag(tag)}>{tag}</span>
+			{tags.map(tag => <button className='tag' key={tag}
+				onClick={() => removeTag(tag)}>{tag}</button>
 			)}
 		</div>
-		<span className='tag' key={'add tag'} onClick={() => setMenuOpen(true)}>+ tag</span>
+		<button className='tag' key={'add tag'} onClick={() => setMenuOpen(true)}>+ tag</button>
 		{
 			menuOpen && <>
 				<span className='close_click_catcher' onClick={() => setMenuOpen(false)} />
@@ -34,13 +34,13 @@ export default function TagSelector({ tagsChange }) {
 					{error && error}
 					{
 						allTags.filter(t => !tags.includes(t)).map(
-							tag => <span
+							tag => <button
 								className='tag'
 								onClick={
 									() => { addTag(tag); setMenuOpen(false); }
 								}
 								key={tag}>{tag}
-							</span>
+							</button>
 						)
 					}
 				</div>
