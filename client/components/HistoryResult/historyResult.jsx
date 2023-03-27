@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import './historyResult.css';
+
+// component for problem box on History page
+
 // mostly copied from SearchResult
 export default function HistoryResult({ passed, submission, id }) {
 	const navigate = useNavigate();
@@ -13,7 +16,7 @@ export default function HistoryResult({ passed, submission, id }) {
                     <code>{submission}</code>
             </pre>
 			<button onClick={() => navigate(`/solve/${id}`)}>
-				Code
+				View Problem
 			</button>
 		</div >
 	);

@@ -5,39 +5,49 @@ export default function History() {
     const user = useCredentials();
 
     const[data , setData] = useState();
+    // messages to help user
+    const[message, setMessage] = useState();
+    // error messages, unexpected behavior
     const[error, setError] = useState();
    
-    useEffect(() => {
-        fetchProblems();
+    // fetch problem history
+    useEffect( () => {
+        setupHistory();
+        setupMessages();
     }, [user]);
 
-    //console.log(user.email)
-
-    const fetchProblems = async () => {
+    const setupHistory = async () => {
         try {
             const response = await fetch(`/api/user/answers?email=${user.email}`);
             if (response.ok) {
                 const jsonData = await response.json()
                 setData(jsonData)
             }
-
             else {
                 setError("Error fetching problem history");
             }
         }
 
         catch(e) {
-            setError(e.toString());
+            console.error(e.toString());
         }
-        
-
     }
 
+    const setupMessages = () => {
+        if (!user) {
+            setMessage("Please login to view problem history");
+        }
+
+        else if (!data) {
+            setMessage("No problem history. Time to start coding :)");
+        }
+    }
     return(
         <>
             <h1>Problem History</h1>
             {data && <ul> {data.map( (problem, index) => <li key={index}><HistoryResult passed={problem.pass_test} submission={problem.submission} id={problem.problem_id} /></li>)}</ul>}
-            {!data && <h3>No problem history</h3>}
+            {!error && <h3>{message}</h3>}
+            {error && <h3>{error}</h3>}
         </>
     )
 }
