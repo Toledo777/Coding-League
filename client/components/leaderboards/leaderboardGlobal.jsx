@@ -7,12 +7,16 @@ export default function Leaderboard({ global }) {
 	let [error, loading, users] = [];
 
 	//if a global leaderboard is requested through the nav bar
-	if (global) {
+	if (global === 'global') {
 		[error, loading, users] = useFetch('/api/users?count=15', []);
 	}
 	//if a user is logged in and they request a local leaderboard, if they arent logged in the api will send them a global one
-	else {
+	else if (global === 'current') {
 		[error, loading, users] = useFetch('/api/userNeighbors?count=3', []);
+	}
+
+	else {
+		users = [{ username: 'error', exp: 'no users found' }];
 	}
 
 	return (

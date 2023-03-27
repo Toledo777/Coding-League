@@ -44,7 +44,6 @@ export default function Root() {
 			// Trigger useCredentials() to fetch for user creds, and display user's name
 			dispatchEvent(new Event('login'));
 		}
-
 	}
 
 	/** 

@@ -6,12 +6,7 @@ export default function Leaderboard() {
 	const params = useParams();
 	let { option } = params;
 
-	if (option === 'global') {
-		option = true;
-	}
-	else {
-		option = false;
-	}
+
 
 	return (
 		<div>

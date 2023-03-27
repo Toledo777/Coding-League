@@ -210,7 +210,7 @@ router.get('/users', async (req, res) => {
 	let person = '';
 	const response = await user.aggregate([
 		{ $sort: { exp: -1 } },
-		{ $limit: parseInt(5) },
+		{ $limit: parseInt(req.query.count) },
 	]);
 	//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
 	if (req.session.user) {
