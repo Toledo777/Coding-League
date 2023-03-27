@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
 const ENV_MODE = process.env.NODE_ENV || 'dev';
+const clientID = process.env.GOOGLE_CLIENT_ID;
 const router = express.Router();
 
 router.use(session({
@@ -23,7 +24,7 @@ router.use(session({
 	}
 }));
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(clientID);
 
 router.use(express.json());
 
@@ -31,8 +32,11 @@ router.use(express.json());
  * Returns google client id to be used in the client
  */
 router.get('/google-client-id', (req, res) => {
-	let clientID = process.env.GOOGLE_CLIENT_ID;
-	res.json(clientID);
+	if(clientID){
+		res.json(clientID);
+	} else {
+		res.status(404).json({title : 'google client ID not found'});
+	}
 });
 
 /**
@@ -67,7 +71,7 @@ router.post('/login', async (req, res) => {
 			// Once save. Re-find that user in DB
 			response = await userModel.findOne({ email: email });
 			if (!response) {
-				return res.sendStatus(500).json({ error: 'Could not find user after creating one.' });
+				return res.sendStatus(500).json({ error: 'Could not find user after creating one' });
 			}
 		} catch {
 			res.sendStatus(500).json({ error: 'Error on user creation' });
@@ -76,7 +80,6 @@ router.post('/login', async (req, res) => {
 	} else {
 		// If there is response: Update user into DB
 		const updatedUser = new userModel({ _id: response._id, email: email, username: response.name, avatar_uri: response.picture, exp: response.exp });
-		console.log(updatedUser);
 		await userModel.updateOne({ email: email }, updatedUser);
 	}
 
