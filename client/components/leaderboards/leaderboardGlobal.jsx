@@ -14,7 +14,7 @@ export default function Leaderboard({ global }) {
 			setUrl('/api/topUsers?count=15');
 		}
 
-		//if a user is logged in and they request a local leaderboard, if they arent logged in the api will send them a global one
+		//if a user is logged in and they request a local leaderboard, if they arent logged in the api will send them an error
 		else if (global === 'current') {
 			setUrl('/api/userNeighbors?count=3');
 		}
