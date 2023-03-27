@@ -9,6 +9,9 @@ import fs from 'fs/promises';
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
 import { create, insertBatch, search } from '@lyrasearch/lyra';
 
+import rateLimit from 'express-rate-limit';
+import requestIp from 'request-ip';
+
 dotenv.config();
 const router = express.Router();
 
@@ -31,6 +34,19 @@ try {
 
 // Parse body as json
 router.use(bodyParser.json());
+
+// get user IP address for the purposes of limiting API requests
+router.use(requestIp.mw());
+
+// limit API requests for each IP address individually (max 30 requests every 1 minute)
+const codeRunnerLimiter = rateLimit({
+	windowMs: 60 * 1000, // 1 minute
+	max: 5, // 5 requests per minute per IP address
+	keyGenerator: (req, res) => {
+		return req.clientIp; // rateLimit has req.ip but apparently it's not helpful, hence the requestIp.mw() above
+	},
+	standardHeaders: true
+});
 
 /**
  * gets random problems in a range given by req.query.start (2941 is equal to the amount of problems in our db)
@@ -99,7 +115,7 @@ router.get('/problem/tags', async (req, res) => {
  * Submits code for debugging to be ran by the code-runner
  * for now this acts only as a proxy for the code-runner
  */
-router.post('/problem/debug', async (req, res) => {
+router.post('/problem/debug', codeRunnerLimiter, async (req, res) => {
 	const { code, problem_id } = req.body;
 	if (code != undefined) {
 		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
@@ -117,7 +133,7 @@ router.post('/problem/debug', async (req, res) => {
  * Submits code solution to be ran by the code-runner
  * will update user answer row in userAnswerSchema if applicable (or create new row if non-existent)
  */
-router.post('/problem/submit', async (req, res) => {
+router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 	const { email, problem_id, problem_title, code } = req.body;
 	if (code != undefined && email != undefined) {
 		const submitResp = await fetch(`${CODE_RUNNER_URI}/attempt_problem`, {

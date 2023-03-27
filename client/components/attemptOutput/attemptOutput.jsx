@@ -4,8 +4,12 @@ import './attemptOutput.css';
 
 export default function AttemptOutput({ result }) {
 	if (!result) {
-		return <div>Empty :(</div>;
+		return <div>Empty :</div>;
 	}
+
+	// if (result.statusCode === 429) {
+	// 	return <div>Too many submissions! Try again in 1 minute.</div>;
+	// }
 
 	const {
 		all_ok,
@@ -18,7 +22,7 @@ export default function AttemptOutput({ result }) {
 		<div>
 			<div className='status'>{all_ok ? 'Passed' : 'Failed'}</div>
 			<div className='counts'>
-				Passed: {total_ran - failures}/{total_ran}
+				{total_ran && failures && <p>Passed: {total_ran - failures}/{total_ran}</p>}
 			</div>
 			<div>
 				{individual_tests && individual_tests
