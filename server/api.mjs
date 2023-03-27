@@ -206,7 +206,7 @@ router.get('/user', async (req, res) => {
  * sorted by descending order
  * if a user is not in the leaderboard top X, they will be added to the bottom
  */
-router.get('/users', async (req, res) => {
+router.get('/topUsers', async (req, res) => {
 	let person = '';
 	const response = await user.aggregate([
 		{ $sort: { exp: -1 } },

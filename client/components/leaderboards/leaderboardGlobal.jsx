@@ -5,13 +5,13 @@ import { useState } from 'react';
 export default function Leaderboard({ global }) {
 
 	let [error, loading, users] = [];
-	let [url, setUrl] = useState('/api/users?count=15');
+	let [url, setUrl] = useState('/api/topUsers?count=15');
 
 
 	useEffect(() => {
 		//if a global leaderboard is requested through the nav bar
 		if (global === 'global') {
-			setUrl('/api/users?count=15');
+			setUrl('/api/topUsers?count=15');
 		}
 
 		//if a user is logged in and they request a local leaderboard, if they arent logged in the api will send them a global one
