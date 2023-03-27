@@ -253,7 +253,7 @@ router.get('/user/answers', async (req, res) =>  {
 		const response = await userAnswer.find({email: req.query.email});
 
 		// check if email exist
-		let emailExist = await user.exists({ email: req.query.email})
+		let emailExist = await user.exists({ email: req.query.email});
 
 		if (emailExist) {
 			// return data
@@ -262,7 +262,7 @@ router.get('/user/answers', async (req, res) =>  {
 
 		// no problems found with email
 		else {
-			res.status(404).json({ title: "No user associated with this email was found" });
+			res.status(404).json({ title: 'No user associated with this email was found' });
 		}
 	}
 	// missing id parameter

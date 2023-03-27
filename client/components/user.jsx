@@ -16,10 +16,6 @@ export default function User({user}) {
 				<p>Losses: {user.losses}</p>
 				<p>Rank: {user.rank}</p>
 			</div>
-			<div id="previous answers">
-				<h2>Previous Answers (this section is currently hardcoded until answers are stored in db)</h2>
-				<p>console.log("hello world")</p>
-			</div>
 		</>
 	);
 }
