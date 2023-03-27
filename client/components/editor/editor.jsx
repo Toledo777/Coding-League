@@ -11,7 +11,7 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 export default function Editor({ onChange }) {
 	const editorRef = useRef();
 
-	const [value, setValue] = useState('function solve() { \n\tconsole.log("Your Code Here!");\n}');
+	const [value, setValue] = useState('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
 
 	// This is a hack to force the editor to update it's size based on it's parent during load,
 	useEffect(() => {
