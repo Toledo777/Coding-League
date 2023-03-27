@@ -20,14 +20,6 @@ export default function Filter({ filterChange }) {
 		calculateColor([min, max]);
 	};
 
-	// Reset range state, slider appearance and thumb positions
-	const clearDiffRange = () => {
-		setDiffRangeHelper(800, 3500);
-	};
-
-	// Reset all filter components to default
-	const clearFilters = () => clearDiffRange();
-
 	// Calculate slider gradient color in realtime using current range value attached to each thumb
 	const calculateColor = (values) => {
 		const [minColor, maxColor] = values.map(v => (255 * ((v - 800) / (3500 - 800))));
@@ -44,7 +36,6 @@ export default function Filter({ filterChange }) {
 	useEffect(() => {
 		calculateColor([diffMin, diffMax]);
 	}, []);
-
 
 	useEffect(() => {
 		filterChange(tags, [diffMin, diffMax]);
