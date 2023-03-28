@@ -5,8 +5,6 @@ import SplitPane from '../components/splitPane/splitPane';
 
 export default function Leaderboard() {
 
-
-
 	return (
 		<SplitPane labels={['global', 'current']}>
 			<Board global={'global'}></Board>

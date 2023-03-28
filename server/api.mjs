@@ -170,7 +170,6 @@ router.post('/answer', (req, res) => {
 router.get('/user', async (req, res) => {
 	// check for email
 	if (req.query.email) {
-
 		const response = await user.findOne({ email: req.query.email });
 		if (response) {
 			res.json(response);
@@ -272,7 +271,6 @@ router.get('/userNeighbors', async (req, res) => {
 			{ $sort: { exp: -1 } },
 			{ $limit: parseInt(15) },
 		]);
-		console.log(response);
 		if (response) {
 			res.json([{ username: 'error', exp: 'nothing found' }]);
 		}
