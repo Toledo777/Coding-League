@@ -4,7 +4,7 @@ import './attemptOutput.css';
 
 export default function AttemptOutput({ result }) {
 	if (!result) {
-		return <div>Empty :</div>;
+		return <div>Empty :(</div>;
 	}
 
 	const {
