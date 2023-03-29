@@ -10,7 +10,7 @@ const db = await create({
 
 export async function searchProblems(term, limit) {
 	const searchResults = await search(db, { term: term, limit: limit });
-	return searchResults.hits.map(({document}) => document);
+	return searchResults.hits.map(({ document }) => document);
 }
 
 export async function insertProblems(items) {

@@ -11,9 +11,15 @@ import { create, insertBatch, search } from '@lyrasearch/lyra';
 dotenv.config();
 const router = express.Router();
 
-(async function() {
-	const dbFind = (await problem.find({}, { _id: 1, title: 1, tags: 1 })).map(({ _id, title, tags }) => ({ _id, title, tags }));
-	await insertProblems(dbFind);
+(async function () {
+	const dbResults = await problem.find({}, { _id: 1, title: 1, tags: 1 });
+
+	// Remove all the wrapping that mongoose does so lyra will accept the data
+	const problems = dbResults.map(
+		({ _id, title, tags, description }) => ({ _id, title, tags, description })
+	);
+
+	await insertProblems(problems);
 })();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
