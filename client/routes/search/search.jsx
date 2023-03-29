@@ -37,6 +37,7 @@ export default function Search() {
 		<div className='search'>
 			<div className='options panel'>
 				<SearchBar doSearch={fetchData} />
+				<div>{data.length} results found</div>
 				<Filter filterChange={filterChange} />
 			</div>
 			<div className='results panel'>
