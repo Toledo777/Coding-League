@@ -6,13 +6,12 @@ import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
 
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
-import { create, insertBatch, search } from '@lyrasearch/lyra';
 
 dotenv.config();
 const router = express.Router();
 
 (async function () {
-	const dbResults = await problem.find({}, { _id: 1, title: 1, tags: 1 });
+	const dbResults = await problem.find({}, { _id: 1, title: 1, tags: 1, description: 1 });
 
 	// Remove all the wrapping that mongoose does so lyra will accept the data
 	const problems = dbResults.map(

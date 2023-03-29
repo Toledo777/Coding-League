@@ -5,6 +5,7 @@ const db = await create({
 		_id: 'string',
 		title: 'string',
 		tags: 'string[]',
+		description: 'string',
 	},
 });
 
