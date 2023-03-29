@@ -50,7 +50,7 @@ const codeRunnerLimiter = rateLimit({
 });
 
 // values for calculating score
-const [base, firstClear] = [100, 1000];
+const [base, firstClear] = [100, 175];
 
 /**
  * gets random problems in a range given by req.query.start (2941 is equal to the amount of problems in our db)
@@ -179,10 +179,14 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 				let passAttempts = await userAnswer.find({ problem_id: problem_id, pass_test: true });
 				passAttempts = passAttempts.length;
 
-				// do math here for points
+				// if not first clear
 				if (passAttempts > 1 && allAttempts > 1) {
-					points = base + (base * (allAttempts / passAttempts));
-				} else {
+					// store calculation so we can limit it to 100 later
+					const calculation = base * (allAttempts / passAttempts);
+					points = base + (base * ((calculation < 100) ? calculation : 100));
+				}
+				// if first clear
+				else {
 					points = base + firstClear;
 				}
 
