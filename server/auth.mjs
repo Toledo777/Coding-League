@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 //TODO: figure out why secure true doesn't work on production
 dotenv.config();
 const SESSION_MAX_AGE = 86400000; // 1 day
+const ONE_DAY = 86400;
 const ENV_MODE = process.env.NODE_ENV || 'dev';
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.use(session({
 	resave: false,
 	cookie: {
 		maxAge: SESSION_MAX_AGE, //time in ms
-		secure: ENV_MODE === 'prod' ? true : false, //should only sent over https, but set to false for testing and dev on localhost
+		secure: false, //should only sent over https, but set to false for testing and dev on localhost
 		httpOnly: true, //can't be read by clientside JS
 		sameSite: 'strict' //only sent for requests to same origin
 	}
@@ -59,14 +60,14 @@ router.post('/login', async (req, res) => {
 	// const user = { email, picture, name };
 	
 
-	let response = await userModel.findOne({ email: email });
+	let response = ENV_MODE !== 'dev' ? await userModel.findOne({ email: email }).cache(ONE_DAY) : await userModel.findOne({ email: email });
 	if (!response) {
 		// If no response: Newly registered use. Create a new user into DB.
 		const user = new userModel({ email: email, username: name, avatar_uri: picture, exp: 0 });
 		try {
 			await user.save();
 			// Once save. Re-find that user in DB
-			response = await userModel.findOne({ email: email });
+			response = ENV_MODE !== 'dev' ? await userModel.findOne({ email: email }).cache(ONE_DAY) : await userModel.findOne({ email: email });
 			if (!response) {
 				return res.sendStatus(500).json({ error: 'Could not find user after creating one.' });
 			}
@@ -77,7 +78,6 @@ router.post('/login', async (req, res) => {
 	} else {
 		// If there is response: Update user into DB
 		const updatedUser = new userModel({ _id: response._id, email: email, username: response.name, avatar_uri: response.picture, exp: response.exp });
-		console.log(updatedUser);
 		await userModel.updateOne({ email: email }, updatedUser);
 	}
 

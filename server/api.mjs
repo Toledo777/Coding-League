@@ -1,22 +1,21 @@
-import express, { response } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
-
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
-import { create, insertBatch, search } from '@lyrasearch/lyra';
 
 dotenv.config();
 const router = express.Router();
 
-(async function() {
+(async function () {
 	const dbFind = (await problem.find({}, { _id: 1, title: 1, tags: 1 })).map(({ _id, title, tags }) => ({ _id, title, tags }));
 	await insertProblems(dbFind);
 })();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
+const ENV_MODE = process.env.NODE_ENV || 'dev';
 const ONE_DAY = 86400;
 
 let problemTags;
@@ -55,7 +54,7 @@ router.get('/problem/list', async (req, res) => {
  */
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
-		const response = await problem.findById(req.query.id).cache(ONE_DAY);
+		const response = ENV_MODE !== 'dev' ? await problem.findById(req.query.id).cache(ONE_DAY) : await problem.findById(req.query.id);
 		if (response != undefined) {
 			res.json(response);
 		} else {
@@ -70,7 +69,7 @@ router.get('/problem/id', async (req, res) => {
  * gets a single problem by its title
  */
 router.get('/problem/title', async (req, res) => {
-	const response = await problem.findOne({ title: req.query.title }).cache(ONE_DAY);
+	const response = ENV_MODE !== 'dev' ? await problem.findOne({ title: req.query.title }).cache(ONE_DAY) : await problem.findOne({ title: req.query.title });
 	res.json(response);
 });
 
@@ -170,7 +169,7 @@ router.get('/user', async (req, res) => {
 	// check for email
 	if (req.query.email) {
 
-		const response = await user.findOne({ email: req.query.email });
+		const response = ENV_MODE !== 'dev' ? await user.findOne({ email: req.query.email }).cache(ONE_DAY) : await user.findOne({ email: req.query.email });
 		if (response) {
 			res.json(response);
 		}
@@ -183,7 +182,7 @@ router.get('/user', async (req, res) => {
 	// check for username
 	else if (req.query.username) {
 		// check for valid mongo object id format
-		const response = await user.findOne({ username: req.query.username });
+		const response = ENV_MODE !== 'dev' ? await user.findOne({ username: req.query.username }).cache(ONE_DAY) : await user.findOne({ username: req.query.username });
 		if (response) {
 			res.json(response);
 		}
