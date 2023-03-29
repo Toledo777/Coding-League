@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { IconSearch } from '@tabler/icons-react';
+import './searchBar.css';
 
 export default function SearchBar({ doSearch }) {
 
@@ -8,15 +10,15 @@ export default function SearchBar({ doSearch }) {
 		setText(e.target.value);
 	};
 
+	const submit = (e) => {
+		e.preventDefault();
+		doSearch(text);
+	};
+
 	return (
-		<div>
-			<label htmlFor='searchForm'>
-				Search:
-			</label>
-			<div className='searchForm'>
-				<input type='text' onChange={handleTextChange} />
-				<button onClick={() => doSearch(text)}>Submit</button>
-			</div>
-		</div>
+		<form className='search_bar panel' onSubmit={submit}>
+			<input type='text' onChange={handleTextChange} />
+			<button disabled={!text.length} className='btn confirm'><IconSearch /></button>
+		</form >
 	);
 }
