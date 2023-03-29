@@ -1,0 +1,17 @@
+.home>h1.header {
+    background-size: cover;
+    background-image: url("code.webp");
+    display: block;
+    border-radius: 0.25rem;
+    text-align: center;
+    line-height: 100%;
+    line-height: 5rem;
+    font-size: 3rem;
+    text-shadow: 2px 2px gray;
+    font-family: monospace;
+    font-weight: bolder;
+}
+
+.banner.panel {
+    padding: 0px;
+}
