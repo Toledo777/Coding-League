@@ -20,7 +20,7 @@ export default function Leaderboard({ global }) {
 		}
 	}, [global]);
 
-	[error, loading, users] = useFetch(url, [{ id: '', username: 'error', exp: 'no users found' }], [url]);
+	[error, loading, users] = useFetch(url, [{ _id: '', username: 'error', exp: 'no users found' }], [url]);
 
 	if (users == undefined || users.count == 0) {
 		users = [{ username: 'error', exp: 'no users found' }];
