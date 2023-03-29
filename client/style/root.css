@@ -21,13 +21,11 @@
 
 body {
     background-color: var(--bg-color);
-    /* display: grid;
+    display: grid;
     min-height: 0px;
     overflow: hidden;
     width: calc(100vw - 1rem);
     height: calc(100vh - 1rem);
-    
-    These style attributes mess up the search results, so they're commented them out for now */
 }
 
 #root {
@@ -48,8 +46,6 @@ nav {
     padding: 5px 10px;
 }
 
-
-
 /* styling nav bar links */
 nav a {
     margin: 0 15px;
@@ -58,18 +54,17 @@ nav a {
     text-decoration: none;
 }
 
-button {
-    margin: 5 10px;
-}
-.user {
+nav .user {
     display: flex;
     flex-direction: row;
     margin-right: 0;
 }
-.user > p {
+
+nav .user>p {
     margin-right: 10px;
 }
-.user > img {
+
+nav .user>img {
     width: 45px;
     height: 45px;
 }
