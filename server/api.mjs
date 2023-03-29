@@ -206,33 +206,42 @@ router.get('/user', async (req, res) => {
  * if a user is not in the leaderboard top X, they will be added to the bottom
  */
 router.get('/topUsers', async (req, res) => {
-	let person = '';
-	const response = await user.aggregate([
-		{ $sort: { exp: -1 } },
-		{ $limit: parseInt(req.query.count) },
-	]);
-	//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
-	if (req.session.user) {
-		let something = response.find(({ username }) => username === req.session.user.username);
-		if (!something) {
-			person = await user.findOne({ username: req.session.user.username });
+	if (req.query.count) {
+		let person = '';
+		const response = await user.aggregate([
+			{ $sort: { exp: -1 } },
+			{ $limit: parseInt(req.query.count) },
+		]);
+		//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
+		if (req.session.user) {
+			let something = response.find(({ username }) => username === req.session.user.username);
+			if (!something) {
+				person = await user.findOne({ username: req.session.user.username });
+			}
 		}
-	}
 
-	if (response) {
-		//if a person was created to be added
-		if (person) {
-			let together = [...response, person];
-			res.json(together);
+		if (response) {
+			//if a person was created to be added
+			if (person) {
+				let together = [...response, person];
+				res.json(together);
+			}
+			else {
+				res.json(response);
+			}
 		}
 		else {
-			res.json(response);
+			res.status(404).json({ title: 'No users found' });
 		}
 	}
 	else {
-		res.status(404).json({ title: 'No users found' });
+		res.status(400).json({ title: 'No parameter given' });
 	}
 });
+
+
+
+
 
 /**
  * GET api to call X users with higher and lower exp compared to a user
