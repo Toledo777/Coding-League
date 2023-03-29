@@ -19,3 +19,7 @@
 .editor-sizer {
     width: auto;
 }
+
+.editor-sizer>* {
+    max-height: 100%;
+}
