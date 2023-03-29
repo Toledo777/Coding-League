@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import HistoryResult from '../components/HistoryResult/historyResult';
 import useCredentials from '../hooks/useCredentials';
+
+// page to display all attempts and answers of a user
 export default function History() {
 	const user = useCredentials();
 
+	// array of problems
 	const [data, setData] = useState();
 	// messages to help user
 	const [message, setMessage] = useState();
