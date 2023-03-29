@@ -66,6 +66,7 @@ button {
     display: flex;
     flex-direction: row;
     margin-right: 0;
+    cursor: pointer;
 }
 .user > p {
     margin-right: 10px;

@@ -75,7 +75,7 @@ export default function Root() {
 				<Link to={'/'}>Home</Link>
 				<Link to={'/search'}>Search</Link>
 
-				<div className='user' onClick={viewProfile}>
+				<div className='user' onClick={viewProfile} >
 					{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 					<p>{user && user.username}</p>
 					{user && <img src={user.avatar_uri} alt='user profile' referrerPolicy='no-referrer'></img>}
