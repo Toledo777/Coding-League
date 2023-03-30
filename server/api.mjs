@@ -3,7 +3,6 @@ import bodyParser from 'body-parser';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
-import fs from 'fs/promises';
 
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
 
@@ -38,15 +37,6 @@ let tags = [];
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 const ONE_DAY = 86400;
-
-let problemTags;
-
-try {
-	problemTags = await fs.readFile('./server/assets/all_tags.json', 'utf-8');
-	problemTags = JSON.parse(problemTags);
-} catch (e) {
-	console.log(e);
-}
 
 // Parse body as json
 router.use(bodyParser.json());
@@ -137,11 +127,6 @@ router.post('/problem/debug', async (req, res) => {
  * used in react to populate the tag multiselect field in the filter component of the search page
  */
 router.get('/allTags', async (req, res) => {
-	// if (problemTags == null) {
-	// 	res.status(500).json({ error: 'tags unavailable' });
-	// } else {
-	// 	res.json(problemTags);
-	// }
 	if (tags.length == 0) {
 		res.status(500).json({ error: 'tags unavailable' });
 	} else {
