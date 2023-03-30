@@ -273,6 +273,94 @@
         }
       }
     },
+    "/api/problem/id": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "summary": "Retrieve a coding problem based on ID",
+        "description": "Retrieve a coding problem based on ID",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "description": "ID of a coding problem",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1234E"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a problem fetched from our Database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if either the ID is not given in parameter, or the ID couldn't be found in our Database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "No ID in Parameter": {
+                    "value": {
+                      "title": "No ID input"
+                    }
+                  },
+                  "ID not found in database": {
+                    "value": {
+                      "title": "invalid ID"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/problem/title": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "summary": "Retrieve a coding problem based on title",
+        "description": "Retrieve a coding problem based on title",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "description": "Title of a coding problem",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "E. Special Permutation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a problem fetched from our Database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/problem/debug": {
       "post": {
         "tags": [
@@ -429,13 +517,49 @@
         ],
         "responses": {
           "200": {
-            "description": "Return list of distinct results"
+            "description": "Return list of distinct results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Problem"
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Respond with 400 status if search parameters are missing"
+            "description": "Respond with 400 status if search parameters are missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "missing search params"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Respond with 404 status if search parameter's input is empty"
+            "description": "Respond with 404 status if search parameter's input is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Enter a title to search for problems"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
