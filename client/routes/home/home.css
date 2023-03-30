@@ -1,17 +1,31 @@
 .home>.header {
-    max-width: 1100px;
+    line-height: 3rem;
     background-size: cover;
     background-image: url("code.webp");
     display: block;
     border-radius: 0.25rem;
     text-align: center;
-    line-height: 100%;
-    font-size: 2.5rem;
+    font-size: 2rem;
     text-shadow: 2px 2px gray;
     font-family: monospace;
     font-weight: bolder;
 }
 
+.home {
+    display: flex;
+    flex-direction: column;
+}
+
+.home>* {
+    max-width: 1100px;
+
+}
+
+.cta {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
 
 @keyframes blink {
     0% {
@@ -35,9 +49,7 @@
 
 }
 
-.home>.header>p {
-    line-height: 3rem;
-}
+
 
 .banner.panel {
     padding: 0px;

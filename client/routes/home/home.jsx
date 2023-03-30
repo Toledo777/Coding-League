@@ -1,4 +1,5 @@
 
+import { IconDice6, IconSearch } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import './home.css';
@@ -24,15 +25,11 @@ export default function Home() {
 				<h1>Coding League</h1>
 				<h2>Take your title as #1 of the Coding League</h2>
 				<p>Over 3000 unique problems to try. Compete against other coders and climb your way up the leaderboard</p>
-
-				<h3>
-					{msg}
-				</h3>
-				{<button onClick={randomProblem}>Try Random Problem :)</button>}
-				{<button onClick={() => navigate('/search')}>Search Problem</button>}
-			</div>
-			<div className='cta'>
-
+				<div className='cta'>
+					<button className='btn warn' onClick={randomProblem}><p>Try Random Problem</p> <IconDice6 /> </button>
+					<button className='btn confirm' onClick={() => navigate('/search')}><p>Search Problems</p> <IconSearch /> </button>
+				</div>
+				{msg}
 			</div>
 		</div>
 	);
