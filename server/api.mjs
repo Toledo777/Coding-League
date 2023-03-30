@@ -373,56 +373,6 @@ router.get('/topUsers', async (req, res) => {
 });
 
 
-
-
-
-/**
- * GET api to call X users with higher and lower exp compared to a user
- * to use call '/api/userNeighbors?count=X
- */
-router.get('/userNeighbors', async (req, res) => {
-	//if a user is logged in they will get the higher and lower leaderboard
-	if (req.session.user) {
-		let person = await user.findOne({ username: req.session.user.username });
-		let userExp = person.exp;
-
-		let response = await user.aggregate([
-			{ $match: { exp: { $gt: parseInt(userExp) } } },
-			{ $sort: { exp: 1 } },
-			{ $limit: parseInt(req.query.count) },
-			{ $sort: { exp: -1 } }
-		]);
-		let response2 = await user.aggregate([
-			{ $match: { exp: { $lt: parseInt(userExp) } } },
-			{ $sort: { exp: -1 } },
-			{ $limit: parseInt(req.query.count) },
-		]);
-
-		let together = [...response, person, ...response2];
-
-		if (together) {
-			res.json(together);
-		}
-		else {
-			res.status(404).json({ title: 'No users found' });
-		}
-	}
-	//if a user is not logged in they will get a default 15 user global leaderboard
-	else {
-		const response = await user.aggregate([
-			{ $sort: { exp: -1 } },
-			{ $limit: parseInt(15) },
-		]);
-		if (response) {
-			res.json([{ username: 'error', exp: 'nothing found' }]);
-		}
-		else {
-			res.status(404).json({ title: 'No users found' });
-		}
-	}
-});
-
-
 /**
  * POST api to post new user into database
  * Checks if username / email exists before creating one.
