@@ -22,7 +22,7 @@ export async function searchProblems(term, limit) {
 }
 
 export async function fetchTags() {
-	const searchResults = await search(tagsDB, { term: '*' });
+	const searchResults = await search(tagsDB, { limit: 100 });
 	return searchResults.hits.map(({ document }) => document);
 }
 
@@ -32,11 +32,12 @@ export async function insertProblems(items) {
 		item.description = sanitizeRawText(item.description);
 	}
 	console.log(`sanitized in: ${performance.now() - perf}`);
-	
+
 	await insertBatch(searchDB, items, { language: 'english', batchSize: 100 });
 }
 
 export async function insertTags(items) {
+	console.log('inserting items: ' + items);
 	await insertBatch(tagsDB, items, { language: 'english', batchSize: 100 });
 }
 

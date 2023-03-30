@@ -17,31 +17,28 @@ const router = express.Router();
 
 	// Remove all the wrapping that mongoose does so lyra will accept the data
 	const problems = dbResults.map(
-		({ _id, title, description }) => ({ _id, title, description })
+		({ _id, title, tags, description }) => ({ _id, title, tags, description })
 	);
-	
+
 	let tags = [];
 
-	for (let i = 0; i < dbResults.length; i++) {
-		console.log('first loop of dbResults');
-		for (let j = 0; j < dbResults[i].tags; j++) {
-			if (tags.indexOf(dbResults[i].tags[j]) === -1) {
-				tags.push(dbResults[i].tags[j]);
-				console.log('tag in loop: ' + dbResults[i].tags[j]);
-			} else {
-				console.log('false if statement');
+	dbResults.forEach((result) => {
+		result.tags.forEach((tag) => {
+			if (tags.indexOf(tag) == -1) {
+				tags.push(tag);
 			}
-		}
-	}
+		});
+	});
 
-	// dbResults.map(
-	// 	({ tags }) => ({ tags })
-	// );
-
-	console.log('tags are here: ' + tags[0]);
+	console.log('tags are here: ' + tags)
 
 	await insertProblems(problems);
 	await insertTags(tags);
+
+	let fetchedTags = await fetchTags();
+
+	console.log('fetched tags are here: ' + fetchedTags);
+
 	console.log('Lyra DB populated');
 })();
 
@@ -151,11 +148,11 @@ router.get('/allTags', async (req, res) => {
 	// } else {
 	// 	res.json(problemTags);
 	// }
-	const distinctResults = await fetchTags();
-	if (distinctResults == null) {
+	const results = await fetchTags();
+	if (results == null) {
 		res.status(500).json({ error: 'tags unavailable' });
 	} else {
-		res.status(200).json(distinctResults);
+		res.status(200).json(results);
 	}
 });
 
