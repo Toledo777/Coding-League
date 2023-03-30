@@ -15,7 +15,7 @@ export default function userLine({ user, index }) {
 	}
 
 	let navigate = useNavigate();
-	if (user.username === '...') {
+	if (user.username === '...' && !user.exp) {
 		return (
 			<div onClick={toUser}>
 				{user.username}

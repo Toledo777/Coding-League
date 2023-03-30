@@ -10,8 +10,9 @@ export default function Leaderboard() {
 
 
 	if (users == undefined || users.count == 0) {
-		users = [{ _id: '', username: 'error', exp: 'no users found' }];
+		error = 'no users found';
 	}
+
 
 	return (
 		<div>
