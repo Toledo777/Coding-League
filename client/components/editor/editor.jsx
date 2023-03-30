@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { default as Ace } from 'react-ace';
 import './editor.css';
 
@@ -8,8 +8,23 @@ import 'ace-builds/src-noconflict/theme-dracula';
 import 'ace-builds/src-noconflict/ext-language_tools';
 
 // code editor component
-export default function Editor({ onChange }) {
+export default function Editor({ onChange, solution }) {
 	const editorRef = useRef();
+	const [value, setValue] = useState('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
+
+	useEffect(() => {
+		if (solution) {
+			setValue(solution);
+		}
+	});
+
+	if (solution) {
+		console.log('theres a solutioon');
+	}
+
+	const change = (e) => {
+		setValue(e);
+	};
 
 	// This is a hack to force the editor to update it's size based on it's parent during load,
 	useEffect(() => {
@@ -22,7 +37,8 @@ export default function Editor({ onChange }) {
 			ref={editorRef}
 			mode='javascript'
 			theme='dracula'
-			onChange={() => onChange(editorRef.current.editor.getValue())}
+			onChange={(e) => onChange(editorRef.current.editor.getValue(), change(e))}
+			value={value}
 			name='aceEditorComponent'
 			showGutter={true}
 			width="unset"
