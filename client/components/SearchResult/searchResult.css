@@ -1,23 +1,11 @@
-.outer > * {
-    display:inline-block;
-    background-color: lightgray;
-    margin-bottom: 10px;
-  }
-.insideProblem{
-    height: 150px;
-    width: 200px;
+.search_result {
+    flex-direction: column;
 }
 
-.insideButton{
-    position: absolute;
-    height: 150px;
-    padding-left: 100px;
+.search_result>h3 {
+    margin: 0px;
 }
-.actualButton{
-    width: 70%;
-    background-color: lightgray;
-    padding: 14px 28px;
-    font-size: 16px;
-    text-align: center;
-    margin-top: 80%;
+
+.search_result>button {
+    cursor: pointer;
 }

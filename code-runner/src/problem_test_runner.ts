@@ -14,7 +14,7 @@ type ProblemAttemptResult = {
     all_ok: boolean,
     total_ran: number,
     failures: number,
-    individual_tests: TestRunResult[],
+    individual_tests?: TestRunResult[],
 }
 
 function createTestingPostfix(test_input: string, result_file: string) {
@@ -86,8 +86,9 @@ function processTestResults(results: TestRunResult[]): ProblemAttemptResult {
 export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
     const tests = problem.testCases.map(test => runTestCase(code, test));
     const test_results: TestRunResult[] = await Promise.all(tests);
-
-    return processTestResults(test_results);
+    const processed = processTestResults(test_results);
+    delete processed.individual_tests;
+    return processed;
 }
 
 export async function debugProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
