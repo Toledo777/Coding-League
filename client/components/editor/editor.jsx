@@ -24,12 +24,8 @@ export default function Editor({ onChange, solution }) {
 			ref={editorRef}
 			mode='javascript'
 			theme='dracula'
-<<<<<<< HEAD
-			onChange={(e) => onChange(editorRef.current.editor.getValue(), setValue(e))}
-=======
 			onChange={() => onChange(editorRef.current.editor.getValue())}
 			value={solution}
->>>>>>> c2e3de0b93deb2d879d1a3bdd66f13a454b39801
 			name='aceEditorComponent'
 			showGutter={true}
 			width="unset"
