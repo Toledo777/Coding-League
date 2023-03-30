@@ -47,8 +47,6 @@ export default function Solve() {
 	useEffect(() => {
 		if (user){
 			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
-		} else {
-			setSolution('');
 		}
 	}, [user]);
 

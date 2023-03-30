@@ -121,7 +121,7 @@ router.get('/problem/tags', async (req, res) => {
  */
 router.post('/problem/debug', codeRunnerLimiter, async (req, res) => {
 	const { code, problem_id } = req.body;
-	if (code != undefined) {
+	if (code != undefined && problem_id != undefined) {
 		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
 			headers: {
 				'Accept': 'application/json',
@@ -130,6 +130,13 @@ router.post('/problem/debug', codeRunnerLimiter, async (req, res) => {
 		});
 		const data = await response.json();
 		res.json(data);
+	} else {
+		if (!code) {
+			res.status(400).json({ 'error': 'No code submitted!' });
+		}
+		else if (!problem_id) {
+			res.status(400).json({ 'error': 'No problem_id specified!' });
+		}
 	}
 });
 
@@ -139,7 +146,7 @@ router.post('/problem/debug', codeRunnerLimiter, async (req, res) => {
  */
 router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 	const { email, problem_id, problem_title, code } = req.body;
-	if (code != undefined && email != undefined) {
+	if (code != undefined && email != undefined && problem_id != undefined) {
 		const submitResp = await fetch(`${CODE_RUNNER_URI}/attempt_problem`, {
 			headers: {
 				'Accept': 'application/json',
@@ -163,7 +170,7 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 			solved = answerData.pass_test;
 		}
 
-		// check if posted answer is finished parsing and the user has never submitted a correct answer yet
+		// check if posted answer parsed properly and the user has never submitted a correct answer yet
 		if (results && !solved) {
 			// save users submitted code
 			await userAnswer.updateOne({ email: email, problem_id: problem_id }, { submission: code, pass_test: results.all_ok });
@@ -197,6 +204,16 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 		}
 
 		res.json(results);
+	} else {
+		if (!code) {
+			res.status(400).json({ 'error': 'No code submitted!' });
+		}
+		else if (!email) {
+			res.status(401).json({ 'error': 'Must be logged in to submit code!' });
+		}
+		else if (!problem_id) {
+			res.status(400).json({ 'error': 'No problem_id specified!' });
+		}
 	}
 });
 
@@ -216,7 +233,12 @@ router.get('/problem/solution', async (req, res) => {
 			res.json({ 'error': 'no attempts' });
 		}
 	} else {
-		res.status(400).json({ 'error': 'missing params' });
+		if (!problem_id) {
+			res.status(400).json({ 'error': 'missing problem_id!' });
+		}
+		else if (!email) {
+			res.status(400).json({ 'error': 'missing email!' });
+		}
 	}
 });
 
