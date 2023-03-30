@@ -23,7 +23,7 @@ export default function Solve() {
 
 		// check if user is signed in
 		if (!response.ok) {
-			alert('Please sign in to submit your code.');
+			alert('Please sign in to debug and submit your code.');
 		}
 
 		else {
