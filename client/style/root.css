@@ -73,6 +73,12 @@ nav .user>img {
 }
 
 /* style codeforces logo */
+
+footer {
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+}
 footer img {
     max-height: 45px;
 }
