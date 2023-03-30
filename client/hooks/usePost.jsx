@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 export default function usePost(url, defaultValue = null) {
-	// This allows for dynamic updating deps
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -12,15 +11,19 @@ export default function usePost(url, defaultValue = null) {
 		'Content-Type': 'application/json'
 	};
 
-	const send = (body) => {
+	const send = async (body) => {
 		setData(defaultValue);
 		setLoading(true);
 		setError(null);
-		fetch(url, { headers, method: 'POST', body: JSON.stringify(body) })
-			.then(res => res.json())
-			.then(data => setData(data))
-			.finally(() => setLoading(false))
-			.catch(e => setError(e.toString()));
+
+		let res = await fetch(url, { headers, method: 'POST', body: JSON.stringify(body) });
+
+		if (!res.ok) {
+			setError({ message: res.statusText, status: res.status });
+		}
+
+		setData(await res.json());
+		setLoading(false);
 	};
 
 	return [error, loading, data, send];
