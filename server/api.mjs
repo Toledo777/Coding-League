@@ -219,53 +219,53 @@ router.get('/user', async (req, res) => {
 	}
 });
 
-/**
- * POST api to post new user into database
- * Checks if username / email exists before creating one.
- */
-router.post('/user/create', async (req, res) => {
-	// check for user data in body
-	if (req.body.email) {
-		const userData = new user(req.body);
+// /**
+//  * POST api to post new user into database
+//  * Checks if username / email exists before creating one.
+//  */
+// router.post('/user/create', async (req, res) => {
+// 	// check for user data in body
+// 	if (req.body.email) {
+// 		const userData = new user(req.body);
 
-		// Check if username / email already exists in DB before creating user
-		if (await user.exists({ username: userData.username })) {
-			res.status(409).json({ title: 'Username already exists' });
-		} else if (await user.exists({ email: userData.email })) {
-			res.status(409).json({ title: 'Email already exists' });
-		} else {
-			await userData.save();
-			res.status(201).json({ title: 'Account created' });
-		}
-	} else {
-		res.status(400).json({ title: 'ERROR: Missing email or data in body' });
-	}
-});
+// 		// Check if username / email already exists in DB before creating user
+// 		if (await user.exists({ username: userData.username })) {
+// 			res.status(409).json({ title: 'Username already exists' });
+// 		} else if (await user.exists({ email: userData.email })) {
+// 			res.status(409).json({ title: 'Email already exists' });
+// 		} else {
+// 			await userData.save();
+// 			res.status(201).json({ title: 'Account created' });
+// 		}
+// 	} else {
+// 		res.status(400).json({ title: 'ERROR: Missing email or data in body' });
+// 	}
+// });
 
-/**
- * PUT api to update user data already present in database
- * uses email to update user
- */
-router.put('/user/update', express.json(), async (req, res) => {
-	// check for email
-	const userData = req.body;
-	if (req.body.email) {
-		const response = await user.updateOne({ email: userData.email }, userData);
+// /**
+//  * PUT api to update user data already present in database
+//  * uses email to update user
+//  */
+// router.put('/user/update', express.json(), async (req, res) => {
+// 	// check for email
+// 	const userData = req.body;
+// 	if (req.body.email) {
+// 		const response = await user.updateOne({ email: userData.email }, userData);
 
-		// if response from db
-		if (response.acknowledged) {
-			res.status(204).json({ title: 'Account updated' });
-		}
+// 		// if response from db
+// 		if (response.acknowledged) {
+// 			res.status(204).json({ title: 'Account updated' });
+// 		}
 
-		// no data found with email
-		else {
-			res.status(404).json({ title: 'No data found' });
-		}
-	}
-	// missing id parameter
-	else {
-		res.status(400).json({ title: 'ERROR: Missing email parameter' });
-	}
-});
+// 		// no data found with email
+// 		else {
+// 			res.status(404).json({ title: 'No data found' });
+// 		}
+// 	}
+// 	// missing id parameter
+// 	else {
+// 		res.status(400).json({ title: 'ERROR: Missing email parameter' });
+// 	}
+// });
 
 export default router;
