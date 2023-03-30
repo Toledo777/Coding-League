@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 // NOTE: This feature has been removed, I'll keep the component in case the feature is ever reintroduced later.
 
 // component to display form to edit user data, takes a user as input to prepopulate form
-export default function EditForm({user}) {
+export default function EditForm({ user }) {
 	const [error, setError] = useState(false);
 
 	// if the user ever gets changed, update the form and the updatedUser
@@ -37,7 +37,7 @@ export default function EditForm({user}) {
 			});
 
 			// display an error message to user if api response is not ok
-			if (! response.ok) {
+			if (!response.ok) {
 				setError(true);
 			}
 
@@ -47,19 +47,19 @@ export default function EditForm({user}) {
 		}
 	}
 
-	return(
+	return (
 		<>
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="formUsername">Username:</label>
-				<input type="text" required name="formUsername" id="formUsername" value={formData.username || ''} onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
+				<input type="text" required name="formUsername" id="formUsername" value={formData.username || ''} onChange={(e) => setFormData({ ...formData, username: e.target.value })} />
 
 				<label htmlFor="formAvatar">Avatar link:</label>
-				<input type="text" required name="formAvatar" id="formAvatar" value={formData.avatar || ''} onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}/>
+				<input type="text" required name="formAvatar" id="formAvatar" value={formData.avatar || ''} onChange={(e) => setFormData({ ...formData, avatar: e.target.value })} />
 
 				<label htmlFor="formBio">Bio:</label>
-				<input type="text" required name="formBio" id="formBio" value={formData.bio || ''} onChange={(e) => setFormData({ ...formData, bio: e.target.value })}/>
+				<input type="text" required name="formBio" id="formBio" value={formData.bio || ''} onChange={(e) => setFormData({ ...formData, bio: e.target.value })} />
 
-				<input type="submit" required name="submitBtn" id="submitBtn" value="Confirm"/>
+				<input type="submit" required name="submitBtn" id="submitBtn" value="Confirm" />
 			</form>
 
 			{error && <div>Error updating profile</div>}

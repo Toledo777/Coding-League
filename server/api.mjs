@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 dotenv.config();
 import fs from 'fs/promises';
 
+
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
 import { create, insertBatch, search } from '@lyrasearch/lyra';
 
@@ -277,7 +278,6 @@ router.post('/answer', (req, res) => {
 router.get('/user', async (req, res) => {
 	// check for email
 	if (req.query.email) {
-
 		const response = await user.findOne({ email: req.query.email });
 		if (response) {
 			res.json(response);
@@ -303,7 +303,7 @@ router.get('/user', async (req, res) => {
 		}
 
 		else {
-			res.status(400).json({title: 'Invalid ID'});
+			res.status(400).json({ title: 'Invalid ID' });
 		}
 	}
 
@@ -324,6 +324,54 @@ router.get('/user', async (req, res) => {
 		res.status(400).json({ title: 'No parameter given' });
 	}
 });
+
+
+/**
+ * GET api to call the top X users
+ * to use call '/api/users?count=X 
+ * sorted by descending order
+ * if a user is not in the leaderboard top X, they will be added to the bottom
+ */
+router.get('/topUsers', async (req, res) => {
+	if (req.query.count) {
+		let person = '';
+		const response = await user.aggregate([
+			{ $sort: { exp: -1 } },
+			{ $limit: parseInt(req.query.count) },
+		]);
+		//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
+		if (req.session.user) {
+			let signedIn = response.find(({ username }) => username === req.session.user.username);
+			if (!signedIn) {
+				const response2 = await user.aggregate([
+					{ $sort: { exp: -1 } },
+				]);
+				person = response2.find((element) => element.username === req.session.user.username);
+				let position = (element) => element.username === req.session.user.username;
+				let index = response2.findIndex(position);
+				person = { ...person, position: index };
+			}
+		}
+
+		if (response) {
+			//if a person was created to be added
+			if (person) {
+				let together = [...response, { _id: 'null', username: '...' }, person];
+				res.json(together);
+			}
+			else {
+				res.json(response);
+			}
+		}
+		else {
+			res.status(404).json({ title: 'No users found' });
+		}
+	}
+	else {
+		res.status(400).json({ title: 'No parameter given' });
+	}
+});
+
 
 /**
  * POST api to post new user into database
@@ -373,5 +421,7 @@ router.put('/user/update', express.json(), async (req, res) => {
 		res.status(400).json({ title: 'ERROR: Missing email parameter' });
 	}
 });
+
+
 
 export default router;
