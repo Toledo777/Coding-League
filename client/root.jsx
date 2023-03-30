@@ -92,6 +92,9 @@ export default function Root() {
 
 				<Outlet />
 			</main>
+			<footer>
+				Problems courtesy of <a href='https://codeforces.com/'><img src='https://codeforces.org/s/32772/images/codeforces-sponsored-by-ton.png' alt='Codeforces logo with ton sponsorship'/></a>
+			</footer>
 		</GoogleOAuthProvider>
 	);
 }

@@ -69,3 +69,8 @@ nav .user>img {
     width: 45px;
     height: 45px;
 }
+
+/* style codeforces logo */
+footer img {
+    max-height: 45px;
+}
