@@ -37,6 +37,7 @@ body {
 main.content {
     display: grid;
     overflow: auto;
+    max-width: 1100px;
 }
 
 .description {
