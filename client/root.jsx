@@ -62,15 +62,20 @@ export default function Root() {
 		dispatchEvent(new Event('login'));
 	}
 
+	// event handler to route to profile
+	const viewProfile = () => {
+		// construct path to user's profile
+		let path = '/profile/' + user._id;
+		navigate(path);
+	};
+
 	return (
 		<GoogleOAuthProvider clientId={data}>
 			<nav className='panel'>
 				<Link to={'/'}>Home</Link>
 				<Link to={'/search'}>Search</Link>
 
-				{/* temporarily hardcode route to user in the db */}
-				<Link to={'/profile/cooluser123'}>Profile</Link>
-				<div className='user'>
+				<div className='user' onClick={viewProfile} >
 					{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 					<p>{user && user.username}</p>
 					{user && <img src={user.avatar_uri} alt='user profile' referrerPolicy='no-referrer'></img>}

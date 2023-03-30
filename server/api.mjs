@@ -4,6 +4,8 @@ import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
 import { userAnswer } from './models/userAnswer.mjs';
 import * as dotenv from 'dotenv';
+import mongoose from 'mongoose';
+dotenv.config();
 import fs from 'fs/promises';
 
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
@@ -286,9 +288,27 @@ router.get('/user', async (req, res) => {
 		}
 	}
 
+	// check for id parameter
+	else if (req.query.id) {
+		// check for valid mongo object id format
+		if (mongoose.Types.ObjectId.isValid(req.query.id)) {
+			const response = await user.findById(req.query.id);
+			if (response != undefined) {
+				res.json(response);
+			}
+			// no data found with ID
+			else {
+				res.status(404).json({ title: 'No data found' });
+			}
+		}
+
+		else {
+			res.status(400).json({title: 'Invalid ID'});
+		}
+	}
+
 	// check for username
 	else if (req.query.username) {
-		// check for valid mongo object id format
 		const response = await user.findOne({ username: req.query.username });
 		if (response) {
 			res.json(response);
@@ -298,7 +318,8 @@ router.get('/user', async (req, res) => {
 			res.status(404).json({ title: 'No data found with that username' });
 		}
 	}
-	// missing id parameter
+
+	// missing parameter
 	else {
 		res.status(400).json({ title: 'No parameter given' });
 	}
