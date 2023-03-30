@@ -5,23 +5,23 @@ import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
 
-import { searchProblems, fetchTags, insertProblems, insertTags } from './search/searchManager.mjs';
+import { searchProblems, insertProblems } from './search/searchManager.mjs';
 
 dotenv.config();
 const router = express.Router();
 
+// global variable to store tags to be fetched using /allTags route for problem search filtering
+let tags = [];
+
 (async function () {
 	const dbResults = await problem.find({}, { _id: 1, title: 1, tags: 1, description: 1 });
-
-	console.log('dbResults are here: ' + dbResults[0].tags);
 
 	// Remove all the wrapping that mongoose does so lyra will accept the data
 	const problems = dbResults.map(
 		({ _id, title, tags, description }) => ({ _id, title, tags, description })
 	);
 
-	let tags = [];
-
+	// push unique tags to global scope tags array above this function
 	problems.forEach((problem) => {
 		problem.tags.forEach((tag) => {
 			if (tags.indexOf(tag) == -1) {
@@ -30,18 +30,10 @@ const router = express.Router();
 		});
 	});
 
-	console.log('tags are here: ' + tags);
-
-	// tags = [{ tag: 'math' }, { tag: 'probabililty' }, { tag: 'brute force' }];
-
+	// insert problems to lyra problems schema
 	await insertProblems(problems);
-	await insertTags(tags);
 
-	let fetchedTags = await fetchTags();
-
-	console.log('fetched tags are here: ' + fetchedTags);
-
-	console.log('Lyra DB populated');
+	console.log('Lyra DB and filter tags populated');
 })();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
@@ -150,11 +142,10 @@ router.get('/allTags', async (req, res) => {
 	// } else {
 	// 	res.json(problemTags);
 	// }
-	const results = await fetchTags();
-	if (results == null) {
+	if (tags.length == 0) {
 		res.status(500).json({ error: 'tags unavailable' });
 	} else {
-		res.status(200).json(results);
+		res.status(200).json(tags);
 	}
 });
 
