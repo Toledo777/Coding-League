@@ -5,7 +5,7 @@ export default function userLine({ user, index }) {
 
 	const toUser = () => {
 		if (user.username != 'error') {
-			navigate('/profile/' + user.username);
+			navigate('/profile/' + user._id);
 
 		}
 	};

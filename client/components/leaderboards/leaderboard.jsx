@@ -6,7 +6,8 @@ export default function Leaderboard() {
 	let [error, loading, users] = [];
 	let url = '/api/topUsers?count=3';
 
-	[error, loading, users] = useFetch(url, [{ _id: '', username: 'error', exp: 'no users found' }], [url]);
+	[error, loading, users] = useFetch(url, [], [url]);
+
 
 	if (users == undefined || users.count == 0) {
 		users = [{ _id: '', username: 'error', exp: 'no users found' }];
@@ -23,7 +24,7 @@ export default function Leaderboard() {
 					{loading && 'loading...'}
 				</h3>
 				<div>
-					{users.map((u, index) => <div key={u._id}> <UserLine index={index + 1} user={u}></UserLine> </div>)}
+					{!error && users.map((u, index) => <div key={u._id}> <UserLine index={index + 1} user={u}></UserLine> </div>)}
 				</div>
 			</div>
 		</div >
