@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Problem from '../../components/problem';
 import { useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost';
@@ -6,6 +6,7 @@ import AttemptOutput from '../../components/attemptOutput/attemptOutput';
 import Editor from '../../components/editor/editor';
 import SplitPane from '../../components/splitPane/splitPane';
 import useFetch from '../../hooks/useFetch';
+import useCredentials from '../../hooks/useCredentials';
 import Loading from '../../components/loader/loader';
 import './solve.css';
 
@@ -23,7 +24,9 @@ export default function Solve() {
 	const [error, loading, problem] = useFetch(`/api/problem/id/?id=${id}`);
 	const [solution, setSolution] = useState('');
 	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
+	const [submitError, submitLoading, submitResult, sendSubmission] = usePost('/api/problem/submit');
 
+	const user = useCredentials();
 
 	const debugSolution = async () => {
 		const response = await fetch('/auth/protected');
@@ -41,19 +44,43 @@ export default function Solve() {
 		}
 	};
 
+	const submitSolution = () => {
+		sendSubmission({
+			email: user.email,
+			code: solution,
+			problem_id: id,
+			problem_title: problem.title
+		});
+	};
+
+	const handleSolutionChange = (value) => {
+		setSolution(value);
+		if (user){
+			window.localStorage.setItem(`${id}-${user.email}`, value);
+		}
+	};
+
+	useEffect(() => {
+		if (user){
+			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
+		}
+	}, [user]);
+
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
 			{loading && 'Loading...' || error && <SolveError error={error} /> || <Problem problem={problem} />}
 			<div>
-				{<AttemptOutput result={debugResult} />}
-				{debugError && <div>{debugError}</div>}
+				{<AttemptOutput result={debugResult || submitResult} />}
+				{debugError && <div>{debugError.message}</div>}
+				{submitError && <div>{submitError.message}</div>}
 				{debugLoading && <Loading />}
+				{submitLoading && <Loading />}
 			</div>
 		</SplitPane>
 
 		<div className='editor-container panel'>
 			<div className='editor-sizer'>
-				<Editor onChange={(value) => setSolution(value)} />
+				<Editor onChange={(value) => handleSolutionChange(value)} solution={solution} />
 			</div>
 			<div className='editor-buttons'>
 				<button disabled={error} className='debug btn' onClick={debugSolution}>Debug</button>
