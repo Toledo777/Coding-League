@@ -197,7 +197,7 @@ router.get('/user', async (req, res) => {
 		}
 
 		else {
-			res.status(400).json({title: 'Invalid ID'});
+			res.status(400).json({ title: 'Invalid ID' });
 		}
 	}
 
@@ -235,16 +235,22 @@ router.get('/topUsers', async (req, res) => {
 		]);
 		//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
 		if (req.session.user) {
-			let something = response.find(({ username }) => username === req.session.user.username);
-			if (!something) {
-				person = await user.findOne({ username: req.session.user.username });
+			let signedIn = response.find(({ username }) => username === req.session.user.username);
+			if (!signedIn) {
+				const response2 = await user.aggregate([
+					{ $sort: { exp: -1 } },
+				]);
+				person = response2.find((element) => element.username === req.session.user.username);
+				let position = (element) => element.username === req.session.user.username;
+				let index = response2.findIndex(position);
+				person = { ...person, position: index };
 			}
 		}
 
 		if (response) {
 			//if a person was created to be added
 			if (person) {
-				let together = [...response, person];
+				let together = [...response, { username: '...' }, person];
 				res.json(together);
 			}
 			else {

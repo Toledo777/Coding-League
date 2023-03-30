@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function userLine({ user }) {
+export default function userLine({ user, index }) {
 
 	const toUser = () => {
 		if (user.username != 'error') {
@@ -10,10 +10,24 @@ export default function userLine({ user }) {
 		}
 	};
 
+	if (user.position) {
+		index = '';
+	}
+
 	let navigate = useNavigate();
-	return (
-		<div onClick={toUser}>
-			{user.username} | {user.exp}
-		</div>
-	);
+	if (user.username === '...') {
+		return (
+			<div onClick={toUser}>
+				{user.username}
+			</div>
+		);
+	}
+	else {
+		return (
+			<div onClick={toUser}>
+				{user.position} {index} {user.username} | {user.exp}
+			</div>
+		);
+	}
+
 }
