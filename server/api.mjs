@@ -5,16 +5,8 @@ import { user } from './models/user.mjs';
 import { userAnswer } from './models/userAnswer.mjs';
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
-dotenv.config();
 import fs from 'fs/promises';
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 9a50ca92786289de9a6dc712145887c5c8265ac7
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
-import { userAnswer } from './models/userAnswer.mjs';
-
 import rateLimit from 'express-rate-limit';
 import requestIp from 'request-ip';
 
@@ -306,11 +298,7 @@ router.get('/user', async (req, res) => {
 		}
 
 		else {
-<<<<<<< HEAD
 			res.status(400).json({message: 'Error 400: Invalid ID'});
-=======
-			res.status(400).json({ title: 'Invalid ID' });
->>>>>>> 9a50ca92786289de9a6dc712145887c5c8265ac7
 		}
 	}
 
@@ -430,7 +418,6 @@ router.put('/user/update', express.json(), async (req, res) => {
 	}
 });
 
-<<<<<<< HEAD
 // return all answers associated with user
 router.get('/user/answers', async (req, res) =>  {
 	if (req.query.email) {
@@ -454,8 +441,5 @@ router.get('/user/answers', async (req, res) =>  {
 		res.status(400).json({ title: 'No parameter given' });
 	}
 });
-=======
-
->>>>>>> 9a50ca92786289de9a6dc712145887c5c8265ac7
 
 export default router;
