@@ -11,10 +11,18 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 export default function Editor({ onChange, solution }) {
 	const editorRef = useRef();
 	const [value, setValue] = useState('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
-	if(solution){
-		setValue(solution);
+
+	useEffect(() => {
+		if (solution) {
+			setValue(solution);
+		}
+	});
+
+	if (solution) {
+		console.log('theres a solutioon');
 	}
-	const change = (e) =>{
+
+	const change = (e) => {
 		setValue(e);
 	};
 
