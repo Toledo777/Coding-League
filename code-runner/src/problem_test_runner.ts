@@ -10,12 +10,16 @@ type TestRunResult = {
     expected: string,
 }
 
-type ProblemAttemptResult = {
+export type ProblemDebugResult = {
+    individual_tests: TestRunResult[],
+} & ProblemAttemptResult;
+
+export type ProblemAttemptResult = {
     all_ok: boolean,
     total_ran: number,
     failures: number,
-    individual_tests: TestRunResult[],
 }
+
 
 function createTestingPostfix(test_input: string, result_file: string) {
     return `
@@ -47,9 +51,12 @@ async function createProcess(code: string, files: TestRunnerFiles): Promise<Deno
 }
 
 
-async function runTestCase(code: string, { input, output: expected }: TestCase, timeout = 2000): Promise<TestRunResult> {
+async function runTestCase(code: string, testCase: TestCase, timeout = 2000): Promise<TestRunResult> {
+    const test_input = testCase.input;
+    const expected_output = testCase.output;
+
     const files = await allocateProblemTestProcessFiles();
-    const postfix = createTestingPostfix(input, files.solution_out);
+    const postfix = createTestingPostfix(test_input, files.solution_out);
 
     const process = await createProcess(code + postfix, files);
 
@@ -61,38 +68,55 @@ async function runTestCase(code: string, { input, output: expected }: TestCase, 
 
     clearTimeout(kill_timeout);
 
-    const [stdout, stderr, answer] = ([
-        await readTextFileWithLimit(files.debug_out, 2048),
-        await readTextFileWithLimit(files.error_out, 2048),
-        await readTextFileWithLimit(files.solution_out, 2048),
+    const [stdout, stderr, answer] = await Promise.all([
+        readTextFileWithLimit(files.debug_out, 2048),
+        readTextFileWithLimit(files.error_out, 2048),
+        readTextFileWithLimit(files.solution_out, 2048),
     ]);
 
     // TODO: Validate that this replacement is valid for all tests.
-    const ok = status.success && answer == expected.replaceAll("\n", "");
+    const ok = status.success && answer == expected_output.replaceAll("\n", "");
 
-    return { ok, stderr, stdout, answer, expected };
+    return { ok, stderr, stdout, answer, expected: expected_output };
 }
 
-function processTestResults(results: TestRunResult[]): ProblemAttemptResult {
+function processTestResults(results: TestRunResult[], debug: true): ProblemDebugResult;
+function processTestResults(results: TestRunResult[], debug: false): ProblemAttemptResult;
+function processTestResults(results: TestRunResult[], debug: boolean): unknown {
     const failures = results.filter(res => !res.ok).length;
-    return {
+
+    const res: ProblemAttemptResult = {
         failures,
         all_ok: failures == 0,
         total_ran: results.length,
-        individual_tests: results
     };
+
+    // Only add debug info if processed as debug
+    return debug ? { ...res, individual_tests: results } : res;
+}
+
+async function runTestCases(code: string, tests: TestCase[], parallel = false): Promise<TestRunResult[]> {
+    if (parallel) {
+        return Promise.all(
+            tests.map(test => runTestCase(code, test))
+        );
+    } else {
+        const results: TestRunResult[] = [];
+        for (const test of tests) {
+            results.push(await runTestCase(code, test));
+        }
+        return results;
+    }
 }
 
 export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
-    const tests = problem.testCases.map(test => runTestCase(code, test));
-    const test_results: TestRunResult[] = await Promise.all(tests);
-
-    return processTestResults(test_results);
+    const tests = problem.testCases;
+    const results = await runTestCases(code, tests);
+    return processTestResults(results, false);
 }
 
-export async function debugProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
-    const tests = problem.testCases.slice(0, 5).map(test => runTestCase(code, test));
-    const test_results: TestRunResult[] = await Promise.all(tests);
-
-    return processTestResults(test_results);
+export async function debugProblem(code: string, problem: Problem): Promise<ProblemDebugResult> {
+    const tests = problem.testCases.slice(0, 5);
+    const results = await runTestCases(code, tests, true);
+    return processTestResults(results, true);
 }
