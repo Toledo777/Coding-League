@@ -10,8 +10,21 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 // code editor component
 export default function Editor({ onChange, solution }) {
 	const editorRef = useRef();
-
 	const [value, setValue] = useState('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
+
+	useEffect(() => {
+		if (solution) {
+			setValue(solution);
+		}
+	});
+
+	if (solution) {
+		console.log('theres a solutioon');
+	}
+
+	const change = (e) => {
+		setValue(e);
+	};
 
 	// This is a hack to force the editor to update it's size based on it's parent during load,
 	useEffect(() => {
@@ -24,8 +37,8 @@ export default function Editor({ onChange, solution }) {
 			ref={editorRef}
 			mode='javascript'
 			theme='dracula'
-			onChange={() => onChange(editorRef.current.editor.getValue())}
-			value={solution}
+			onChange={(e) => onChange(editorRef.current.editor.getValue(), change(e))}
+			value={value}
 			name='aceEditorComponent'
 			showGutter={true}
 			width="unset"
@@ -37,7 +50,6 @@ export default function Editor({ onChange, solution }) {
 				enableBasicAutocompletion: true,
 				useWorker: false
 			}}
-			value={value}
 		/>
 	);
 }
