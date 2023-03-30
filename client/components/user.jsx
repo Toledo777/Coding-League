@@ -12,6 +12,7 @@ export default function User({ user }) {
 				<img src={user.avatar} alt="profile avatar" />
 				<p>Email: {user.email}</p>
 				<p>Bio: {user.bio}</p>
+<<<<<<< HEAD
 				<p>Wins: {user.wins}</p>
 				<p>Losses: {user.losses}</p>
 				<p>Rank: {user.rank}</p>
@@ -19,6 +20,16 @@ export default function User({ user }) {
 			<div id="previous answers">
 				<h2>Previous Answers (this section is currently hardcoded until answers are stored in db)</h2>
 				<p>console.log(hello world)</p>
+=======
+				{/* <p>Wins: {user.wins}</p>
+				<p>Losses: {user.losses}</p>
+				<p>Rank: {user.rank}</p> */}
+				<p>EXP: {user.exp}</p>
+			</div>
+			<div id="previous answers">
+				<h2>Previous Answers (this section is currently hardcoded until answers are stored in db)</h2>
+				<p>console.log("hello world")</p>
+>>>>>>> c2e3de0b93deb2d879d1a3bdd66f13a454b39801
 			</div>
 		</>
 	);
