@@ -218,31 +218,6 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 });
 
 /**
- * Checks if user has already submitted an answer for the given problem and return it
- */
-router.get('/problem/solution', async (req, res) => {
-	const email = req.query.email;
-	const problem_id = req.query.id;
-	if (email && problem_id) {
-		let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
-		if (answer) {
-			// already attempted, has submission
-			res.json(answer);
-		} else {
-			// no submission, hasn't attempted
-			res.json({ 'error': 'no attempts' });
-		}
-	} else {
-		if (!problem_id) {
-			res.status(400).json({ 'error': 'missing problem_id!' });
-		}
-		else if (!email) {
-			res.status(400).json({ 'error': 'missing email!' });
-		}
-	}
-});
-
-/**
  * get json result containing string array of all possible coding problem tags
  * used in react to populate the tag multiselect field in the filter component of the search page
  */
