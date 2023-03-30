@@ -3,6 +3,11 @@ import React from 'react';
 export default function Problem({ problem }) {
 	return (
 		<div className='problem'>
+			<label htmlFor='language-select'>Language:</label>
+			<select name='language' id='language-select'>
+				<option value='javascript'>Javascript</option>
+			</select>
+
 			<h3 className='header'>
 				{problem.title}
 			</h3>
