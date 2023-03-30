@@ -11,10 +11,9 @@ import './solve.css';
 
 
 function SolveError({ error }) {
-	console.log(error.title);
-	return <span>
-		{error.title}
-	</span>;
+	return <h2>
+		{error?.title || 'Error'}
+	</h2>;
 }
 
 export default function Solve() {
@@ -44,8 +43,7 @@ export default function Solve() {
 
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
-			{/* {loading && 'Loading...' || error || <Problem problem={problem} />} */}
-			{loading && 'Loading...' || error && <SolveError error={error} /> || problem.toString()}
+			{loading && 'Loading...' || error && <SolveError error={error} /> || <Problem problem={problem} />}
 			<div>
 				{<AttemptOutput result={debugResult} />}
 				{debugError && <div>{debugError}</div>}
