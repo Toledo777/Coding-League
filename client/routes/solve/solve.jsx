@@ -9,6 +9,14 @@ import useFetch from '../../hooks/useFetch';
 import Loading from '../../components/loader/loader';
 import './solve.css';
 
+
+function SolveError({ error }) {
+	console.log(error.title);
+	return <span>
+		{error.title}
+	</span>;
+}
+
 export default function Solve() {
 	// Get the problem id from the route
 	const params = useParams();
@@ -36,7 +44,8 @@ export default function Solve() {
 
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
-			{loading && 'Loading...' || error || <Problem problem={problem} />}
+			{/* {loading && 'Loading...' || error || <Problem problem={problem} />} */}
+			{loading && 'Loading...' || error && <SolveError error={error} /> || problem.toString()}
 			<div>
 				{<AttemptOutput result={debugResult} />}
 				{debugError && <div>{debugError}</div>}
