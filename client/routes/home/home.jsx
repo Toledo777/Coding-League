@@ -23,14 +23,16 @@ export default function Home() {
 	return (
 		<div className='home'>
 			<h1 className='panel header'>Coding League</h1>
+			<h2>Take your title as #1 of the Coding League</h2>
+			<p>Over 3000 unique problems to try. Compete against other coders and climb your way up the leaderboard</p>
+
 			<h3>
 				{error && error}
 				{loading && 'loading...'}
 				{msg}
 			</h3>
-			{!loading && <button onClick={routeChange}>Random Problem :)</button>}
-		
-			<p>Welcome to Coding League. To test your skills navigate to the solve page to try a random coding challenge!</p>
+			{!loading && <button onClick={routeChange}>Try Random Problem :)</button>}
+			{!loading && <button onClick={() => navigate('/search')}>Search Problem</button>}
 		</div>
 	);
 }
