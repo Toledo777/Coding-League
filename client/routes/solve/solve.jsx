@@ -18,11 +18,20 @@ export default function Solve() {
 	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
 
 
-	const debugSolution = () => {
-		sendDebug({
-			code: solution,
-			problem_id: id
-		});
+	const debugSolution = async () => {
+		const response = await fetch('/auth/protected');
+
+		// check if user is signed in
+		if (!response.ok) {
+			alert('Please sign in to debug and submit your code.');
+		}
+
+		else {
+			sendDebug({
+				code: solution,
+				problem_id: id
+			});
+		}
 	};
 
 	return <div className='solve'>
