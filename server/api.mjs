@@ -199,7 +199,7 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 
 				// update user points by taking their current points and adding points from this new solution
 				const fetchUser = await user.findOne({ email: email });
-				const updateExpResp = await user.updateOne({ email: email }, { exp: (fetchUser.exp ?? 0) + points });
+				await user.updateOne({ email: email }, { exp: (fetchUser.exp ?? 0) + points });
 			}
 		}
 
