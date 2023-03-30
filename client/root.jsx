@@ -72,7 +72,7 @@ export default function Root() {
 	return (
 		<GoogleOAuthProvider clientId={data}>
 			<nav className='panel'>
-				<Link to={'/'}>Home</Link>
+				<Link id='siteName' to={'/'}>Coding League</Link>
 				<Link to={'/search'}>Search</Link>
 
 				<div className='user' onClick={viewProfile} >
@@ -93,7 +93,7 @@ export default function Root() {
 				<Outlet />
 			</main>
 			<footer>
-				Problems courtesy of <a href='https://codeforces.com/'><img src='https://codeforces.org/s/32772/images/codeforces-sponsored-by-ton.png' alt='Codeforces logo with ton sponsorship'/></a>
+				Problemset courtesy of <a href='https://codeforces.com/'><img src='https://codeforces.org/s/32772/images/codeforces-sponsored-by-ton.png' alt='Codeforces logo with ton sponsorship'/></a>
 			</footer>
 		</GoogleOAuthProvider>
 	);
