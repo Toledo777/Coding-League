@@ -183,8 +183,13 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 				// fetch all attempts and pass attempts for calculating points (TODO: optimize :S)
 				let allAttempts = await userAnswer.find({ problem_id: problem_id });
 				allAttempts = allAttempts.length;
-				let passAttempts = await userAnswer.find({ problem_id: problem_id, pass_test: true });
+				// let passAttempts = await userAnswer.find({ problem_id: problem_id, pass_test: true });
+				// passAttempts = passAttempts.length;
+
+				passAttempts = allAttempts.filter((attempt) => { return attempt.pass_test; });
 				passAttempts = passAttempts.length;
+
+				console.log(passAttempts);
 
 				// if not first clear
 				if (passAttempts > 1 && allAttempts > 1) {
