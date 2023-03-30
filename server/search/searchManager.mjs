@@ -1,6 +1,7 @@
 import { create, insertBatch, search } from '@lyrasearch/lyra';
 import { problem } from '../models/problem.mjs';
-const db = await create({
+
+const searchDB = await create({
 	schema: {
 		_id: 'string',
 		title: 'string',
@@ -9,13 +10,19 @@ const db = await create({
 	},
 });
 
-function sanitizeRawText(text) {
-	return text.replaceAll(/<[^>]*>/g, '') // Remove XML
-		.replaceAll(/\s+/g, ' '); // Remove formatting whitespace
-}
+const tagsDB = await create({
+	schema: {
+		tags: 'string',
+	},
+});
 
 export async function searchProblems(term, limit) {
-	const searchResults = await search(db, { term: term, limit: limit });
+	const searchResults = await search(searchDB, { term: term, limit: limit });
+	return searchResults.hits.map(({ document }) => document);
+}
+
+export async function fetchTags() {
+	const searchResults = await search(tagsDB, { term: '*' });
 	return searchResults.hits.map(({ document }) => document);
 }
 
@@ -24,8 +31,16 @@ export async function insertProblems(items) {
 	for (let item of items) {
 		item.description = sanitizeRawText(item.description);
 	}
-
 	console.log(`sanitized in: ${performance.now() - perf}`);
+	
+	await insertBatch(searchDB, items, { language: 'english', batchSize: 100 });
+}
 
-	await insertBatch(db, items, { language: 'english', batchSize: 100 });
+export async function insertTags(items) {
+	await insertBatch(tagsDB, items, { language: 'english', batchSize: 100 });
+}
+
+function sanitizeRawText(text) {
+	return text.replaceAll(/<[^>]*>/g, '') // Remove XML
+		.replaceAll(/\s+/g, ' '); // Remove formatting whitespace
 }

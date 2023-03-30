@@ -5,7 +5,7 @@ import { user } from './models/user.mjs';
 import * as dotenv from 'dotenv';
 import fs from 'fs/promises';
 
-import { searchProblems, insertProblems } from './search/searchManager.mjs';
+import { searchProblems, fetchTags, insertProblems, insertTags } from './search/searchManager.mjs';
 
 dotenv.config();
 const router = express.Router();
@@ -13,13 +13,35 @@ const router = express.Router();
 (async function () {
 	const dbResults = await problem.find({}, { _id: 1, title: 1, tags: 1, description: 1 });
 
+	console.log('dbResults are here: ' + dbResults[0].tags);
+
 	// Remove all the wrapping that mongoose does so lyra will accept the data
 	const problems = dbResults.map(
-		({ _id, title, tags, description }) => ({ _id, title, tags, description })
+		({ _id, title, description }) => ({ _id, title, description })
 	);
+	
+	let tags = [];
 
+	for (let i = 0; i < dbResults.length; i++) {
+		console.log('first loop of dbResults');
+		for (let j = 0; j < dbResults[i].tags; j++) {
+			if (tags.indexOf(dbResults[i].tags[j]) === -1) {
+				tags.push(dbResults[i].tags[j]);
+				console.log('tag in loop: ' + dbResults[i].tags[j]);
+			} else {
+				console.log('false if statement');
+			}
+		}
+	}
+
+	// dbResults.map(
+	// 	({ tags }) => ({ tags })
+	// );
+
+	console.log('tags are here: ' + tags[0]);
 
 	await insertProblems(problems);
+	await insertTags(tags);
 	console.log('Lyra DB populated');
 })();
 
@@ -124,10 +146,16 @@ router.post('/problem/debug', async (req, res) => {
  * used in react to populate the tag multiselect field in the filter component of the search page
  */
 router.get('/allTags', async (req, res) => {
-	if (problemTags == null) {
+	// if (problemTags == null) {
+	// 	res.status(500).json({ error: 'tags unavailable' });
+	// } else {
+	// 	res.json(problemTags);
+	// }
+	const distinctResults = await fetchTags();
+	if (distinctResults == null) {
 		res.status(500).json({ error: 'tags unavailable' });
 	} else {
-		res.json(problemTags);
+		res.status(200).json(distinctResults);
 	}
 });
 
