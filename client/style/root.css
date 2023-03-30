@@ -58,6 +58,7 @@ nav .user {
     display: flex;
     flex-direction: row;
     margin-right: 0;
+    cursor: pointer;
 }
 
 nav .user>p {

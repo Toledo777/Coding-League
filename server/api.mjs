@@ -2,9 +2,15 @@ import express, { response } from 'express';
 import bodyParser from 'body-parser';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
+import { userAnswer } from './models/userAnswer.mjs';
 import * as dotenv from 'dotenv';
+import mongoose from 'mongoose';
+dotenv.config();
 
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
+
+import rateLimit from 'express-rate-limit';
+import requestIp from 'request-ip';
 
 dotenv.config();
 const router = express.Router();
@@ -40,6 +46,23 @@ const ONE_DAY = 86400;
 
 // Parse body as json
 router.use(bodyParser.json());
+
+// get user IP address for the purposes of limiting API requests
+router.use(requestIp.mw());
+
+// limit API requests for each IP address individually (max 30 requests every 1 minute)
+const [timeout, limit] = [60 * 1000, 5]; // 5 requests across 1 minute
+const codeRunnerLimiter = rateLimit({
+	windowMs: timeout,
+	max: limit,
+	keyGenerator: (req, res) => {
+		return req.clientIp; // rateLimit has req.ip but apparently it's not helpful, hence the requestIp.mw() above
+	},
+	standardHeaders: true
+});
+
+// values for calculating score
+const [base, firstClear] = [100, 175];
 
 /**
  * gets random problems in a range given by req.query.start (2941 is equal to the amount of problems in our db)
@@ -105,12 +128,12 @@ router.get('/problem/tags', async (req, res) => {
 });
 
 /**
- * Submits code to be ran by the code-runner
- *  for now this acts only as a proxy for the code-runner
+ * Submits code for debugging to be ran by the code-runner
+ * for now this acts only as a proxy for the code-runner
  */
-router.post('/problem/debug', async (req, res) => {
+router.post('/problem/debug', codeRunnerLimiter, async (req, res) => {
 	const { code, problem_id } = req.body;
-	if (code != undefined) {
+	if (code != undefined && problem_id != undefined) {
 		const response = await fetch(`${CODE_RUNNER_URI}/debug_problem`, {
 			headers: {
 				'Accept': 'application/json',
@@ -119,6 +142,91 @@ router.post('/problem/debug', async (req, res) => {
 		});
 		const data = await response.json();
 		res.json(data);
+	} else {
+		if (!code) {
+			res.status(400).json({ 'error': 'No code submitted!' });
+		}
+		else if (!problem_id) {
+			res.status(400).json({ 'error': 'No problem_id specified!' });
+		}
+	}
+});
+
+/**
+ * Submits code solution to be ran by the code-runner
+ * will update user answer row in userAnswerSchema if applicable (or create new row if non-existent)
+ */
+router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
+	const { email, problem_id, problem_title, code } = req.body;
+	if (code != undefined && email != undefined && problem_id != undefined) {
+		const submitResp = await fetch(`${CODE_RUNNER_URI}/attempt_problem`, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}, method: 'POST', body: JSON.stringify({ code, problem_id })
+		});
+		const results = await submitResp.json();
+
+		// fetch user answer and store solved variable representing their previous solved state
+		let answerData = await userAnswer.findOne({ email: email, problem_id: problem_id });
+		let solved;
+
+		// if the user hasn't answered yet, make a new userAnswer and set solved state to false
+		if (!answerData) {
+			answerData = new userAnswer({ email: email, problem_id: problem_id, problem_title: problem_title, submission: code, pass_test: false });
+			answerData.save();
+			solved = false;
+		}
+		// if user has answered, set their previous solved state to what is in the stored userAnswer document
+		else {
+			solved = answerData.pass_test;
+		}
+
+		// check if posted answer parsed properly and the user has never submitted a correct answer yet
+		if (results && !solved) {
+			// save users submitted code
+			await userAnswer.updateOne({ email: email, problem_id: problem_id }, { submission: code, pass_test: results.all_ok });
+
+			// all of this only runs if they've answered it successfully for the first time
+			if (results.all_ok) {
+				// initialize points
+				let points = 0;
+
+				// fetch all attempts and pass attempts for calculating points
+				let allAttempts = await userAnswer.find({ problem_id: problem_id });
+				let passAttempts = allAttempts.filter((attempt) => { return attempt.pass_test; });
+
+				// count all attempts and pass attempts
+				[allCount, passCount] = [allAttempts.length, passAttempts.length];
+
+				// if not first clear
+				if (passCount > 1 && allCount > 1) {
+					// store calculation so we can limit it to 100 later
+					const calculation = base * (allCount / passCount);
+					points = base + (base * ((calculation < 100) ? calculation : 100));
+				}
+				// if first clear
+				else {
+					points = base + firstClear;
+				}
+
+				// update user points by taking their current points and adding points from this new solution
+				const fetchUser = await user.findOne({ email: email });
+				await user.updateOne({ email: email }, { exp: (fetchUser.exp ?? 0) + points });
+			}
+		}
+
+		res.json(results);
+	} else {
+		if (!code) {
+			res.status(400).json({ 'error': 'No code submitted!' });
+		}
+		else if (!email) {
+			res.status(401).json({ 'error': 'Must be logged in to submit code!' });
+		}
+		else if (!problem_id) {
+			res.status(400).json({ 'error': 'No problem_id specified!' });
+		}
 	}
 });
 
@@ -190,9 +298,27 @@ router.get('/user', async (req, res) => {
 		}
 	}
 
+	// check for id parameter
+	else if (req.query.id) {
+		// check for valid mongo object id format
+		if (mongoose.Types.ObjectId.isValid(req.query.id)) {
+			const response = await user.findById(req.query.id);
+			if (response != undefined) {
+				res.json(response);
+			}
+			// no data found with ID
+			else {
+				res.status(404).json({ title: 'No data found' });
+			}
+		}
+
+		else {
+			res.status(400).json({title: 'Invalid ID'});
+		}
+	}
+
 	// check for username
 	else if (req.query.username) {
-		// check for valid mongo object id format
 		const response = await user.findOne({ username: req.query.username });
 		if (response) {
 			res.json(response);
@@ -202,7 +328,8 @@ router.get('/user', async (req, res) => {
 			res.status(404).json({ title: 'No data found with that username' });
 		}
 	}
-	// missing id parameter
+
+	// missing parameter
 	else {
 		res.status(400).json({ title: 'No parameter given' });
 	}
