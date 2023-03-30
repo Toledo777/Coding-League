@@ -177,7 +177,7 @@ router.get('/user', async (req, res) => {
 		}
 		// no data found with email
 		else {
-			res.status(404).json({ title: 'No data found with that email' });
+			res.status(404).json({ message: 'Error 404: No data found with that email' });
 		}
 	}
 
@@ -191,12 +191,12 @@ router.get('/user', async (req, res) => {
 			}
 			// no data found with ID
 			else {
-				res.status(404).json({ title: 'No data found' });
+				res.status(404).json({ message: 'Error 404: No data found' });
 			}
 		}
 
 		else {
-			res.status(400).json({title: 'Invalid ID'});
+			res.status(400).json({message: 'Error 400: Invalid ID'});
 		}
 	}
 
@@ -208,13 +208,13 @@ router.get('/user', async (req, res) => {
 		}
 		// no data found with username
 		else {
-			res.status(404).json({ title: 'No data found with that username' });
+			res.status(404).json({ message: 'Error 404: No data found with that username' });
 		}
 	}
 
 	// missing parameter
 	else {
-		res.status(400).json({ title: 'No parameter given' });
+		res.status(400).json({ message: 'Error 400: No parameter given' });
 	}
 });
 
