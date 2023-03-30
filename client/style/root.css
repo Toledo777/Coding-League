@@ -58,6 +58,7 @@ nav .user {
     display: flex;
     flex-direction: row;
     margin-right: 0;
+    cursor: pointer;
 }
 
 nav .user>p {
@@ -67,4 +68,9 @@ nav .user>p {
 nav .user>img {
     width: 45px;
     height: 45px;
+}
+
+/* style codeforces logo */
+footer img {
+    max-height: 45px;
 }
