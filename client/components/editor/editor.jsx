@@ -8,7 +8,7 @@ import 'ace-builds/src-noconflict/theme-dracula';
 import 'ace-builds/src-noconflict/ext-language_tools';
 
 // code editor component
-export default function Editor({ onChange }) {
+export default function Editor({ onChange, solution }) {
 	const editorRef = useRef();
 
 	// This is a hack to force the editor to update it's size based on it's parent during load,
@@ -23,6 +23,7 @@ export default function Editor({ onChange }) {
 			mode='javascript'
 			theme='dracula'
 			onChange={() => onChange(editorRef.current.editor.getValue())}
+			value={solution}
 			name='aceEditorComponent'
 			showGutter={true}
 			width="unset"
