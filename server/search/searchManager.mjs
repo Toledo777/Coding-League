@@ -22,7 +22,7 @@ export async function searchProblems(term, limit) {
 }
 
 export async function fetchTags() {
-	const searchResults = await search(tagsDB, { limit: 100 });
+	const searchResults = await search(tagsDB, { term: '*' });
 	return searchResults.hits.map(({ document }) => document);
 }
 

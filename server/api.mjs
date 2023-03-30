@@ -22,15 +22,17 @@ const router = express.Router();
 
 	let tags = [];
 
-	dbResults.forEach((result) => {
-		result.tags.forEach((tag) => {
+	problems.forEach((problem) => {
+		problem.tags.forEach((tag) => {
 			if (tags.indexOf(tag) == -1) {
 				tags.push(tag);
 			}
 		});
 	});
 
-	console.log('tags are here: ' + tags)
+	console.log('tags are here: ' + tags);
+
+	// tags = [{ tag: 'math' }, { tag: 'probabililty' }, { tag: 'brute force' }];
 
 	await insertProblems(problems);
 	await insertTags(tags);
