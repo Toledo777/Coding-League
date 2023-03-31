@@ -2,8 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Coding League's express APIs",
-    "version": "0.1.0",
-    "description": "This page contains information about our website and how our APIs are used used.",
+    "version": "1.0.0",
+    "description": "This page contains information about our website and how our APIs are used.",
     "license": {
       "name": "MIT",
       "url": "https://spdx.org/licenses/MIT.html"
@@ -27,7 +27,7 @@
     "/auth/google-client-id": {
       "get": {
         "tags": [
-          "authentication"
+          "Authentication"
         ],
         "summary": "Retrieve Google Client ID",
         "description": "Retrieve google client ID from environment variable for our client-side to use Google Authentication components.",
@@ -64,7 +64,7 @@
     "/auth/login": {
       "post": {
         "tags": [
-          "authentication"
+          "Authentication"
         ],
         "summary": "Login the user to Coding League",
         "description": "Login the user to Coding League by first verifying their Google token, then inserting or updating their info into database, then setting their cookie session.",
@@ -143,7 +143,7 @@
     "/auth/credentials": {
       "get": {
         "tags": [
-          "authentication"
+          "Authentication"
         ],
         "summary": "Retrieve user session info",
         "description": "Retrieve user info that's contained inside the session. If the session doesn't exists, respond with a value indicating the current user is not logged in",
@@ -174,7 +174,7 @@
     "/auth/protected": {
       "get": {
         "tags": [
-          "authentication"
+          "Authentication"
         ],
         "summary": "Verifies user's authentication",
         "description": "Checks if the current user is in session. Used by our client-side to restrict features to authenticated users only",
@@ -191,7 +191,7 @@
     "/auth/logout": {
       "post": {
         "tags": [
-          "authentication"
+          "Authentication"
         ],
         "summary": "Logout the user from Coding League",
         "description": "Logs out the current user by clearing their session cookie",
@@ -211,7 +211,7 @@
     "/api/problem/random": {
       "get": {
         "tags": [
-          "API"
+          "Coding Problem"
         ],
         "summary": "Retrieve a random problem from our Database",
         "description": "Get random problem from a range between all of the problems in our Database",
@@ -232,7 +232,7 @@
     "/api/problem/list": {
       "get": {
         "tags": [
-          "API"
+          "Coding Problem"
         ],
         "summary": "Retrieve list of problems",
         "description": "Fetches number of problems starting at query start in DB's list of problems",
@@ -276,7 +276,7 @@
     "/api/problem/id": {
       "get": {
         "tags": [
-          "API"
+          "Coding Problem"
         ],
         "summary": "Retrieve a coding problem based on ID",
         "description": "Retrieve a coding problem based on ID",
@@ -331,7 +331,7 @@
     "/api/problem/title": {
       "get": {
         "tags": [
-          "API"
+          "Coding Problem"
         ],
         "summary": "Retrieve a coding problem based on title",
         "description": "Retrieve a coding problem based on title",
@@ -364,7 +364,7 @@
     "/api/problem/debug": {
       "post": {
         "tags": [
-          "API"
+          "Coding Problem"
         ],
         "summary": "Submit code to be ran by code-runner.",
         "description": "Using the code submitted by user, run the code-runner and output the results based on the problem's test cases",
@@ -442,10 +442,136 @@
         }
       }
     },
+    "/api/problem/submit": {
+      "post": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Submit code to have EXP calculated.",
+        "description": "Submit code to have it be checked by code-runner, then calculate and post EXP for the user if the code solution is correct.",
+        "requestBody": {
+          "description": "Contains the user, and their solution to a problem",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "omfgll@hotmail.com"
+                  },
+                  "problem_id": {
+                    "type": "string",
+                    "example": "1234E"
+                  },
+                  "problem_title": {
+                    "type": "string",
+                    "example": "E. Special Permutation"
+                  },
+                  "code": {
+                    "type": "string",
+                    "example": "console.log(2+2);"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respond with the results that Code-Runner returns with.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "all_ok": {
+                      "type": "boolean"
+                    },
+                    "total_ran": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "failures": {
+                      "type": "number"
+                    },
+                    "individual_tests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ok": {
+                            "type": "boolean"
+                          },
+                          "stdout": {
+                            "type": "string",
+                            "example": 4
+                          },
+                          "stderr": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "answer": {
+                            "type": "string",
+                            "example": "console.log(2+2);"
+                          },
+                          "expected": {
+                            "type": "string",
+                            "example": 4
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status either if code or problem_id is not specified in request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "User Code Not in Body": {
+                    "value": {
+                      "error": "No code submitted!"
+                    }
+                  },
+                  "Problem ID Not in Body": {
+                    "value": {
+                      "error": "No problem_id specified!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if email is not specified in request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "value": {
+                    "error": "Must be logged in to submit code!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/allTags": {
       "get": {
         "tags": [
-          "API"
+          "Coding Problem"
         ],
         "summary": "Retrieve all stored problem tags",
         "description": "Get list of all problem tags. Used in our client-side to populate the filter component of the search page.",
@@ -491,7 +617,7 @@
     "/api/searchProblems": {
       "get": {
         "tags": [
-          "API"
+          "Coding Problem"
         ],
         "summary": "Retrieve problem based on user's query",
         "description": "Retrieve problems containing JSON array of titles and IDs of problems returned from Lyra Search.",
@@ -567,7 +693,7 @@
     "/api/user": {
       "get": {
         "tags": [
-          "API"
+          "User"
         ],
         "summary": "Retrieve specific user",
         "description": "Retrieve user in our database base on either email or username",
@@ -581,6 +707,16 @@
             },
             "required": true,
             "example": "example@gmail.com"
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "description": "User's Object ID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": 2317512875612695
           },
           {
             "in": "query",
@@ -609,6 +745,91 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "Invalid Object ID": {
+                    "value": {
+                      "title": "Invalid ID"
+                    }
+                  },
+                  "Parameters Not Given": {
+                    "value": {
+                      "title": "No parameter given"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if no user is found in Database from the input that was given",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "Email Not Found in Database": {
+                    "value": {
+                      "title": "No data found with that email"
+                    }
+                  },
+                  "User ID Not Found in Database": {
+                    "value": {
+                      "title": "No data found with that ID"
+                    }
+                  },
+                  "Username Not Found in Database": {
+                    "value": {
+                      "title": "No data found with that username"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/topUsers": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Retrieve the top X users",
+        "description": "Retrieve the top users based on given input. The top users are considered by whoever has the highest EXP. If the user in session, place it into the bottom of the list (unless they're part of the top list).",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "count",
+            "description": "How many top users to retrieve from our Database",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a list of users with highest EXP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status if no count parameter is given",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
                     "title": {
@@ -621,7 +842,7 @@
             }
           },
           "404": {
-            "description": "Respond with 404 status if no user is found in Database, with the input given",
+            "description": "Respond with 404 status if our User Database response came out empty",
             "content": {
               "application/json": {
                 "schema": {
@@ -629,7 +850,7 @@
                   "properties": {
                     "title": {
                       "type": "string",
-                      "example": "No data found with that username"
+                      "example": "No users found"
                     }
                   }
                 }
