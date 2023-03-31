@@ -1,14 +1,11 @@
 import express from 'express';
-import session from 'express-session';
 import { OAuth2Client } from 'google-auth-library';
 import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
 
-//TODO: figure out why secure true doesn't work on production
 dotenv.config();
 const router = express.Router();
-
-
+const clientID = process.env.GOOGLE_CLIENT_ID;
 
 const client = new OAuth2Client(clientID);
 
