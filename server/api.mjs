@@ -38,7 +38,7 @@ let tags = [];
 	// insert problems to lyra problems schema
 	await insertProblems(problems);
 
-	console.log('Lyra DB and filter tags populated');
+	console.log('Lyra DB populated');
 })();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;

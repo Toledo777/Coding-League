@@ -16,10 +16,11 @@ export async function searchProblems(term, limit) {
 
 export async function insertProblems(items) {
 	let perf = performance.now();
+	console.log('begin sanitizing problems before lyra insertion...');
 	for (let item of items) {
 		item.description = sanitizeRawText(item.description);
 	}
-	console.log(`sanitized in: ${performance.now() - perf}`);
+	console.log(`sanitized in: ${performance.now() - perf}ms`);
 
 	await insertBatch(searchDB, items, { language: 'english', batchSize: 100 });
 }
