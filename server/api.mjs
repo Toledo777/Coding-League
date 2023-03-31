@@ -29,7 +29,7 @@ let tags = [];
 	// push unique tags to global scope tags array above this function
 	problems.forEach((problem) => {
 		problem.tags.forEach((tag) => {
-			if (tags.indexOf(tag) == -1) {
+			if (tags.indexOf(tag) == -1 && !tag.match(/\*\d{3,4}/gm)) {
 				tags.push(tag);
 			}
 		});
