@@ -18,11 +18,12 @@ export default function usePost(url, defaultValue = null) {
 
 		let res = await fetch(url, { headers, method: 'POST', body: JSON.stringify(body) });
 
-		if (!res.ok) {
+		if (res.ok){
+			setData(await res.json());
+		} else {
 			setError({ message: res.statusText, status: res.status });
 		}
-
-		setData(await res.json());
+		
 		setLoading(false);
 	};
 
