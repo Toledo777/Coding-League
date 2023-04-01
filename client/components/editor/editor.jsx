@@ -13,23 +13,16 @@ export default function Editor({ onChange, solution }) {
 	const [value, setValue] = useState('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
 
 	useEffect(() => {
+		// This is a hack to force the editor to update it's size based on it's parent during load,
+		editorRef.current.editor.resize();
 		if (solution) {
 			setValue(solution);
 		}
 	});
 
-	if (solution) {
-		console.log('theres a solutioon');
-	}
-
 	const change = (e) => {
 		setValue(e);
 	};
-
-	// This is a hack to force the editor to update it's size based on it's parent during load,
-	useEffect(() => {
-		editorRef.current.editor.resize();
-	});
 
 	return (
 		<AceEditor

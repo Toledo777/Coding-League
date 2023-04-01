@@ -10,6 +10,13 @@ import useCredentials from '../../hooks/useCredentials';
 import Loading from '../../components/loader/loader';
 import './solve.css';
 
+
+function SolveError({ error }) {
+	return <h2>
+		{error?.title || 'Error'}
+	</h2>;
+}
+
 export default function Solve() {
 	// Get the problem id from the route
 	const params = useParams();
@@ -61,7 +68,7 @@ export default function Solve() {
 
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
-			{loading && 'Loading...' || error || <Problem problem={problem} />}
+			{loading && 'Loading...' || error && <SolveError error={error} /> || <Problem problem={problem} />}
 			<div>
 				{<AttemptOutput result={debugResult || submitResult} />}
 				{debugError && <div>{debugError.message}</div>}
@@ -76,8 +83,8 @@ export default function Solve() {
 				<Editor onChange={(value) => handleSolutionChange(value)} solution={solution} />
 			</div>
 			<div className='editor-buttons'>
-				<button className='debug btn' onClick={debugSolution}>Debug</button>
-				<button className='submit btn confirm' onClick={submitSolution}>Submit</button>
+				<button disabled={error} className='debug btn' onClick={debugSolution}>Debug</button>
+				<button disabled={error} className='submit btn confirm' onClick={debugSolution}>Submit</button>
 			</div>
 		</div>
 	</div>;
