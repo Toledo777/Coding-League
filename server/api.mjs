@@ -287,14 +287,13 @@ router.post('/answer', (req, res) => {
 router.get('/user', async (req, res) => {
 	// check for email
 	if (req.query.email) {
-
 		const response = await user.findOne({ email: req.query.email });
 		if (response) {
 			res.json(response);
 		}
-		// no data found with ID
+		// no data found with email
 		else {
-			res.status(404).json({ title: 'No data found with that email' });
+			res.status(404).json({ error: 'Error 404: No data found with that email' });
 		}
 	}
 
@@ -308,12 +307,12 @@ router.get('/user', async (req, res) => {
 			}
 			// no data found with ID
 			else {
-				res.status(404).json({ title: 'No data found' });
+				res.status(404).json({ error: 'Error 404: No data found' });
 			}
 		}
 
 		else {
-			res.status(400).json({title: 'Invalid ID'});
+			res.status(400).json({ error: 'Error 400: Invalid ID'});
 		}
 	}
 
@@ -325,15 +324,63 @@ router.get('/user', async (req, res) => {
 		}
 		// no data found with username
 		else {
-			res.status(404).json({ title: 'No data found with that username' });
+			res.status(404).json({ error: 'Error 404: No data found with that username' });
 		}
 	}
 
 	// missing parameter
 	else {
+		res.status(400).json({ error: 'Error 400: No parameter given' });
+	}
+});
+
+
+/**
+ * GET api to call the top X users
+ * to use call '/api/users?count=X 
+ * sorted by descending order
+ * if a user is not in the leaderboard top X, they will be added to the bottom
+ */
+router.get('/topUsers', async (req, res) => {
+	if (req.query.count) {
+		let person = '';
+		const response = await user.aggregate([
+			{ $sort: { exp: -1 } },
+			{ $limit: parseInt(req.query.count) },
+		]);
+		//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
+		if (req.session.user) {
+			let signedIn = response.find(({ username }) => username === req.session.user.username);
+			if (!signedIn) {
+				const response2 = await user.aggregate([
+					{ $sort: { exp: -1 } },
+				]);
+				person = response2.find((element) => element.username === req.session.user.username);
+				let position = (element) => element.username === req.session.user.username;
+				let index = response2.findIndex(position);
+				person = { ...person, position: index };
+			}
+		}
+
+		if (response) {
+			//if a person was created to be added
+			if (person) {
+				let together = [...response, { _id: 'null', username: '...' }, person];
+				res.json(together);
+			}
+			else {
+				res.json(response);
+			}
+		}
+		else {
+			res.status(404).json({ title: 'No users found' });
+		}
+	}
+	else {
 		res.status(400).json({ title: 'No parameter given' });
 	}
 });
+
 
 /**
  * POST api to post new user into database
@@ -381,6 +428,30 @@ router.put('/user/update', express.json(), async (req, res) => {
 	// missing id parameter
 	else {
 		res.status(400).json({ title: 'ERROR: Missing email parameter' });
+	}
+});
+
+// return all answers associated with user
+router.get('/user/answers', async (req, res) =>  {
+	if (req.query.email) {
+		
+		// check if email exist
+		let emailExist = await user.exists({ email: req.query.email});
+
+		if (emailExist) {
+			const response = await userAnswer.find({email: req.query.email});
+			// return data
+			res.status(200).json(response);
+		}
+
+		// no problems found with email
+		else {
+			res.status(404).json({ title: 'No user associated with this email was found' });
+		}
+	}
+	// missing id parameter
+	else {
+		res.status(400).json({ title: 'No parameter given' });
 	}
 });
 

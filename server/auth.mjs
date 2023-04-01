@@ -5,22 +5,10 @@ import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
 //TODO: figure out why secure true doesn't work on production
 dotenv.config();
-const SESSION_MAX_AGE = 86400000; // 1 day
-const ENV_MODE = process.env.NODE_ENV || 'dev';
+
 const router = express.Router();
 
-router.use(session({
-	secret: process.env.SECRET, //used to sign the session id
-	name: 'session-id', //name of the session id cookie
-	saveUninitialized: false, //don't create session until something stored
-	resave: false,
-	cookie: {
-		maxAge: SESSION_MAX_AGE, //time in ms
-		secure: ENV_MODE === 'prod' ? true : false, //should only sent over https, but set to false for testing and dev on localhost
-		httpOnly: true, //can't be read by clientside JS
-		sameSite: 'strict' //only sent for requests to same origin
-	}
-}));
+
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -57,7 +45,7 @@ router.post('/login', async (req, res) => {
 	// Extract user data 
 	const { email, picture, name } = ticket.getPayload();
 	// const user = { email, picture, name };
-	
+
 
 	let response = await userModel.findOne({ email: email });
 	if (!response) {
@@ -77,7 +65,6 @@ router.post('/login', async (req, res) => {
 	} else {
 		// If there is response: Update user into DB
 		const updatedUser = new userModel({ _id: response._id, email: email, username: response.name, avatar_uri: response.picture, exp: response.exp });
-		console.log(updatedUser);
 		await userModel.updateOne({ email: email }, updatedUser);
 	}
 
