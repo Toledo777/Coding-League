@@ -9,6 +9,14 @@ export default function SearchResult({ problem }) {
 			<h3>{title}</h3>
 			<div className='description_div'>
 				<p className='description'>{description}</p>
+				{
+					problem.tags.map(
+						tag => <p
+							className='tag_desc'
+							key={tag}>{tag}
+						</p>
+					)
+				}
 			</div>
 			<button onClick={() => navigate(`/solve/${_id}`)}>
 				Code
