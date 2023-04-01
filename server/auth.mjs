@@ -65,7 +65,6 @@ router.post('/login', async (req, res) => {
 	} else {
 		// If there is response: Update user into DB
 		const updatedUser = new userModel({ _id: response._id, email: email, username: response.name, avatar_uri: response.picture, exp: response.exp });
-		console.log(updatedUser);
 		await userModel.updateOne({ email: email }, updatedUser);
 	}
 
