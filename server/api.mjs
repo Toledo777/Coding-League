@@ -3,7 +3,6 @@ import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
 import requestIp from 'request-ip';
 import mongoose from 'mongoose';
-import fs from 'fs/promises';
 import * as dotenv from 'dotenv';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
@@ -13,23 +12,39 @@ import { searchProblems, insertProblems } from './search/searchManager.mjs';
 dotenv.config();
 const router = express.Router();
 
+// global variable to store tags to be fetched using /allTags route for problem search filtering
+let tags = [];
+
 (async function () {
-	const dbFind = (await problem.find({}, { _id: 1, title: 1, tags: 1 })).map(({ _id, title, tags }) => ({ _id, title, tags }));
-	await insertProblems(dbFind);
+	const dbResults = await problem.find({}, { _id: 1, title: 1, tags: 1, description: 1 });
+
+	// Remove all the wrapping that mongoose does so lyra will accept the data
+	const problems = dbResults.map(
+		({ _id, title, tags, description }) => ({ _id, title, tags, description })
+	);
+
+	// push unique tags to global scope tags array above this function
+	problems.forEach((problem) => {
+		problem.tags.forEach((tag) => {
+			if (tags.indexOf(tag) == -1 && !tag.match(/\*\d{3,4}/gm)) {
+				tags.push(tag);
+			}
+		});
+	});
+
+	// insert problems to lyra problems schema
+	try {
+		await insertProblems(problems);
+		console.log('Lyra DB populated');
+	} catch (e) {
+		console.log('Error inserting problems: ' + e);
+		console.log('Problem searching not active!');
+	}
 })();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
 const ENV_MODE = process.env.NODE_ENV || 'dev';
 const ONE_DAY = 86400;
-
-let problemTags;
-
-try {
-	problemTags = await fs.readFile('./server/assets/all_tags.json', 'utf-8');
-	problemTags = JSON.parse(problemTags);
-} catch (e) {
-	console.log(e);
-}
 
 // Parse body as json
 router.use(bodyParser.json());
@@ -202,10 +217,10 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
  * used in react to populate the tag multiselect field in the filter component of the search page
  */
 router.get('/allTags', async (req, res) => {
-	if (problemTags == null) {
+	if (tags.length == 0) {
 		res.status(500).json({ error: 'tags unavailable' });
 	} else {
-		res.json(problemTags);
+		res.status(200).json(tags);
 	}
 });
 
@@ -266,7 +281,7 @@ router.get('/user', async (req, res) => {
 			response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found' });
 		}
 		else {
-			res.status(400).json({ error: 'Error 400: Invalid ID'});
+			res.status(400).json({ error: 'Error 400: Invalid ID' });
 		}
 	}
 
@@ -381,14 +396,14 @@ router.put('/user/update', express.json(), async (req, res) => {
 });
 
 // return all answers associated with user
-router.get('/user/answers', async (req, res) =>  {
+router.get('/user/answers', async (req, res) => {
 	if (req.query.email) {
-		
+
 		// check if email exist
-		let emailExist = await user.exists({ email: req.query.email});
+		let emailExist = await user.exists({ email: req.query.email });
 
 		if (emailExist) {
-			const response = await userAnswer.find({email: req.query.email});
+			const response = await userAnswer.find({ email: req.query.email });
 			// return data
 			res.status(200).json(response);
 		}
