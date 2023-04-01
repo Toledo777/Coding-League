@@ -26,7 +26,6 @@ export default function History() {
 					const jsonData = await response.json();
 
 					// check for data
-					console.log(jsonData);
 					if (jsonData.length != 0) {
 						setMessage('');
 						setData(jsonData);

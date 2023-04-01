@@ -420,12 +420,12 @@ router.put('/user/update', express.json(), async (req, res) => {
 // return all answers associated with user
 router.get('/user/answers', async (req, res) =>  {
 	if (req.query.email) {
-		const response = await userAnswer.find({email: req.query.email});
-
+		
 		// check if email exist
 		let emailExist = await user.exists({ email: req.query.email});
 
 		if (emailExist) {
+			const response = await userAnswer.find({email: req.query.email});
 			// return data
 			res.status(200).json(response);
 		}
