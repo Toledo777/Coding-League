@@ -33,9 +33,13 @@ let tags = [];
 	});
 
 	// insert problems to lyra problems schema
-	await insertProblems(problems);
-
-	console.log('Lyra DB populated');
+	try {
+		await insertProblems(problems);
+		console.log('Lyra DB populated');
+	} catch (e) {
+		console.log('Error inserting problems: ' + e);
+		console.log('Problem searching not active!');
+	}
 })();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
@@ -277,7 +281,7 @@ router.get('/user', async (req, res) => {
 			response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found' });
 		}
 		else {
-			res.status(400).json({ error: 'Error 400: Invalid ID'});
+			res.status(400).json({ error: 'Error 400: Invalid ID' });
 		}
 	}
 
@@ -392,14 +396,14 @@ router.put('/user/update', express.json(), async (req, res) => {
 });
 
 // return all answers associated with user
-router.get('/user/answers', async (req, res) =>  {
+router.get('/user/answers', async (req, res) => {
 	if (req.query.email) {
-		
+
 		// check if email exist
-		let emailExist = await user.exists({ email: req.query.email});
+		let emailExist = await user.exists({ email: req.query.email });
 
 		if (emailExist) {
-			const response = await userAnswer.find({email: req.query.email});
+			const response = await userAnswer.find({ email: req.query.email });
 			// return data
 			res.status(200).json(response);
 		}
