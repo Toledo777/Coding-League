@@ -1,18 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import rateLimit from 'express-rate-limit';
+import requestIp from 'request-ip';
+import mongoose from 'mongoose';
+import fs from 'fs/promises';
+import * as dotenv from 'dotenv';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
 import { userAnswer } from './models/userAnswer.mjs';
-import * as dotenv from 'dotenv';
-import mongoose from 'mongoose';
-dotenv.config();
-import fs from 'fs/promises';
-
-
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
-
-import rateLimit from 'express-rate-limit';
-import requestIp from 'request-ip';
 
 dotenv.config();
 const router = express.Router();
@@ -56,22 +52,22 @@ const codeRunnerLimiter = rateLimit({
 const [base, firstClear] = [100, 175];
 
 /**
- * gets random problems in a range given by req.query.start (2941 is equal to the amount of problems in our db)
- * this is so we don't have to fetch the entire db every time we want some randoms
- *  
+ * gets random problem from the DB
  */
 router.get('/problem/random', async (req, res) => {
-	let response = await problem.aggregate([{ $sample: { size: 1 } }]);
-	res.json(response[0]);
+	const response = await problem.aggregate([{ $sample: { size: 1 } }]);
+	response ? res.status(200).json(response[0]) : res.status(404).json({ error: 'Coding problem couldn\'t be found' });
 });
 
-//fetches {req.query.count} number of problems starting at {req.query.start} in the db's entire list of problems (for pagination) 
+/**
+ *fetches {req.query.count} number of problems starting at {req.query.start} in the db's entire list of problems
+ */
 router.get('/problem/list', async (req, res) => {
-	let response = await problem.aggregate([
+	const response = await problem.aggregate([
 		{ $skip: parseInt(req.query.start) },
 		{ $limit: parseInt(req.query.count) }
 	]);
-	res.json(response);
+	response ? res.status(200).json(response) : res.status(404).json({ error: 'Coding problems couldn\'t be found' });
 });
 
 /**
@@ -95,27 +91,7 @@ router.get('/problem/id', async (req, res) => {
  */
 router.get('/problem/title', async (req, res) => {
 	const response = ENV_MODE !== 'dev' ? await problem.findOne({ title: req.query.title }).cache(ONE_DAY) : await problem.findOne({ title: req.query.title });
-	res.json(response);
-});
-
-
-/**
- * gets the first problem related to the tag sent by the user,
- * incomplete until difficulty implementation is complete and I figure out a way to deal with more than one tags with a space in them
- */
-router.get('/problem/tags', async (req, res) => {
-	//preliminary difficulty implementation
-
-	// if (req.query.difficulty) {
-	// 	console.log('there is difficulty range');
-	// 	const response = await problem.find({});
-	// 	res.json(response[0]);
-	// }
-	// console.log('there is no difficulty');
-
-	//finding multiple tags possible with $in
-	const response = await problem.find({ tags: { $in: ['\n    ' + req.query.tags + '\n', '\n    ' + '*2300' + '\n'] } });
-	res.json(response[0]);
+	response ? res.status(200).json(response) : res.status(404).json({ error: 'Coding problem not found' });
 });
 
 /**
@@ -132,7 +108,7 @@ router.post('/problem/debug', codeRunnerLimiter, async (req, res) => {
 			}, method: 'POST', body: JSON.stringify({ code, problem_id })
 		});
 		const data = await response.json();
-		res.json(data);
+		res.status(200).json(data);
 	} else {
 		if (!code) {
 			res.status(400).json({ 'error': 'No code submitted!' });
@@ -273,36 +249,22 @@ router.post('/answer', (req, res) => {
 
 /**
  * GET api to get all data on a user based on userID
- * to use call '/api/user?email= with' or '/api/user?username= '
+ * to use it: '/api/user?email=' or '/api/user?username=' or '/api/user?id='
  */
 router.get('/user', async (req, res) => {
 	// check for email
 	if (req.query.email) {
-
 		const response = ENV_MODE !== 'dev' ? await user.findOne({ email: req.query.email }).cache(ONE_DAY) : await user.findOne({ email: req.query.email });
-		if (response) {
-			res.json(response);
-		}
-		// no data found with ID
-		else {
-			res.status(404).json({ title: 'No data found with that email' });
-		}
+		response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found with that email' });
 	}
 
 	// check for id parameter
 	else if (req.query.id) {
-		// check for valid mongo object id format
+		// check if the id query is in valid ObjectId format
 		if (mongoose.Types.ObjectId.isValid(req.query.id)) {
-			const response = await user.findById(req.query.id);
-			if (response != undefined) {
-				res.json(response);
-			}
-			// no data found with ID
-			else {
-				res.status(404).json({ title: 'No data found' });
-			}
+			const response = ENV_MODE !== 'dev' ? await user.findById(req.query.id).cache(ONE_DAY) : await user.findById(req.query.id);
+			response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found' });
 		}
-
 		else {
 			res.status(400).json({ title: 'Invalid ID' });
 		}
@@ -312,13 +274,7 @@ router.get('/user', async (req, res) => {
 	else if (req.query.username) {
 		// check for valid mongo object id format
 		const response = ENV_MODE !== 'dev' ? await user.findOne({ username: req.query.username }).cache(ONE_DAY) : await user.findOne({ username: req.query.username });
-		if (response) {
-			res.json(response);
-		}
-		// no data found with username
-		else {
-			res.status(404).json({ title: 'No data found with that username' });
-		}
+		response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found with that username' });
 	}
 
 	// missing parameter
