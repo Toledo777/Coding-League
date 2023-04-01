@@ -8,6 +8,7 @@ dotenv.config();
 const router = express.Router();
 
 const ENV_MODE = process.env.NODE_ENV || 'dev';
+const ONE_DAY = 86400;
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
