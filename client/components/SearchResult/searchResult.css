@@ -9,3 +9,21 @@
 .search_result>button {
     cursor: pointer;
 }
+
+.description_div {
+    padding-bottom: 1em;
+}
+
+.description {
+    line-height: 1.6;
+}
+
+.tag_desc {
+    background-color: rgb(31, 84, 119);
+    display: inline;
+    margin: 0.2rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 50rem;
+    white-space: nowrap;
+    border: none;
+  }
