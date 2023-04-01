@@ -266,7 +266,7 @@ router.get('/user', async (req, res) => {
 			response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found' });
 		}
 		else {
-			res.status(400).json({ title: 'Invalid ID' });
+			res.status(400).json({ error: 'Error 400: Invalid ID'});
 		}
 	}
 
@@ -279,7 +279,7 @@ router.get('/user', async (req, res) => {
 
 	// missing parameter
 	else {
-		res.status(400).json({ title: 'No parameter given' });
+		res.status(400).json({ error: 'Error 400: No parameter given' });
 	}
 });
 
@@ -380,6 +380,28 @@ router.put('/user/update', express.json(), async (req, res) => {
 	}
 });
 
+// return all answers associated with user
+router.get('/user/answers', async (req, res) =>  {
+	if (req.query.email) {
+		
+		// check if email exist
+		let emailExist = await user.exists({ email: req.query.email});
 
+		if (emailExist) {
+			const response = await userAnswer.find({email: req.query.email});
+			// return data
+			res.status(200).json(response);
+		}
+
+		// no problems found with email
+		else {
+			res.status(404).json({ title: 'No user associated with this email was found' });
+		}
+	}
+	// missing id parameter
+	else {
+		res.status(400).json({ title: 'No parameter given' });
+	}
+});
 
 export default router;

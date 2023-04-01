@@ -18,7 +18,7 @@ const store = MongoDBStore({
 
 // Catch any Session Store errors
 store.on('error', (err)=>{
-	console.log(err);
+	console.error(err);
 });
 
 app.use(session({
@@ -34,8 +34,6 @@ app.use(session({
 		sameSite: 'strict' //only sent for requests to same origin
 	}
 }));
-
-
 
 /**
  * Compress all JSON responses, resulting in smaller data sizes

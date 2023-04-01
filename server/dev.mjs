@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 8080;
 
 await dbConnect();
 
-if(!process.env.SECRET){
-	console.log('Error: add SECRET to .env (random set of characters)');
+if(!process.env.SECRET || !process.env.CODE_RUNNER_URI || !process.env.GOOGLE_CLIENT_ID){
+	console.log('Error: SECRET, CODE_RUNNER_URI, GOOGLE_CLIENT_ID must be set in environment');
 	process.exit(1);
 }
 app.listen(PORT, () => {
