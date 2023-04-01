@@ -62,3 +62,8 @@
     filter: brightness(1.1);
     transform: scale(0.98);
 }
+
+.btn:disabled {
+    filter: grayscale(1.0);
+    pointer-events: none;
+}

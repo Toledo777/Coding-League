@@ -12,6 +12,7 @@ nav>a {
     border-radius: 0.5rem;
 }
 
+
 nav>a::after {
     content: " ";
     display: block;
@@ -27,3 +28,9 @@ nav>a:focus::after,
 nav>a:hover::after {
     width: 100%;
 }
+
+/* test stying */
+.user>p:hover , .user>img:hover{ 
+    color: red;
+}
+

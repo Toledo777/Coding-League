@@ -43,6 +43,7 @@
     "connect-mongodb-session": "^3.1.1",
     "dompurify": "^3.0.0",
     "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.3",
     "fetch": "^1.1.0",
     "google-auth-library": "^8.7.0",
@@ -50,6 +51,7 @@
     "react-ace": "^10.1.0",
     "react-range-slider-input": "^3.0.7",
     "recachegoose": "^9.1.0",
+    "request-ip": "^3.3.0",
     "xterm": "^5.1.0",
     "xterm-addon-fit": "^0.7.0"
   },
