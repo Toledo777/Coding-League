@@ -9,6 +9,7 @@ const clientID = process.env.GOOGLE_CLIENT_ID;
 
 const client = new OAuth2Client(clientID);
 const ENV_MODE = process.env.NODE_ENV || 'dev';
+const ONE_DAY = 86400;
 
 router.use(express.json());
 
