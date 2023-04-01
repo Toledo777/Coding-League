@@ -51,7 +51,7 @@
                   "type": "object",
                   "properties": {
                     "title": {
-                      "example": "google client ID not found"
+                      "example": "Google Client ID missing"
                     }
                   }
                 }
@@ -225,6 +225,22 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Respond with 404 status if Database fetch returns with no coding problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Coding problem couldn't be found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -265,6 +281,22 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/Problem"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if Database fetch returns with no coding problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Coding problem couldn't be found"
+                    }
                   }
                 }
               }
@@ -354,6 +386,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if Database fetch returns with no coding problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Coding problem not found"
+                    }
+                  }
                 }
               }
             }
@@ -851,6 +899,71 @@
                     "title": {
                       "type": "string",
                       "example": "No users found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/answers": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Retrieve all answers associated with user",
+        "description": "Retrieve all answers associated with the user",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "description": "user's email, used to search for their answers",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "example@gmail.com"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with all of the user's answers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userAnswer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status if no parameters are given",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No parameter given"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 400 status if the user's email is not in our database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No user associated with this email was found"
                     }
                   }
                 }
