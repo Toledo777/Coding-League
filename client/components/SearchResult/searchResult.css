@@ -9,3 +9,7 @@
 .search_result>button {
     cursor: pointer;
 }
+
+.description {
+    line-height: 1.6;
+}
