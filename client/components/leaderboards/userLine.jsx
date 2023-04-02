@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function userLine({ user, index }) {
 
 	const toUser = () => {
-		if (user.username != 'error') {
+		if (user.username != 'error' && user.username != '---') {
 			navigate('/profile/' + user._id);
 
 		}
