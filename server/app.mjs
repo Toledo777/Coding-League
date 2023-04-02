@@ -1,6 +1,7 @@
 import express from 'express';
 import api from '../server/api.mjs';
 import auth from '../server/auth.mjs';
+import api_doc from './api_doc.mjs';
 import compression from 'compression';
 import session from 'express-session';
 import connectMongoDBSession from 'connect-mongodb-session';
@@ -39,13 +40,11 @@ app.use(session({
  * Compress all JSON responses, resulting in smaller data sizes
  */
 app.use(compression());
-
 app.use(express.static('dist'));
 
+app.use('/api/docs', api_doc);
 app.use('/auth', auth);
 app.use('/api', api);
-
-
 
 /**
  * 404 response if sub-query not provided

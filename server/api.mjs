@@ -248,21 +248,6 @@ router.get('/searchProblems', async (req, res) => {
 });
 
 /**
- * useless hello world, can be deleted in a later commit
- */
-router.get('/hello_world', (req, res) => {
-	res.send('Hello World');
-});
-
-/**
- * post api for client to server posts, going to be used in a different sprint
- */
-router.post('/answer', (req, res) => {
-	console.log(req.query.answer);
-	res.status(200);
-});
-
-/**
  * GET api to get all data on a user based on userID
  * to use it: '/api/user?email=' or '/api/user?username=' or '/api/user?id='
  */
@@ -342,56 +327,6 @@ router.get('/topUsers', async (req, res) => {
 	}
 	else {
 		res.status(400).json({ title: 'No parameter given' });
-	}
-});
-
-
-/**
- * POST api to post new user into database
- * Checks if username / email exists before creating one.
- */
-router.post('/user/create', async (req, res) => {
-	// check for user data in body
-	if (req.body.email) {
-		const userData = new user(req.body);
-
-		// Check if username / email already exists in DB before creating user
-		if (await user.exists({ username: userData.username })) {
-			res.status(409).json({ title: 'Username already exists' });
-		} else if (await user.exists({ email: userData.email })) {
-			res.status(409).json({ title: 'Email already exists' });
-		} else {
-			await userData.save();
-			res.status(201).json({ title: 'Account created' });
-		}
-	} else {
-		res.status(400).json({ title: 'ERROR: Missing email or data in body' });
-	}
-});
-
-/**
- * PUT api to update user data already present in database
- * uses email to update user
- */
-router.put('/user/update', express.json(), async (req, res) => {
-	// check for email
-	const userData = req.body;
-	if (req.body.email) {
-		const response = await user.updateOne({ email: userData.email }, userData);
-
-		// if response from db
-		if (response.acknowledged) {
-			res.status(204).json({ title: 'Account updated' });
-		}
-
-		// no data found with email
-		else {
-			res.status(404).json({ title: 'No data found' });
-		}
-	}
-	// missing id parameter
-	else {
-		res.status(400).json({ title: 'ERROR: Missing email parameter' });
 	}
 });
 

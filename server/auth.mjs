@@ -4,13 +4,12 @@ import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 const router = express.Router();
+const clientID = process.env.GOOGLE_CLIENT_ID;
 
+const client = new OAuth2Client(clientID);
 const ENV_MODE = process.env.NODE_ENV || 'dev';
 const ONE_DAY = 86400;
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 router.use(express.json());
 
@@ -54,7 +53,7 @@ router.post('/login', async (req, res) => {
 			// Once save. Re-find that user in DB
 			response = ENV_MODE !== 'dev' ? await userModel.findOne({ email: email }).cache(ONE_DAY) : await userModel.findOne({ email: email });
 			if (!response) {
-				return res.sendStatus(500).json({ error: 'Could not find user after creating one.' });
+				return res.sendStatus(500).json({ error: 'Could not find user after creating one' });
 			}
 		} catch {
 			res.sendStatus(500).json({ error: 'Error on user creation' });
