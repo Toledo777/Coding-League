@@ -76,25 +76,30 @@ async function runTestCase(code: string, testCase: TestCase, timeout = 2000): Pr
         readTextFileWithLimit(files.solution_out, BUFFER_SIZE),
     ]);
 
-    // TODO: Validate that this replacement is valid for all tests.
     const ok = status.success && answer == expected_output.replaceAll("\n", "");
 
     return { ok, stderr, stdout, answer, expected: expected_output };
 }
 
-function processTestResults(results: TestRunResult[], debug: true): ProblemDebugResult;
-function processTestResults(results: TestRunResult[], debug: false): ProblemAttemptResult;
-function processTestResults(results: TestRunResult[], debug: boolean): unknown {
+function processAttemptResults(results: TestRunResult[]): ProblemAttemptResult {
     const failures = results.filter(res => !res.ok).length;
 
-    const res: ProblemAttemptResult = {
+    return {
         failures,
         all_ok: failures == 0,
         total_ran: results.length,
-    };
+    }
+}
 
-    // Only add debug info if processed as debug
-    return debug ? { ...res, individual_tests: results } : res;
+function processDebugResults(results: TestRunResult[]): ProblemDebugResult {
+    const failures = results.filter(res => !res.ok).length;
+
+    return {
+        failures,
+        all_ok: failures == 0,
+        total_ran: results.length,
+        individual_tests: results,
+    }
 }
 
 async function runTestCases(code: string, tests: TestCase[], parallel = false): Promise<TestRunResult[]> {
@@ -114,11 +119,11 @@ async function runTestCases(code: string, tests: TestCase[], parallel = false): 
 export async function attemptProblem(code: string, problem: Problem): Promise<ProblemAttemptResult> {
     const tests = problem.testCases;
     const results = await runTestCases(code, tests);
-    return processTestResults(results, false);
+    return processAttemptResults(results);
 }
 
 export async function debugProblem(code: string, problem: Problem): Promise<ProblemDebugResult> {
     const tests = problem.testCases.slice(0, 5);
     const results = await runTestCases(code, tests, true);
-    return processTestResults(results, true);
+    return processDebugResults(results);
 }
