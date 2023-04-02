@@ -73,13 +73,31 @@ nav .user>img {
 }
 
 /* style codeforces logo */
+
+footer {
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+}
+
 footer img {
     max-height: 45px;
 }
 
-nav .logout {
-    display: flex;
-    flex-direction: row;
-    margin-right: 0;
-    cursor: pointer;
+/* styling for language select dropdown, feel free to edit */
+.problem>label {
+    margin: 0px 5px;
+}
+
+.problem>select {
+    margin: 10px 0px 0px 0px;
+}
+
+/* problem history ul */
+.historyList {
+    list-style-type: none
+}
+
+.historyList li {
+    padding: 8px 0px;
 }
