@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import Filter from '../../components/filter/filter';
-import { useState, useMemo } from 'react';
 import SearchResult from '../../components/SearchResult/searchResult';
 import './search.css';
 
@@ -32,6 +31,20 @@ export default function Search() {
 		setTags(newTags);
 		setDiffRange(newDiffRange);
 	};
+
+	useEffect(() => {
+		let storedSearch = window.sessionStorage.getItem('storedSearch');
+		if (storedSearch){
+			storedSearch = JSON.parse(storedSearch).results;
+			setData(storedSearch);
+		}
+	}, []);
+
+	useMemo(() => {
+		if (data.length !== 0){
+			window.sessionStorage.setItem('storedSearch', JSON.stringify({'results': data}));
+		}
+	}, [data]);
 
 	return (
 		<div className='search'>
