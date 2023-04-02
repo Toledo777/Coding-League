@@ -81,9 +81,12 @@ export default function Root() {
 					<p>{user && user.username}</p>
 					{user && <img src={user.avatar_uri} alt='user profile' referrerPolicy='no-referrer'></img>}
 					{authError}
-					{user && <button onClick={handleLogout}>Logout</button>}
-				</div>
 
+				</div>
+				<div className='logout'>
+					{user && <button onClick={handleLogout}>Logout</button>}
+
+				</div>
 				<h3>
 					{error && 'Error loading google authentication'}
 					{loading && 'Loading google authentication'}

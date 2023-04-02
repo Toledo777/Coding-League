@@ -69,3 +69,10 @@ nav .user>img {
     width: 45px;
     height: 45px;
 }
+
+nav .logout{
+    display: flex;
+    flex-direction: row;
+    margin-right: 0;
+    cursor: pointer;
+}
