@@ -25,7 +25,7 @@ export default function userLine({ user, index }) {
 	}
 	else {
 		return (
-			<div className='board_row' onClick={toUser}>
+			<div className='board_row' id={'user'+index} onClick={toUser}>
 				<div className='row_elem'>{user.position}</div>
 				<div className='row_elem'>{index}</div>
 				<div className='row_elem'>{user.username}</div>
