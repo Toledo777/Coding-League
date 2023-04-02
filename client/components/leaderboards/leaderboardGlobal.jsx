@@ -4,7 +4,7 @@ import UserLine from './userLine';
 export default function Leaderboard() {
 
 	let [error, loading, users] = [];
-	let url = '/api/topUsers?count=3';
+	let url = '/api/topUsers?count=20';
 
 	[error, loading, users] = useFetch(url, [], [url]);
 
