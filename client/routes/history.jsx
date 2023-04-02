@@ -56,11 +56,11 @@ export default function History() {
 	};
 
 	return (
-		<>
+		<div>
 			<h1>Problem History</h1>
 			{data && <ul className='historyList'> {data.map((problem, index) => <li key={index}><HistoryResult passed={problem.pass_test} submission={problem.submission} id={problem.problem_id} title={problem.problem_title}/></li>)}</ul>}
 			{!error && <h3>{message}</h3>}
 			{error && <h3>{error}</h3>}
-		</>
+		</div>
 	);
 }
