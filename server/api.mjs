@@ -314,7 +314,7 @@ router.get('/topUsers', async (req, res) => {
 		if (response) {
 			//if a person was created to be added
 			if (person) {
-				let together = [...response, { _id: 'null', username: '...' }, person];
+				let together = [...response, { _id: 'null', username: '---' }, person];
 				res.json(together);
 			}
 			else {
