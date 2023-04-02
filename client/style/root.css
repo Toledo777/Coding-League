@@ -91,3 +91,12 @@ footer img {
 .problem>select {
     margin: 10px 0px 0px 0px;
 }
+
+/* problem history ul */
+.historyList {
+    list-style-type: none
+}
+
+.historyList li {
+    padding: 8px 0px;
+}
