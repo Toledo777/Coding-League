@@ -16,10 +16,10 @@ export default function userLine({ user, index }) {
 	}
 
 	let navigate = useNavigate();
-	if (user.username === '...' && !user.exp) {
+	if (user.username === '---' && !user.exp) {
 		return (
-			<div className='board_row' onClick={toUser}>
-				{user.username}
+			<div className='board_ellipsis' onClick={toUser}>
+				<div className='row_elem'>{user.username}</div>
 			</div>
 		);
 	}
@@ -29,7 +29,6 @@ export default function userLine({ user, index }) {
 				<div className='row_elem'>{user.position}</div>
 				<div className='row_elem'>{index}</div>
 				<div className='row_elem'>{user.username}</div>
-				{/* <div className='row_elem_r'>|</div> */}
 				<div className='align'>
 					<div className='row_elem'>{user.exp}</div>
 				</div>
