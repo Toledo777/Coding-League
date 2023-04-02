@@ -51,6 +51,8 @@
     "react-ace": "^10.1.0",
     "react-range-slider-input": "^3.0.7",
     "recachegoose": "^9.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.2",
     "request-ip": "^3.3.0",
     "xterm": "^5.1.0",
     "xterm-addon-fit": "^0.7.0"
