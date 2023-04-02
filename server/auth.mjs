@@ -1,16 +1,15 @@
 import express from 'express';
-import session from 'express-session';
 import { OAuth2Client } from 'google-auth-library';
 import { user as userModel } from './models/user.mjs';
 import dotenv from 'dotenv';
-//TODO: figure out why secure true doesn't work on production
+
 dotenv.config();
-
 const router = express.Router();
+const clientID = process.env.GOOGLE_CLIENT_ID;
 
-
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(clientID);
+const ENV_MODE = process.env.NODE_ENV || 'dev';
+const ONE_DAY = 86400;
 
 router.use(express.json());
 
@@ -18,8 +17,8 @@ router.use(express.json());
  * Returns google client id to be used in the client
  */
 router.get('/google-client-id', (req, res) => {
-	let clientID = process.env.GOOGLE_CLIENT_ID;
-	res.json(clientID);
+	const clientID = process.env.GOOGLE_CLIENT_ID;
+	clientID ? res.status(200).json(clientID) : res.status(500).json({error: 'Google Client ID missing'});
 });
 
 /**
@@ -44,29 +43,28 @@ router.post('/login', async (req, res) => {
 
 	// Extract user data 
 	const { email, picture, name } = ticket.getPayload();
-	// const user = { email, picture, name };
-
-
-	let response = await userModel.findOne({ email: email });
+	
+	let response = ENV_MODE !== 'dev' ? await userModel.findOne({ email: email }).cache(ONE_DAY) : await userModel.findOne({ email: email });
 	if (!response) {
 		// If no response: Newly registered use. Create a new user into DB.
 		const user = new userModel({ email: email, username: name, avatar_uri: picture, exp: 0 });
 		try {
 			await user.save();
 			// Once save. Re-find that user in DB
-			response = await userModel.findOne({ email: email });
+			response = ENV_MODE !== 'dev' ? await userModel.findOne({ email: email }).cache(ONE_DAY) : await userModel.findOne({ email: email });
 			if (!response) {
-				return res.sendStatus(500).json({ error: 'Could not find user after creating one.' });
+				return res.sendStatus(500).json({ error: 'Could not find user after creating one' });
 			}
 		} catch {
 			res.sendStatus(500).json({ error: 'Error on user creation' });
 		}
 
 	} else {
-		// If there is response: Update user into DB
-		const updatedUser = new userModel({ _id: response._id, email: email, username: response.name, avatar_uri: response.picture, exp: response.exp });
-		console.log(updatedUser);
-		await userModel.updateOne({ email: email }, updatedUser);
+		// If there is response: Update user into DB only if either email, name, picture got changed
+		if(email !== response.email || name !== response.username || picture !== response.avatar_uri){
+			const updatedUser = new userModel({ _id: response._id, email: email, username: name, avatar_uri: picture, exp: response.exp });
+			await userModel.updateOne({ email: email }, updatedUser);
+		}
 	}
 
 	// {ACCORDING TO JAYA's DEMO} 
