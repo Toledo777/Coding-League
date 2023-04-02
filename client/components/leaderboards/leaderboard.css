@@ -72,6 +72,7 @@
 .row_elem {
   display: flex;
   width: 1.5em;
+  padding-left: 0.5em;
 }
 
 .align{
