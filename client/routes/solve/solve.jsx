@@ -23,8 +23,9 @@ export default function Solve() {
 	const { id } = params;
 	const [error, loading, problem] = useFetch(`/api/problem/id/?id=${id}`);
 	const [solution, setSolution] = useState('');
-	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
-	const [submitError, submitLoading, submitResult, sendSubmission] = usePost('/api/problem/submit');
+	let [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
+	let [submitError, submitLoading, submitResult, sendSubmission] = usePost('/api/problem/submit');
+	let [lastRun, setLastRun] = useState('');
 
 	const user = useCredentials();
 
@@ -37,6 +38,7 @@ export default function Solve() {
 		}
 
 		else {
+			setLastRun('debug');
 			sendDebug({
 				code: solution,
 				problem_id: id
@@ -45,6 +47,7 @@ export default function Solve() {
 	};
 
 	const submitSolution = () => {
+		setLastRun('submit');
 		sendSubmission({
 			email: user.email,
 			code: solution,
@@ -90,7 +93,7 @@ export default function Solve() {
 		<SplitPane labels={['problem', 'output']}>
 			{loading && 'Loading...' || error && <SolveError error={error} /> || <Problem problem={problem} />}
 			<div>
-				{<AttemptOutput result={debugResult || submitResult} />}
+				{<AttemptOutput result={lastRun === 'debug' && debugResult || lastRun === 'submit' && submitResult} />}
 				{debugError && <div>{debugError.message}</div>}
 				{submitError && <div>{submitError.message}</div>}
 				{debugLoading && <Loading />}
