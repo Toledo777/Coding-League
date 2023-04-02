@@ -44,7 +44,6 @@ export default function Root() {
 			// Trigger useCredentials() to fetch for user creds, and display user's name
 			dispatchEvent(new Event('login'));
 		}
-
 	}
 
 	/** 
@@ -74,15 +73,20 @@ export default function Root() {
 			<nav className='panel'>
 				<Link id='siteName' to={'/'}>Coding League</Link>
 				<Link to={'/search'}>Search</Link>
+				<Link to={'/history'}>History</Link>
+				<Link to={'/leaderboard/'}>Leaderboard</Link>
 
 				<div className='user' onClick={viewProfile} >
 					{!user && !error && <GoogleLogin onSuccess={handleLogin} onError={handleError} />}
 					<p>{user && user.username}</p>
 					{user && <img src={user.avatar_uri} alt='user profile' referrerPolicy='no-referrer'></img>}
 					{authError}
-					{user && <button onClick={handleLogout}>Logout</button>}
+
 				</div>
-				
+				<div className='logout'>
+					{user && <button onClick={handleLogout}>Logout</button>}
+
+				</div>
 				<h3>
 					{error && 'Error loading google authentication'}
 					{loading && 'Loading google authentication'}

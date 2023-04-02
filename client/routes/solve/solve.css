@@ -18,4 +18,9 @@
 
 .editor-sizer {
     width: auto;
+    overflow: hidden;
+}
+
+.editor-sizer>* {
+    max-height: 100%;
 }

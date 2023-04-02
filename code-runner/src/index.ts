@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.114.0/http/server.ts";
 import { router, MatchHandler } from "https://crux.land/router@0.0.5";
-import { attemptProblem, debugProblem } from "./problem_test_runner.ts";
+import { attemptProblem, debugProblem, ProblemAttemptResult, ProblemDebugResult } from "./problem_test_runner.ts";
 import fetchProblemById from "./problem_fetcher.ts";
 
 type TestAttemptRequest = {
@@ -8,25 +8,25 @@ type TestAttemptRequest = {
 	code: string,
 }
 
+async function handleTestAttemptRequest(request: TestAttemptRequest, debug: boolean):
+	Promise<ProblemDebugResult | ProblemAttemptResult> {
+	const problem_data = await fetchProblemById(request.problem_id);
+	if (debug) {
+		return await debugProblem(request.code, problem_data);
+	} else {
+		return await attemptProblem(request.code, problem_data);
+	}
+}
+
 const routes: Record<string, MatchHandler> = {
 	"POST@/debug_problem": async (req) => {
-		const { problem_id, code }: TestAttemptRequest = await req.json();
-		const problem_data = await fetchProblemById(problem_id);
-		const result = await debugProblem(code, problem_data);
-		return Response.json(result);
+		return Response.json(await handleTestAttemptRequest(await req.json(), true));
 	},
-
 	"POST@/attempt_problem": async (req) => {
-		const { problem_id, code }: TestAttemptRequest = await req.json();
-		const problem_data = await fetchProblemById(problem_id);
-		const result = await attemptProblem(code, problem_data);
-		return Response.json(result);
+		return Response.json(await handleTestAttemptRequest(await req.json(), false));
 	},
-	"/": (_req) => new Response("Hello World!", { status: 200 }),
 }
 
 console.log("Listening!");
-
-console.log(await fetchProblemById("233B"));
 
 await serve(router(routes), { addr: ":8000" });

@@ -18,10 +18,10 @@ export default function AttemptOutput({ result }) {
 		<div>
 			<div className='status'>{all_ok ? 'Passed' : 'Failed'}</div>
 			<div className='counts'>
-				Passed: {total_ran - failures}/{total_ran}
+				{result && <p>Test cases: {total_ran - failures}/{total_ran}</p>}
 			</div>
 			<div>
-				{individual_tests
+				{individual_tests && individual_tests
 					.map((testCase, index) => ({ testCase, index }))
 					.map(TestCaseView)}
 			</div>

@@ -76,3 +76,10 @@ nav .user>img {
 footer img {
     max-height: 45px;
 }
+
+nav .logout {
+    display: flex;
+    flex-direction: row;
+    margin-right: 0;
+    cursor: pointer;
+}
