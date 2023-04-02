@@ -56,7 +56,6 @@ export default function Solve() {
 	const handleSolutionChange = (value) => {
 		setSolution(value);
 		if (user){
-			console.log("updating localStorage");
 			window.localStorage.setItem(`${id}-${user.email}`, value);
 		}
 	};
@@ -68,14 +67,9 @@ export default function Solve() {
 				if (answer && answer !== '') {
 					setAnswer(answer);
 				} else {
-					// const answerUrl = new URL(`/user/answer/?email=${user.email}&id=${id}`);
-					// answerUrl.searchParams.set('email', user.email);
-					// answerUrl.searchParams.set('problem_id', id);
 					answer = await fetch(`/api/user/answer/?email=${encodeURIComponent(user.email)}&id=${id}`);
 					answer = await answer.json();
-					console.log(answer);
 					if (!answer.error) {
-						console.log(answer.submission);
 						setAnswer(answer.submission);
 					} else {
 						setAnswer('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
