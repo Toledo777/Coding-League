@@ -1,15 +1,13 @@
-import express, { response } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
+import rateLimit from 'express-rate-limit';
+import requestIp from 'request-ip';
+import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
 import { problem } from './models/problem.mjs';
 import { user } from './models/user.mjs';
 import { userAnswer } from './models/userAnswer.mjs';
-import * as dotenv from 'dotenv';
-import mongoose from 'mongoose';
-dotenv.config();
-import fs from 'fs/promises';
-
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
-import { create, insertBatch, search } from '@lyrasearch/lyra';
 
 import rateLimit from 'express-rate-limit';
 import requestIp from 'request-ip';
@@ -17,22 +15,39 @@ import requestIp from 'request-ip';
 dotenv.config();
 const router = express.Router();
 
+// global variable to store tags to be fetched using /allTags route for problem search filtering
+let tags = [];
+
 (async function () {
-	const dbFind = (await problem.find({}, { _id: 1, title: 1, tags: 1 })).map(({ _id, title, tags }) => ({ _id, title, tags }));
-	await insertProblems(dbFind);
+	const dbResults = await problem.find({}, { _id: 1, title: 1, tags: 1, description: 1 });
+
+	// Remove all the wrapping that mongoose does so lyra will accept the data
+	const problems = dbResults.map(
+		({ _id, title, tags, description }) => ({ _id, title, tags, description })
+	);
+
+	// push unique tags to global scope tags array above this function
+	problems.forEach((problem) => {
+		problem.tags.forEach((tag) => {
+			if (tags.indexOf(tag) == -1 && !tag.match(/\*\d{3,4}/gm)) {
+				tags.push(tag);
+			}
+		});
+	});
+
+	// insert problems to lyra problems schema
+	try {
+		await insertProblems(problems);
+		console.log('Lyra DB populated');
+	} catch (e) {
+		console.log('Error inserting problems: ' + e);
+		console.log('Problem searching not active!');
+	}
 })();
 
 const CODE_RUNNER_URI = process.env.CODE_RUNNER_URI;
+const ENV_MODE = process.env.NODE_ENV || 'dev';
 const ONE_DAY = 86400;
-
-let problemTags;
-
-try {
-	problemTags = await fs.readFile('./server/assets/all_tags.json', 'utf-8');
-	problemTags = JSON.parse(problemTags);
-} catch (e) {
-	console.log(e);
-}
 
 // Parse body as json
 router.use(bodyParser.json());
@@ -55,22 +70,22 @@ const codeRunnerLimiter = rateLimit({
 const [base, firstClear] = [100, 175];
 
 /**
- * gets random problems in a range given by req.query.start (2941 is equal to the amount of problems in our db)
- * this is so we don't have to fetch the entire db every time we want some randoms
- *  
+ * gets random problem from the DB
  */
 router.get('/problem/random', async (req, res) => {
-	let response = await problem.aggregate([{ $sample: { size: 1 } }]);
-	res.json(response[0]);
+	const response = await problem.aggregate([{ $sample: { size: 1 } }]);
+	response ? res.status(200).json(response[0]) : res.status(404).json({ error: 'Coding problem couldn\'t be found' });
 });
 
-//fetches {req.query.count} number of problems starting at {req.query.start} in the db's entire list of problems (for pagination) 
+/**
+ *fetches {req.query.count} number of problems starting at {req.query.start} in the db's entire list of problems
+ */
 router.get('/problem/list', async (req, res) => {
-	let response = await problem.aggregate([
+	const response = await problem.aggregate([
 		{ $skip: parseInt(req.query.start) },
 		{ $limit: parseInt(req.query.count) }
 	]);
-	res.json(response);
+	response ? res.status(200).json(response) : res.status(404).json({ error: 'Coding problems couldn\'t be found' });
 });
 
 /**
@@ -78,7 +93,7 @@ router.get('/problem/list', async (req, res) => {
  */
 router.get('/problem/id', async (req, res) => {
 	if (req.query.id) {
-		const response = await problem.findById(req.query.id).cache(ONE_DAY);
+		const response = ENV_MODE !== 'dev' ? await problem.findById(req.query.id).cache(ONE_DAY) : await problem.findById(req.query.id);
 		if (response != undefined) {
 			res.json(response);
 		} else {
@@ -93,28 +108,8 @@ router.get('/problem/id', async (req, res) => {
  * gets a single problem by its title
  */
 router.get('/problem/title', async (req, res) => {
-	const response = await problem.findOne({ title: req.query.title }).cache(ONE_DAY);
-	res.json(response);
-});
-
-
-/**
- * gets the first problem related to the tag sent by the user,
- * incomplete until difficulty implementation is complete and I figure out a way to deal with more than one tags with a space in them
- */
-router.get('/problem/tags', async (req, res) => {
-	//preliminary difficulty implementation
-
-	// if (req.query.difficulty) {
-	// 	console.log('there is difficulty range');
-	// 	const response = await problem.find({});
-	// 	res.json(response[0]);
-	// }
-	// console.log('there is no difficulty');
-
-	//finding multiple tags possible with $in
-	const response = await problem.find({ tags: { $in: ['\n    ' + req.query.tags + '\n', '\n    ' + '*2300' + '\n'] } });
-	res.json(response[0]);
+	const response = ENV_MODE !== 'dev' ? await problem.findOne({ title: req.query.title }).cache(ONE_DAY) : await problem.findOne({ title: req.query.title });
+	response ? res.status(200).json(response) : res.status(404).json({ error: 'Coding problem not found' });
 });
 
 /**
@@ -131,7 +126,7 @@ router.post('/problem/debug', codeRunnerLimiter, async (req, res) => {
 			}, method: 'POST', body: JSON.stringify({ code, problem_id })
 		});
 		const data = await response.json();
-		res.json(data);
+		res.status(200).json(data);
 	} else {
 		if (!code) {
 			res.status(400).json({ 'error': 'No code submitted!' });
@@ -225,10 +220,10 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
  * used in react to populate the tag multiselect field in the filter component of the search page
  */
 router.get('/allTags', async (req, res) => {
-	if (problemTags == null) {
+	if (tags.length == 0) {
 		res.status(500).json({ error: 'tags unavailable' });
 	} else {
-		res.json(problemTags);
+		res.status(200).json(tags);
 	}
 });
 
@@ -256,121 +251,109 @@ router.get('/searchProblems', async (req, res) => {
 });
 
 /**
- * useless hello world, can be deleted in a later commit
- */
-router.get('/hello_world', (req, res) => {
-	res.send('Hello World');
-});
-
-/**
- * post api for client to server posts, going to be used in a different sprint
- */
-router.post('/answer', (req, res) => {
-	console.log(req.query.answer);
-	res.status(200);
-});
-
-/**
  * GET api to get all data on a user based on userID
- * to use call '/api/user?email= with' or '/api/user?username= '
+ * to use it: '/api/user?email=' or '/api/user?username=' or '/api/user?id='
  */
 router.get('/user', async (req, res) => {
 	// check for email
 	if (req.query.email) {
-
-		const response = await user.findOne({ email: req.query.email });
-		if (response) {
-			res.json(response);
-		}
-		// no data found with ID
-		else {
-			res.status(404).json({ title: 'No data found with that email' });
-		}
+		const response = ENV_MODE !== 'dev' ? await user.findOne({ email: req.query.email }).cache(ONE_DAY) : await user.findOne({ email: req.query.email });
+		response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found with that email' });
 	}
 
 	// check for id parameter
 	else if (req.query.id) {
-		// check for valid mongo object id format
+		// check if the id query is in valid ObjectId format
 		if (mongoose.Types.ObjectId.isValid(req.query.id)) {
-			const response = await user.findById(req.query.id);
-			if (response != undefined) {
-				res.json(response);
-			}
-			// no data found with ID
-			else {
-				res.status(404).json({ title: 'No data found' });
-			}
+			const response = ENV_MODE !== 'dev' ? await user.findById(req.query.id).cache(ONE_DAY) : await user.findById(req.query.id);
+			response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found' });
 		}
-
 		else {
-			res.status(400).json({title: 'Invalid ID'});
+			res.status(400).json({ error: 'Error 400: Invalid ID' });
 		}
 	}
 
 	// check for username
 	else if (req.query.username) {
-		const response = await user.findOne({ username: req.query.username });
-		if (response) {
-			res.json(response);
-		}
-		// no data found with username
-		else {
-			res.status(404).json({ title: 'No data found with that username' });
-		}
+		// check for valid mongo object id format
+		const response = ENV_MODE !== 'dev' ? await user.findOne({ username: req.query.username }).cache(ONE_DAY) : await user.findOne({ username: req.query.username });
+		response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found with that username' });
 	}
 
 	// missing parameter
+	else {
+		res.status(400).json({ error: 'Error 400: No parameter given' });
+	}
+});
+
+
+/**
+ * GET api to call the top X users
+ * to use call '/api/users?count=X 
+ * sorted by descending order
+ * if a user is not in the leaderboard top X, they will be added to the bottom
+ */
+router.get('/topUsers', async (req, res) => {
+	if (req.query.count) {
+		let person = '';
+		const response = await user.aggregate([
+			{ $sort: { exp: -1 } },
+			{ $limit: parseInt(req.query.count) },
+		]);
+		//check if a user is signed in, if so then find out if they're in the current leaderboard list, if not then create them to add at the bottom
+		if (req.session.user) {
+			let signedIn = response.find(({ username }) => username === req.session.user.username);
+			if (!signedIn) {
+				const response2 = await user.aggregate([
+					{ $sort: { exp: -1 } },
+				]);
+				person = response2.find((element) => element.username === req.session.user.username);
+				let position = (element) => element.username === req.session.user.username;
+				let index = response2.findIndex(position);
+				person = { ...person, position: index };
+			}
+		}
+
+		if (response) {
+			//if a person was created to be added
+			if (person) {
+				let together = [...response, { _id: 'null', username: '---' }, person];
+				res.json(together);
+			}
+			else {
+				res.json(response);
+			}
+		}
+		else {
+			res.status(404).json({ title: 'No users found' });
+		}
+	}
 	else {
 		res.status(400).json({ title: 'No parameter given' });
 	}
 });
 
-/**
- * POST api to post new user into database
- * Checks if username / email exists before creating one.
- */
-router.post('/user/create', async (req, res) => {
-	// check for user data in body
-	if (req.body.email) {
-		const userData = new user(req.body);
+// return all answers associated with user
+router.get('/user/answers', async (req, res) => {
+	if (req.query.email) {
 
-		// Check if username / email already exists in DB before creating user
-		if (await user.exists({ username: userData.username })) {
-			res.status(409).json({ title: 'Username already exists' });
-		} else if (await user.exists({ email: userData.email })) {
-			res.status(409).json({ title: 'Email already exists' });
-		} else {
-			await userData.save();
-			res.status(201).json({ title: 'Account created' });
-		}
-	} else {
-		res.status(400).json({ title: 'ERROR: Missing email or data in body' });
-	}
-});
+		// check if email exist
+		let emailExist = await user.exists({ email: req.query.email });
 
-/**
- * PUT api to update user data already present in database
- * uses email to update user
- */
-router.put('/user/update', express.json(), async (req, res) => {
-	// check for email
-	const userData = req.body;
-	if (req.body.email) {
-		const response = await user.updateOne({ email: userData.email }, userData);
-
-		// if response from db
-		if (response.acknowledged) {
-			res.status(204).json({ title: 'Account updated' });
+		if (emailExist) {
+			const response = await userAnswer.find({ email: req.query.email });
+			// return data
+			res.status(200).json(response);
 		}
 
-		// no data found with email
+		// no problems found with email
 		else {
-			res.status(404).json({ title: 'No data found' });
+			res.status(404).json({ title: 'No user associated with this email was found' });
 		}
 	}
 	// missing id parameter
 	else {
-		res.status(400).json({ title: 'ERROR: Missing email parameter' });
+		res.status(400).json({ title: 'No parameter given' });
 	}
 });
 
