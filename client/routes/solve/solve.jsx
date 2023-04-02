@@ -73,7 +73,7 @@ export default function Solve() {
 				} else {
 					answer = await fetch(`/api/user/answer/?email=${encodeURIComponent(user.email)}&id=${id}`);
 					answer = await answer.json();
-					if (!answer.error) {
+					if (answer) {
 						setSolution(answer.submission);
 					} else {
 						setSolution(template);

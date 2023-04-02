@@ -362,13 +362,7 @@ router.get('/user/answer', async (req, res) => {
 	const problem_id = req.query.id;
 	if (email && problem_id) {
 		let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
-		if (answer) {
-			// already attempted, has submission
-			res.json(answer);
-		} else {
-			// no submission, hasn't attempted
-			res.json({ 'error': 'no attempts' });
-		}
+		res.json(answer);
 	} else {
 		if (!problem_id) {
 			res.status(400).json({ 'error': 'missing problem_id!' });
