@@ -10,8 +10,8 @@ export default function HistoryResult({ passed, submission, id, title }) {
 	return (
 		<div className='history_result panel'>
 			<h3>{id} {title}</h3>
-			<h3>Passed: {passed ? 'True': 'False'}</h3>
-			<h3>Submission:</h3>
+			<h4>Passed: {passed ? 'True': 'False'}</h4>
+			<h4>Submission:</h4>
 			<pre>
 				<code>{submission}</code>
 			</pre>
