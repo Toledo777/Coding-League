@@ -2,6 +2,8 @@ import { allocateProblemTestProcessFiles, TestRunnerFiles } from "./problem_test
 import { readTextFileWithLimit } from "./safe_reader.ts";
 import { Problem, TestCase } from "./types/problem.d.ts";
 
+const BUFFER_SIZE = 4096 * 4 // 16kb
+
 type TestRunResult = {
     ok: boolean,
     stdout: string,
@@ -11,15 +13,14 @@ type TestRunResult = {
 }
 
 export type ProblemDebugResult = {
-    individual_tests: TestRunResult[],
-} & ProblemAttemptResult;
-
-export type ProblemAttemptResult = {
     all_ok: boolean,
     total_ran: number,
     failures: number,
-    individual_tests?: TestRunResult[],
-}
+    individual_tests: TestRunResult[],
+};
+
+
+export type ProblemAttemptResult = Omit<ProblemDebugResult, "individual_tests">;
 
 
 function createTestingPostfix(test_input: string, result_file: string) {
@@ -70,9 +71,9 @@ async function runTestCase(code: string, testCase: TestCase, timeout = 2000): Pr
     clearTimeout(kill_timeout);
 
     const [stdout, stderr, answer] = await Promise.all([
-        readTextFileWithLimit(files.debug_out, 2048),
-        readTextFileWithLimit(files.error_out, 2048),
-        readTextFileWithLimit(files.solution_out, 2048),
+        readTextFileWithLimit(files.debug_out, BUFFER_SIZE),
+        readTextFileWithLimit(files.error_out, BUFFER_SIZE),
+        readTextFileWithLimit(files.solution_out, BUFFER_SIZE),
     ]);
 
     // TODO: Validate that this replacement is valid for all tests.
