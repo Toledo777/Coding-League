@@ -18,7 +18,7 @@ export default function AttemptOutput({ result }) {
 		<div>
 			<div className='status'>{all_ok ? 'Passed' : 'Failed'}</div>
 			<div className='counts'>
-				{total_ran && failures && <p>Passed: {total_ran - failures}/{total_ran}</p>}
+				{result && <p>Test cases: {total_ran - failures}/{total_ran}</p>}
 			</div>
 			<div>
 				{individual_tests && individual_tests

@@ -354,4 +354,24 @@ router.get('/user/answers', async (req, res) => {
 	}
 });
 
+/**
+ * Checks if user has already submitted an answer for the given problem and returns it
+ */
+router.get('/user/answer', async (req, res) => {
+	const email = req.query.email;
+	const problem_id = req.query.id;
+	if (email && problem_id) {
+		let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
+		res.json(answer);
+	} else {
+		if (!problem_id) {
+			res.status(400).json({ 'error': 'missing problem_id!' });
+		}
+		else if (!email) {
+			res.status(400).json({ 'error': 'missing email!' });
+		}
+	}
+});
+
+
 export default router;

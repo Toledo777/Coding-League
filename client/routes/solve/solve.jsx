@@ -23,8 +23,9 @@ export default function Solve() {
 	const { id } = params;
 	const [error, loading, problem] = useFetch(`/api/problem/id/?id=${id}`);
 	const [solution, setSolution] = useState('');
-	const [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
-	const [submitError, submitLoading, submitResult, sendSubmission] = usePost('/api/problem/submit');
+	let [debugError, debugLoading, debugResult, sendDebug] = usePost('/api/problem/debug');
+	let [submitError, submitLoading, submitResult, sendSubmission] = usePost('/api/problem/submit');
+	let [lastRun, setLastRun] = useState('');
 
 	const user = useCredentials();
 
@@ -37,6 +38,7 @@ export default function Solve() {
 		}
 
 		else {
+			setLastRun('debug');
 			sendDebug({
 				code: solution,
 				problem_id: id
@@ -45,6 +47,7 @@ export default function Solve() {
 	};
 
 	const submitSolution = () => {
+		setLastRun('submit');
 		sendSubmission({
 			email: user.email,
 			code: solution,
@@ -61,16 +64,33 @@ export default function Solve() {
 	};
 
 	useEffect(() => {
-		if (user){
-			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
+		async function fetchAnswer(){
+			const template = '//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}';
+			if (user){
+				let answer = window.localStorage.getItem(`${id}-${user.email}`);
+				if (answer && answer !== '') {
+					setSolution(answer);
+				} else {
+					answer = await fetch(`/api/user/answer/?email=${encodeURIComponent(user.email)}&id=${id}`);
+					answer = await answer.json();
+					if (answer) {
+						setSolution(answer.submission);
+					} else {
+						setSolution(template);
+					}
+				}
+			} else {
+				setSolution(template);
+			}
 		}
+		fetchAnswer();
 	}, [user]);
 
 	return <div className='solve'>
 		<SplitPane labels={['problem', 'output']}>
 			{loading && 'Loading...' || error && <SolveError error={error} /> || <Problem problem={problem} />}
 			<div>
-				{<AttemptOutput result={debugResult || submitResult} />}
+				{<AttemptOutput result={lastRun === 'debug' && debugResult || lastRun === 'submit' && submitResult} />}
 				{debugError && <div>{debugError.message}</div>}
 				{submitError && <div>{submitError.message}</div>}
 				{debugLoading && <Loading />}
@@ -84,7 +104,7 @@ export default function Solve() {
 			</div>
 			<div className='editor-buttons'>
 				<button disabled={error} className='debug btn' onClick={debugSolution}>Debug</button>
-				<button disabled={error} className='submit btn confirm' onClick={debugSolution}>Submit</button>
+				<button disabled={error} className='submit btn confirm' onClick={submitSolution}>Submit</button>
 			</div>
 		</div>
 	</div>;
