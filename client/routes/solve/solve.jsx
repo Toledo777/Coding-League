@@ -46,14 +46,23 @@ export default function Solve() {
 		}
 	};
 
-	const submitSolution = () => {
-		setLastRun('submit');
-		sendSubmission({
-			email: user.email,
-			code: solution,
-			problem_id: id,
-			problem_title: problem.title
-		});
+	const submitSolution = async () => {
+		const response = await fetch('/auth/protected');
+
+		// check if user is signed in
+		if (!response.ok) {
+			alert('Please sign in to debug and submit your code.');
+		}
+
+		else {
+			setLastRun('submit');
+			sendSubmission({
+				email: user.email,
+				code: solution,
+				problem_id: id,
+				problem_title: problem.title
+			});
+		}
 	};
 
 	const handleSolutionChange = (value) => {
