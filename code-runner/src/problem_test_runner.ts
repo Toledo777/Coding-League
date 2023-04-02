@@ -18,6 +18,7 @@ export type ProblemAttemptResult = {
     all_ok: boolean,
     total_ran: number,
     failures: number,
+    individual_tests?: TestRunResult[],
 }
 
 
