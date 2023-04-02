@@ -62,6 +62,7 @@ export default function Solve() {
 
 	useEffect(() => {
 		async function fetchAnswer(){
+			const template = '//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}';
 			if (user){
 				let answer = window.localStorage.getItem(`${id}-${user.email}`);
 				if (answer && answer !== '') {
@@ -72,11 +73,11 @@ export default function Solve() {
 					if (!answer.error) {
 						setAnswer(answer.submission);
 					} else {
-						setAnswer('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
+						setAnswer(template);
 					}
 				}
 			} else {
-				setAnswer('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
+				setAnswer(template);
 			}
 		}
 		function setAnswer(answer){
