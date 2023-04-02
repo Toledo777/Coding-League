@@ -11,7 +11,6 @@ export default function Profile() {
 	const { id } = params;
 	// fetch user with data to pass to user component
 	const [userErr, userLoading, userData] = useFetch('/api/user?id=' + id, '');
-
 	return (
 		<>
 			<h1>Profile Page</h1>

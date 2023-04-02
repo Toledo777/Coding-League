@@ -15,11 +15,11 @@ export default function Problem({ problem }) {
 			<div className='problem-content'>
 				<div className='description'>
 					<div dangerouslySetInnerHTML={{ __html: problem.description }} />
-					<div dangerouslySetInnerHTML={{ __html: problem.input_specification }} />
-					<div dangerouslySetInnerHTML={{ __html: problem.output_specification }} />
-					<div dangerouslySetInnerHTML={{ __html: problem.memory_limit }} />
-					<div dangerouslySetInnerHTML={{ __html: problem.time_limit }} />
-					<div dangerouslySetInnerHTML={{ __html: problem.note }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.inputSpecification }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.outputSpecification }} />
+					<div dangerouslySetInnerHTML={{ __html: 'Memory Limit : ' + problem.memoryLimit }} />
+					<div dangerouslySetInnerHTML={{ __html: 'Time Limit: ' + problem.timeLimit }} />
+					<div dangerouslySetInnerHTML={{ __html: problem.notes }} />
 				</div>
 			</div>
 		</div>

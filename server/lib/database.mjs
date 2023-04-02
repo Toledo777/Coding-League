@@ -6,10 +6,15 @@ dotenv.config();
 // database url
 const mongoDB = process.env.ATLAS_URI;
 mongoose.set('strictQuery', false);
+const ENV_MODE = process.env.NODE_ENV || 'dev';
 
-cachegoose(mongoose, {
-	engine: 'memory'
-});
+// Caching gets turned on only if it's not in 'dev' mode
+if(ENV_MODE !== 'dev'){
+	cachegoose(mongoose, {
+		engine: 'memory'
+	});
+}
+
 
 // database connection function
 async function dbConnect() {

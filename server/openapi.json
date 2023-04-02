@@ -1,0 +1,1094 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Coding League's express APIs",
+    "version": "1.0.0",
+    "description": "This page contains information about our website and how our APIs are used.",
+    "license": {
+      "name": "MIT",
+      "url": "https://spdx.org/licenses/MIT.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Development server"
+    },
+    {
+      "url": "https://codingleague.azurewebsites.net",
+      "description": "Production server"
+    },
+    {
+      "url": "https://codingleaguetesting.azurewebsites.net",
+      "description": "Deployed testing server"
+    }
+  ],
+  "paths": {
+    "/auth/google-client-id": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Retrieve Google Client ID",
+        "description": "Retrieve google client ID from environment variable for our client-side to use Google Authentication components.",
+        "responses": {
+          "200": {
+            "description": "Return google client ID from environment",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "XXX-YYY.apps.googleusercontent.com"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response with error if client ID is not found in environment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "example": "Google Client ID missing"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login the user to Coding League",
+        "description": "Login the user to Coding League by first verifying their Google token, then inserting or updating their info into database, then setting their cookie session.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "description": "User's Google ID token to verify and extract info from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK response if the user's token is valid. The user is successfully created or updated in the database. And the session is successfully generated."
+          },
+          "401": {
+            "description": "Responds with 401 status if either no token was provided in parameters, or the ticket is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "No Ticket in Query": {
+                    "value": {
+                      "error": "no token"
+                    }
+                  },
+                  "Invalid token ID": {
+                    "value": {
+                      "error": "Google ticket invalid"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Respond with 500 status if errors occur during user creation process, or during session generation process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "General User Creation Error": {
+                    "value": {
+                      "error": "Error on user creation"
+                    }
+                  },
+                  "No User Found After Creation": {
+                    "value": {
+                      "error": "Could not find user after creating one"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/credentials": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Retrieve user session info",
+        "description": "Retrieve user info that's contained inside the session. If the session doesn't exists, respond with a value indicating the current user is not logged in",
+        "responses": {
+          "200": {
+            "description": "Returns user values from session.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "User Logged In": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "User Not Logged In": {
+                    "value": {
+                      "notLoggedIn": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/protected": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Verifies user's authentication",
+        "description": "Checks if the current user is in session. Used by our client-side to restrict features to authenticated users only",
+        "responses": {
+          "200": {
+            "description": "User is in session and authentication. Allows to view content"
+          },
+          "401": {
+            "description": "User is NOT in session, and NOT authentication. Not allowed to view restricted content"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout the user from Coding League",
+        "description": "Logs out the current user by clearing their session cookie",
+        "responses": {
+          "200": {
+            "description": "User has successfully logged out from Coding League"
+          },
+          "401": {
+            "description": "User is not in session or autenticated to do this action"
+          },
+          "500": {
+            "description": "Error occured when trying to destroy session"
+          }
+        }
+      }
+    },
+    "/api/problem/random": {
+      "get": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Retrieve a random problem from our Database",
+        "description": "Get random problem from a range between all of the problems in our Database",
+        "responses": {
+          "200": {
+            "description": "Return a problem, or null (if not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if Database fetch returns with no coding problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Coding problem couldn't be found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/problem/list": {
+      "get": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Retrieve list of problems",
+        "description": "Fetches number of problems starting at query start in DB's list of problems",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start",
+            "description": "starting index of our Database problems to fetch",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "count",
+            "description": "ending index of our Database problems to fetch",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a list of problems fetched from our Database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Problem"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if Database fetch returns with no coding problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Coding problem couldn't be found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/problem/id": {
+      "get": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Retrieve a coding problem based on ID",
+        "description": "Retrieve a coding problem based on ID",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "description": "ID of a coding problem",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1234E"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a problem fetched from our Database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if either the ID is not given in parameter, or the ID couldn't be found in our Database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "No ID in Parameter": {
+                    "value": {
+                      "title": "No ID input"
+                    }
+                  },
+                  "ID not found in database": {
+                    "value": {
+                      "title": "invalid ID"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/problem/title": {
+      "get": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Retrieve a coding problem based on title",
+        "description": "Retrieve a coding problem based on title",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "description": "Title of a coding problem",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "E. Special Permutation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a problem fetched from our Database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if Database fetch returns with no coding problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Coding problem not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/problem/debug": {
+      "post": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Submit code to be ran by code-runner.",
+        "description": "Using the code submitted by user, run the code-runner and output the results based on the problem's test cases",
+        "requestBody": {
+          "description": "Contains the problem's id and user submitted code",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "example": "console.log(2+2);"
+                  },
+                  "problem_id": {
+                    "type": "string",
+                    "example": "1234E"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns results outputted by code runner. Showcasing number of tests run, how many tests failed, and a boolean if they all passed or not",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "all_ok": {
+                      "type": "boolean"
+                    },
+                    "total_ran": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "failures": {
+                      "type": "number"
+                    },
+                    "individual_tests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ok": {
+                            "type": "boolean"
+                          },
+                          "stdout": {
+                            "type": "string",
+                            "example": 4
+                          },
+                          "stderr": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "answer": {
+                            "type": "string",
+                            "example": "console.log(2+2);"
+                          },
+                          "expected": {
+                            "type": "string",
+                            "example": 4
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/problem/submit": {
+      "post": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Submit code to have EXP calculated.",
+        "description": "Submit code to have it be checked by code-runner, then calculate and post EXP for the user if the code solution is correct.",
+        "requestBody": {
+          "description": "Contains the user, and their solution to a problem",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "omfgll@hotmail.com"
+                  },
+                  "problem_id": {
+                    "type": "string",
+                    "example": "1234E"
+                  },
+                  "problem_title": {
+                    "type": "string",
+                    "example": "E. Special Permutation"
+                  },
+                  "code": {
+                    "type": "string",
+                    "example": "console.log(2+2);"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respond with the results that Code-Runner returns with.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "all_ok": {
+                      "type": "boolean"
+                    },
+                    "total_ran": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "failures": {
+                      "type": "number"
+                    },
+                    "individual_tests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ok": {
+                            "type": "boolean"
+                          },
+                          "stdout": {
+                            "type": "string",
+                            "example": 4
+                          },
+                          "stderr": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "answer": {
+                            "type": "string",
+                            "example": "console.log(2+2);"
+                          },
+                          "expected": {
+                            "type": "string",
+                            "example": 4
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status either if code or problem_id is not specified in request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "User Code Not in Body": {
+                    "value": {
+                      "error": "No code submitted!"
+                    }
+                  },
+                  "Problem ID Not in Body": {
+                    "value": {
+                      "error": "No problem_id specified!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if email is not specified in request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "value": {
+                    "error": "Must be logged in to submit code!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/allTags": {
+      "get": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Retrieve all stored problem tags",
+        "description": "Get list of all problem tags. Used in our client-side to populate the filter component of the search page.",
+        "responses": {
+          "200": {
+            "description": "Respond with all the available problem tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "implementation",
+                    "constructive algorithms",
+                    "math",
+                    "..."
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Respond with 500 status if the json containing the problem tags is not available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "tags unavailable"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/searchProblems": {
+      "get": {
+        "tags": [
+          "Coding Problem"
+        ],
+        "summary": "Retrieve problem based on user's query",
+        "description": "Retrieve problems containing JSON array of titles and IDs of problems returned from Lyra Search.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "The limit on how many problems this API should search for",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 15
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "User's query as input for API to search in our Database",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Apple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return list of distinct results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Problem"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status if search parameters are missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "missing search params"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if search parameter's input is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Enter a title to search for problems"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Retrieve specific user",
+        "description": "Retrieve user in our database base on either email or username",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "description": "User's email address",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "example@gmail.com"
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "description": "User's Object ID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": 2317512875612695
+          },
+          {
+            "in": "query",
+            "name": "username",
+            "description": "User's name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "John Doe"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond by returning the user's info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status if no queries are given",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "Invalid Object ID": {
+                    "value": {
+                      "title": "Invalid ID"
+                    }
+                  },
+                  "Parameters Not Given": {
+                    "value": {
+                      "title": "No parameter given"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if no user is found in Database from the input that was given",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "Email Not Found in Database": {
+                    "value": {
+                      "title": "No data found with that email"
+                    }
+                  },
+                  "User ID Not Found in Database": {
+                    "value": {
+                      "title": "No data found with that ID"
+                    }
+                  },
+                  "Username Not Found in Database": {
+                    "value": {
+                      "title": "No data found with that username"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/topUsers": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Retrieve the top X users",
+        "description": "Retrieve the top users based on given input. The top users are considered by whoever has the highest EXP. If the user in session, place it into the bottom of the list (unless they're part of the top list).",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "count",
+            "description": "How many top users to retrieve from our Database",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with a list of users with highest EXP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status if no count parameter is given",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No parameter given"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 404 status if our User Database response came out empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No users found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/answers": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Retrieve all answers associated with user",
+        "description": "Retrieve all answers associated with the user",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "description": "user's email, used to search for their answers",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "example@gmail.com"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with all of the user's answers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userAnswer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 400 status if no parameters are given",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No parameter given"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Respond with 400 status if the user's email is not in our database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "No user associated with this email was found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@outlook.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "avatar_uri": {
+            "type": "string",
+            "example": "https://lh3.googleusercontent.com/a-/AOh14GgR3T_470A9pQ9ivIgxdNbNn-dkKoQEhr71DRBKWA=s96-c"
+          },
+          "exp": {
+            "type": "number",
+            "example": 1500
+          }
+        }
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "1234E"
+          },
+          "description": {
+            "type": "string",
+            "example": "Let's define pi(n) as the following permutation"
+          },
+          "inputSpecification": {
+            "type": "string",
+            "example": "The first line of the input contains two integers n and m"
+          },
+          "memoryLimit": {
+            "type": "number",
+            "example": 256
+          },
+          "notes": {
+            "type": "string",
+            "example": "Consider the first example"
+          },
+          "outputSpecification": {
+            "type": "string",
+            "example": "Print n integers f(p1(n)),f(p2(n)),…,f(pn(n))"
+          },
+          "sampleTests": {
+            "type": "string",
+            "example": "input 4 4 1 2 3 4 output 3 4 6 5"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "math",
+              "2000"
+            ]
+          },
+          "testCases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "input": {
+                  "type": "string",
+                  "example": "44\\n 1 2 3 4"
+                },
+                "output": {
+                  "type": "string",
+                  "example": "3 4 6 5"
+                }
+              }
+            }
+          },
+          "timeLimit": {
+            "type": "integer",
+            "example": 2
+          },
+          "title": {
+            "type": "string",
+            "example": "E. Special Permutation"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://codeforces.com/problemset/problem/1234/E"
+          }
+        }
+      },
+      "userAnswer": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@outlook.com"
+          },
+          "problem_id": {
+            "type": "string",
+            "example": "1234E"
+          },
+          "submission": {
+            "type": "string",
+            "example": "console.log('hi');"
+          },
+          "pass_test": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      }
+    }
+  }
+}

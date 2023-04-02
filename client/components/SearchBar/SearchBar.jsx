@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IconSearch } from '@tabler/icons-react';
 import './searchBar.css';
 
 export default function SearchBar({ doSearch }) {
-
-	let [text, setText] = useState('');
-
-	const handleTextChange = (e) => {
-		setText(e.target.value);
-	};
-
 	const submit = (e) => {
 		e.preventDefault();
-		doSearch(text);
+		doSearch(e.target.search_input.value);
 	};
 
 	return (
 		<form className='search_bar panel' onSubmit={submit}>
-			<input type='text' onChange={handleTextChange} />
-			<button disabled={!text.length} className='btn confirm'><IconSearch /></button>
+			<input name='search_input' type='text' />
+			<button className='btn confirm'><IconSearch /></button>
 		</form >
 	);
 }
