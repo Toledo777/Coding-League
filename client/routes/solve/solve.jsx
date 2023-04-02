@@ -69,22 +69,19 @@ export default function Solve() {
 			if (user){
 				let answer = window.localStorage.getItem(`${id}-${user.email}`);
 				if (answer && answer !== '') {
-					setAnswer(answer);
+					setSolution(answer);
 				} else {
 					answer = await fetch(`/api/user/answer/?email=${encodeURIComponent(user.email)}&id=${id}`);
 					answer = await answer.json();
 					if (!answer.error) {
-						setAnswer(answer.submission);
+						setSolution(answer.submission);
 					} else {
-						setAnswer(template);
+						setSolution(template);
 					}
 				}
 			} else {
-				setAnswer(template);
+				setSolution(template);
 			}
-		}
-		function setAnswer(answer){
-			setSolution(answer);
 		}
 		fetchAnswer();
 	}, [user]);
