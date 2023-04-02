@@ -9,9 +9,6 @@ import { user } from './models/user.mjs';
 import { userAnswer } from './models/userAnswer.mjs';
 import { searchProblems, insertProblems } from './search/searchManager.mjs';
 
-import rateLimit from 'express-rate-limit';
-import requestIp from 'request-ip';
-
 dotenv.config();
 const router = express.Router();
 
@@ -356,5 +353,31 @@ router.get('/user/answers', async (req, res) => {
 		res.status(400).json({ title: 'No parameter given' });
 	}
 });
+
+/**
+ * Checks if user has already submitted an answer for the given problem and returns it
+ */
+router.get('/user/answer', async (req, res) => {
+	const email = req.query.email;
+	const problem_id = req.query.id;
+	if (email && problem_id) {
+		let answer = await userAnswer.findOne({ email: email, problem_id: problem_id });
+		if (answer) {
+			// already attempted, has submission
+			res.json(answer);
+		} else {
+			// no submission, hasn't attempted
+			res.json({ 'error': 'no attempts' });
+		}
+	} else {
+		if (!problem_id) {
+			res.status(400).json({ 'error': 'missing problem_id!' });
+		}
+		else if (!email) {
+			res.status(400).json({ 'error': 'missing email!' });
+		}
+	}
+});
+
 
 export default router;

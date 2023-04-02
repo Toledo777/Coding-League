@@ -56,14 +56,39 @@ export default function Solve() {
 	const handleSolutionChange = (value) => {
 		setSolution(value);
 		if (user){
+			console.log("updating localStorage");
 			window.localStorage.setItem(`${id}-${user.email}`, value);
 		}
 	};
 
 	useEffect(() => {
-		if (user){
-			setSolution(window.localStorage.getItem(`${id}-${user.email}`));
+		async function fetchAnswer(){
+			if (user){
+				let answer = window.localStorage.getItem(`${id}-${user.email}`);
+				if (answer && answer !== '') {
+					setAnswer(answer);
+				} else {
+					// const answerUrl = new URL(`/user/answer/?email=${user.email}&id=${id}`);
+					// answerUrl.searchParams.set('email', user.email);
+					// answerUrl.searchParams.set('problem_id', id);
+					answer = await fetch(`/api/user/answer/?email=${encodeURIComponent(user.email)}&id=${id}`);
+					answer = await answer.json();
+					console.log(answer);
+					if (!answer.error) {
+						console.log(answer.submission);
+						setAnswer(answer.submission);
+					} else {
+						setAnswer('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
+					}
+				}
+			} else {
+				setAnswer('//please write your code in the solve function\nfunction solve(input) { \n\tconsole.log("Your Code Here!");\n}');
+			}
 		}
+		function setAnswer(answer){
+			setSolution(answer);
+		}
+		fetchAnswer();
 	}, [user]);
 
 	return <div className='solve'>
@@ -84,7 +109,7 @@ export default function Solve() {
 			</div>
 			<div className='editor-buttons'>
 				<button disabled={error} className='debug btn' onClick={debugSolution}>Debug</button>
-				<button disabled={error} className='submit btn confirm' onClick={debugSolution}>Submit</button>
+				<button disabled={error} className='submit btn confirm' onClick={submitSolution}>Submit</button>
 			</div>
 		</div>
 	</div>;
