@@ -8,7 +8,7 @@ export default function TestCase({ testCase, index }) {
 	const [expanded, setExpanded] = useState(false);
 	const { ok, stderr, stdout, answer, expected } = testCase;
 
-	return <div className='test-case'>
+	return <div className='test-case' key={index}>
 		<div className='case-heading'>
 			<span className='case-status'>
 				{ok ? <IconCircleCheck color='green' /> : <IconCircleX color='red' />}
