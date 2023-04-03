@@ -1,23 +1,23 @@
 #user1 {
-  background-color: rgb(179, 152, 0);
+  background-color: rgb(120, 98, 10);
   transition: background-color 0.15s ease-out;
 }
 
 #user1:hover {
-  background-color: rgb(153, 130, 0);
+  background-color: rgb(145, 126, 14);
 }
 
 #user2 {
-  background-color: rgb(153, 153, 153);
+  background-color: rgb(94, 94, 94);
   transition: background-color 0.15s ease-out;
 }
 
 #user2:hover {
-  background-color: rgb(128, 128, 128);
+  background-color: rgb(160, 158, 158);
 }
 
 #user3 {
-  background-color: rgb(144, 89, 35);
+  background-color: rgb(87, 55, 23);
   transition: background-color 0.15s ease-out;
 }
 
@@ -27,7 +27,7 @@
 
 .board_row {
   cursor: pointer;
-  background-color: rgb(31, 84, 119);
+  background-color: rgb(27, 49, 63);
   transition: filter 0.15s ease-out;
   display: flex;
   width: 30em;
@@ -40,7 +40,7 @@
 }
 
 .board_row:hover {
-  filter: saturate(0.5);
+  filter: saturate(3.5);
 }
 
 .board_ellipsis {

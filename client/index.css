@@ -4,3 +4,7 @@
 @import url(./style/nav.css);
 @import url(./style/button.css);
 @import url(./style/panel.css);
+
+.MathJax_Processed {
+    display: none;
+}
