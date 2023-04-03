@@ -1,0 +1,19 @@
+.user_info {
+  background-color: rgb(31, 84, 119);
+  display: inline-flex;
+  flex-wrap: nowrap;
+  width: auto;
+  padding: 2em;
+  border-radius: 2rem;
+  white-space: nowrap;
+  border: none;
+}
+
+.name_exp {
+  display: inline;
+  padding-left: 2em;
+}
+
+#exp_num {
+  color: rgb(255, 215, 0);
+}

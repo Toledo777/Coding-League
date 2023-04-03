@@ -25,7 +25,7 @@ export default function Leaderboard() {
 					{loading && 'loading...'}
 				</h3>
 				<div>
-					{!error && users.map((u, index) => <div key={u._id}> <UserLine index={index + 1} user={u}></UserLine> </div>)}
+					{!error && users.map((u, index) => <div tabIndex={0} key={u._id}> <UserLine index={index + 1} user={u}></UserLine> </div>)}
 				</div>
 			</div>
 		</div >
