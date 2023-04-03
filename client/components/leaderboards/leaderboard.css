@@ -40,7 +40,7 @@
 }
 
 .board_row:hover {
-  filter: saturate(0.5);
+  filter: saturate(3.5);
 }
 
 .board_ellipsis {
