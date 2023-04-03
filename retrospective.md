@@ -100,10 +100,26 @@ Sprint 2:
         - Prevents memory leak
     - Have caching enabled only in production mode
     - Add API documentation to the website
+
+- Alex:
+    - global leaderboard got done quickly and was easy enough to implement
+    - api routes required for the leaderboard
 ## What didn't go well
 - Robert:
     - Simplified Google Authentication so that there no involvement with Profile setup. Was getting complicated to manage if session and database is similar or not. And making sure profile setup only accessible for first time users.
+
+- Alex:
+    - the current leaderboard took the longest amount of time and it was scrapped just after I finished it, it can be chalked up to unclear features during our sprint planning and miscommunication during sprint phase
 ## Champion Summary
 ### Robert (API Documentation):
 - I have successfully implemented API documentation onto our project
     - In /api/docs you can view documents of all our routes. Including authentications, problems, and users routes.
+
+### Alex (Mobile Support)
+- I conducted some research on whether or not a mobile user was going to be able to use the website effectively without making large changes to the format of the project in the following topics
+    - resolution
+    - formatting
+    - interactivity
+- there was not much progress past the research phase, mobile users could interact easily enough and features became more important to complete
+- the feature is going to affect a very small population of users (i have no idea who would code on their phone...)
+- getting features implemented and the fact that the features were going to be used by everyone instead of mobile support being used by very few people is the reason that the championed feature was abandoned to focus on getting the product out there.
