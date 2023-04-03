@@ -104,12 +104,20 @@ Sprint 2:
 - Alex:
     - global leaderboard got done quickly and was easy enough to implement
     - api routes required for the leaderboard
+
+- Matthew:
+    - We decided to remove profile editing after sprint 2 which simplified the profile a lot.
+    - After having worked a lot on apis in the previous sprint, I was able to get the api for user answers completed pretty quickly
+    -  
 ## What didn't go well
 - Robert:
     - Simplified Google Authentication so that there no involvement with Profile setup. Was getting complicated to manage if session and database is similar or not. And making sure profile setup only accessible for first time users.
 
 - Alex:
     - the current leaderboard took the longest amount of time and it was scrapped just after I finished it, it can be chalked up to unclear features during our sprint planning and miscommunication during sprint phase
+
+- Matthew: 
+    - I looked into adding error highlighting to the editor towards the end of the sprint but I found that the documentation for the npm package we used to be a bit lacking. I concluded that it wouldn't be worth it to add this feature this late into the sprint.
 ## Champion Summary
 ### Robert (API Documentation):
 - I have successfully implemented API documentation onto our project
@@ -123,3 +131,9 @@ Sprint 2:
 - there was not much progress past the research phase, mobile users could interact easily enough and features became more important to complete
 - the feature is going to affect a very small population of users (i have no idea who would code on their phone...)
 - getting features implemented and the fact that the features were going to be used by everyone instead of mobile support being used by very few people is the reason that the championed feature was abandoned to focus on getting the product out there.
+
+### Matthew (Accesibility)
+- I tried to make our website as accesible as possible. Our main priority of course was just to get the features working at all.
+- To check accesbility, I mainly use the one that is built in to firefox.
+- I terms of color we think we did pretty well, the only weakness being the difficulty scrolling.
+- In terms of keyboard accesibility, there is an issue with getting stuck inside thhe code editor if you tab into it.
