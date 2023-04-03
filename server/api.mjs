@@ -179,7 +179,7 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 				let passAttempts = allAttempts.filter((attempt) => { return attempt.pass_test; });
 
 				// count all attempts and pass attempts
-				[allCount, passCount] = [allAttempts.length, passAttempts.length];
+				let [allCount, passCount] = [allAttempts.length, passAttempts.length];
 
 				// if not first clear
 				if (passCount > 1 && allCount > 1) {
