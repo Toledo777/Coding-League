@@ -108,7 +108,6 @@ Sprint 2:
 - Matthew:
     - We decided to remove profile editing after sprint 2 which simplified the profile a lot.
     - After having worked a lot on apis in the previous sprint, I was able to get the api for user answers completed pretty quickly
-    -  
 ## What didn't go well
 - Robert:
     - Simplified Google Authentication so that there no involvement with Profile setup. Was getting complicated to manage if session and database is similar or not. And making sure profile setup only accessible for first time users.
@@ -135,5 +134,6 @@ Sprint 2:
 ### Matthew (Accesibility)
 - I tried to make our website as accesible as possible. Our main priority of course was just to get the features working at all.
 - To check accesbility, I mainly use the one that is built in to firefox.
-- I terms of color we think we did pretty well, the only weakness being the difficulty scrolling.
+- I terms of color we think we did pretty well. The the only weakness being the difficulty scrolling as well as the text with an image background on the home pagel 
 - In terms of keyboard accesibility, there is an issue with getting stuck inside thhe code editor if you tab into it.
+- If I had more time to dedicate to this feature, I would have liked to try using our completed website blindfolded using a screenreader to see what could be improved for visually impaired users.
