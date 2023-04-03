@@ -116,6 +116,11 @@ Sprint 2:
         - Saving code to and pulling from LocalStorage (or MongoDB if LocalStorage doesn't have any)
         - Saving search results to SessionStorage (useful since our dataset is >3000 and trying to remember what you searched is a pain)
 
+- Noah
+  - CSS mostly worked well, 
+    - The style was easy to replicate for many components
+  - Point calculation is perfectly simple
+
 ## What didn't go well
 - Robert:
     - Simplified Google Authentication so that there no involvement with Profile setup. Was getting complicated to manage if session and database is similar or not. And making sure profile setup only accessible for first time users.
@@ -137,6 +142,15 @@ Sprint 2:
     - Our original ELO ranking system idea:
         - It would've taken too long to implement
         - We instead settled for a plain points system with a top 10 leaderboard
+
+- Noah
+  - Checking validity of answers was tricky, 
+    - Getting output from arbitrary code is hard
+      - Stdout was the solution
+    - Comparing that output with what was expected was hard
+      - What's expected is in string format
+      - The user expects to just return from a function
+      - JS's loose typing makes it hell to parse things with certainty
 
 ## Champion Summary
 ### Robert (API Documentation):
@@ -173,3 +187,28 @@ Sprint 2:
         - This didn't really pan out. With the health checker service I'm using, the lowest interval I can go on the free tier is 5 minutes
         - Supposedly, Azure hibernates stuff after around 3min 50sec of inactivity
         - 5 minutes is ok, though, at least we were able to minimize the downtime to just a few minutes instead of until the next time we use it
+
+### Noah Labrecque (Performance)
+
+#### Efforts Made
+- Minified JS at build time
+- Modern build target to reduce required polyfills
+- Did away with CreateReactApp's bloated insanity
+- Wrote a fast build system
+
+#### Current Mark
+
+As of submission the deployed version scores a 92 on performance using google lighthouse in desktop mode.
+
+#### Possible improvements
+
+- Improve code splitting (most of react is unused)
+- Reduce dependencies
+  - google auth react component could be made smaller
+  - range slider inputs could be made ourselves with more time
+- Use another reactive library (SolidJS, Svelte... etc)
+  - React is much larger than we need,
+  - React is old and has a bloated codebase
+  - React makes SSR more complex than needed
+  - The virtual-dom reactivity model makes sense in a world where browsers are under-optimized. However, we no longer live in that world
+- Moving the code runner to a serverless function model would allow more parallelized work
