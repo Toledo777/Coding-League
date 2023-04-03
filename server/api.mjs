@@ -254,7 +254,7 @@ router.get('/searchProblems', async (req, res) => {
 router.get('/user', async (req, res) => {
 	// check for email
 	if (req.query.email) {
-		const response = ENV_MODE !== 'dev' ? await user.findOne({ email: req.query.email }).cache(ONE_DAY) : await user.findOne({ email: req.query.email });
+		const response = await user.findOne({ email: req.query.email });
 		response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found with that email' });
 	}
 
@@ -262,7 +262,7 @@ router.get('/user', async (req, res) => {
 	else if (req.query.id) {
 		// check if the id query is in valid ObjectId format
 		if (mongoose.Types.ObjectId.isValid(req.query.id)) {
-			const response = ENV_MODE !== 'dev' ? await user.findById(req.query.id).cache(ONE_DAY) : await user.findById(req.query.id);
+			const response = await user.findById(req.query.id);
 			response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found' });
 		}
 		else {
@@ -273,7 +273,7 @@ router.get('/user', async (req, res) => {
 	// check for username
 	else if (req.query.username) {
 		// check for valid mongo object id format
-		const response = ENV_MODE !== 'dev' ? await user.findOne({ username: req.query.username }).cache(ONE_DAY) : await user.findOne({ username: req.query.username });
+		const response = await user.findOne({ username: req.query.username });
 		response ? res.status(200).json(response) : res.status(404).json({ title: 'No data found with that username' });
 	}
 
