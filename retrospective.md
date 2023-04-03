@@ -108,6 +108,14 @@ Sprint 2:
 - Matthew:
     - We decided to remove profile editing after sprint 2 which simplified the profile a lot.
     - After having worked a lot on apis in the previous sprint, I was able to get the api for user answers completed pretty quickly
+- Gabriel:
+    - Points calculation for code submission
+        - Our points algorithm isn't as complex as we had initially planned, but it works!
+    - Rate limiting code debugging/submitting routes
+    - Various quality of life improvements:
+        - Saving code to and pulling from LocalStorage (or MongoDB if LocalStorage doesn't have any)
+        - Saving search results to SessionStorage (useful since our dataset is >3000 and trying to remember what you searched is a pain)
+
 ## What didn't go well
 - Robert:
     - Simplified Google Authentication so that there no involvement with Profile setup. Was getting complicated to manage if session and database is similar or not. And making sure profile setup only accessible for first time users.
@@ -117,6 +125,19 @@ Sprint 2:
 
 - Matthew: 
     - I looked into adding error highlighting to the editor towards the end of the sprint but I found that the documentation for the npm package we used to be a bit lacking. I concluded that it wouldn't be worth it to add this feature this late into the sprint.
+    
+- Gabriel:
+    - Overall code submission at first:
+        - It was tricky dealing with the whole process of submitting answers to the code runner:
+            - We had to check if the user was logged in and actually submitted code
+            - Then check if they had already submitted a correct solution before and prevent them from resubmitting for points
+            - Calculating points (easiest part though)
+            - Finally, outputting the results in React
+        - We eventually got there, but it was a long rod
+    - Our original ELO ranking system idea:
+        - It would've taken too long to implement
+        - We instead settled for a plain points system with a top 10 leaderboard
+
 ## Champion Summary
 ### Robert (API Documentation):
 - I have successfully implemented API documentation onto our project
@@ -137,3 +158,18 @@ Sprint 2:
 - I terms of color we think we did pretty well. The the only weakness being the difficulty scrolling as well as the text with an image background on the home pagel 
 - In terms of keyboard accesibility, there is an issue with getting stuck inside thhe code editor if you tab into it.
 - If I had more time to dedicate to this feature, I would have liked to try using our completed website blindfolded using a screenreader to see what could be improved for visually impaired users.
+  
+### Gabriel (CI/CD pipeline):
+- Pipeline works really well
+    - One note: multiple deployments to Azure in quick succession can sometimes cause Azure to return an error
+        - This is because Azure is already unpacking the zip from a previous deploy by the time another pipeline finishes deploying
+        - From our perspectives working on GitLab, we don't know when Azure will be done unpacking and launching, only I know that through Azure deployment center
+        - As a result, we just push whenever our work is done and ready to be pushed, and sometimes the pipeline fails if Azure is busy
+    - The solution is just to wait a few minutes and simply rerun the pipeline
+- I had some issues sometimes on Azure, but nothing that was caused by our (awesome) code:
+    - Azure can sometimes be not helpful with its error messages, and sometimes SSH fails to connect when I want to check the logs
+    - Performance can also be slow sometimes, but that's nobody's fault really, we're just on the Student Plan
+    - For the health checker idea to keep the Deno code runner running:
+        - This didn't really pan out. With the health checker service I'm using, the lowest interval I can go on the free tier is 5 minutes
+        - Supposedly, Azure hibernates stuff after around 3min 50sec of inactivity
+        - 5 minutes is ok, though, at least we were able to minimize the downtime to just a few minutes instead of until the next time we use it
