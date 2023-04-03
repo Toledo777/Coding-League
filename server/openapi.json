@@ -51,7 +51,7 @@
                   "type": "object",
                   "properties": {
                     "title": {
-                      "example": "Google Client ID missing"
+                      "example": "google client ID not found"
                     }
                   }
                 }
@@ -933,7 +933,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/userAnswer"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/userAnswer"
+                  }
                 }
               }
             }
@@ -964,6 +967,71 @@
                     "title": {
                       "type": "string",
                       "example": "No user associated with this email was found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/answer": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Retrieve an answer associated with the user",
+        "description": "Retrieve all answers associated with the user",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "description": "user's email, used to search for their answers",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "example@gmail.com"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "description": "ID of a coding problem",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1234E"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respond with all of the user's answers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userAnswer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Respond with 404 status if either email or problem_id is missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "No Problem ID": {
+                    "value": {
+                      "error": "missing problem_id!"
+                    }
+                  },
+                  "No Email": {
+                    "value": {
+                      "error": "missing email!"
                     }
                   }
                 }
