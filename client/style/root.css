@@ -71,6 +71,7 @@ nav .user>p {
 nav .user>img {
     width: 45px;
     height: 45px;
+    margin: 0 20px;
 }
 
 /* style codeforces logo */
@@ -101,4 +102,12 @@ footer img {
 
 .historyList li {
     padding: 8px 0px;
+}
+
+.section-title {
+    font-weight: bold;
+}
+
+.logout div{
+    margin: 0 20px;
 }
