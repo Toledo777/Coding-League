@@ -91,3 +91,14 @@ Sprint 2:
         - ReactJS is huge and should be replaced with any of the much better alternatives, the fact this is industry standard is mildly depressing.
         - Our build system does not perform tree shaking correctly about 50% of downloaded code goes unused
     2. Cold starts on azure take 15-30 seconds, and the VM goes cold pretty quickly, finding a way to mitigate or fix this would be of great benefit to the user experience.
+
+# Sprint 3
+
+## What went well
+
+## What didn't go well
+
+## Champion Summary
+### Robert (API Documentation):
+- I have successfully implemented API documentation onto our project
+    - In /api/docs you can view documents of all our routes. Including authentications, problems, and users routes.
