@@ -12,11 +12,11 @@ export default function Profile() {
 	// fetch user with data to pass to user component
 	const [userErr, userLoading, userData] = useFetch('/api/user?id=' + id, '');
 	return (
-		<>
+		<div>
 			<h1>Profile Page</h1>
 			{userErr && <div>{userErr?.message}</div>}
 			{userLoading && <div>{userLoading}</div>}
 			{userData && <User user={userData} />}
-		</>
+		</div>
 	);
 }
