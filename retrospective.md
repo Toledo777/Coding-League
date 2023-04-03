@@ -95,9 +95,14 @@ Sprint 2:
 # Sprint 3
 
 ## What went well
-
+- Robert:
+    - Update session so that its stored in database instead in memory
+        - Prevents memory leak
+    - Have caching enabled only in production mode
+    - Add API documentation to the website
 ## What didn't go well
-
+- Robert:
+    - Simplified Google Authentication so that there no involvement with Profile setup. Was getting complicated to manage if session and database is similar or not. And making sure profile setup only accessible for first time users.
 ## Champion Summary
 ### Robert (API Documentation):
 - I have successfully implemented API documentation onto our project
