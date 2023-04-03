@@ -108,6 +108,10 @@ footer img {
     font-weight: bold;
 }
 
-.logout div{
-    margin: 0 20px;
+.logout, .logout>button{
+    cursor: pointer;
+}
+
+.logout> button{
+    padding: 12px 0px;
 }
