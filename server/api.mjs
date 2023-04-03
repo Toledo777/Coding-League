@@ -184,8 +184,9 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 				// if not first clear
 				if (passCount > 1 && allCount > 1) {
 					// store calculation so we can limit it to 100 later
+					// base = 100
 					const calculation = base * (allCount / passCount);
-					points = base + (base * ((calculation < 100) ? calculation : 100));
+					points = base + (((calculation < 100) ? calculation : 100));
 				}
 				// if first clear
 				else {
