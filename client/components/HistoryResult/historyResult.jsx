@@ -5,13 +5,13 @@ import './historyResult.css';
 // component for problem box on History page
 
 // mostly copied from SearchResult
-export default function HistoryResult({ passed, submission, id }) {
+export default function HistoryResult({ passed, submission, id, title }) {
 	const navigate = useNavigate();
 	return (
 		<div className='history_result panel'>
-			<h3>Problem ID: {id}</h3>
-			<h3>Passed: {passed ? 'True': 'False'}</h3>
-			<h3>Submission:</h3>
+			<h3>{id} {title}</h3>
+			<h4>Passed: {passed ? 'True': 'False'}</h4>
+			<h4>Submission:</h4>
 			<pre>
 				<code>{submission}</code>
 			</pre>

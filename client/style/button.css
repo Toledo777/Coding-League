@@ -6,12 +6,14 @@
     --border-color-active: #CCC;
     border-radius: 0.25rem;
     margin: var(--gap-m);
-    padding: var(--gap-m) calc(var(--gap-m) * 2);
+    padding: var(--gap-m) calc(var(--gap-m));
     border: none;
     cursor: pointer;
     font-size: medium;
     transition: box-shadow 0.25s, transform 0.1s, filter 0.1s;
     font-weight: bold;
+    display: flex;
+    align-items: center;
 
     /* This looks like redundant styling since the glow is hidden, */
     /* but this forces CSS to animate it correctly */
@@ -20,6 +22,10 @@
         0px 0px 50px 1px #FFF0 inset,
         0rem 0.1rem 0.25rem #0004,
         0rem 0rem 0rem var(--glow-color);
+}
+
+.btn>* {
+    margin: 0px 0.25rem;
 }
 
 .btn:hover,
