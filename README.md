@@ -34,7 +34,7 @@ Features:
     - If it's a first clear, give first clear bonus points (175)
     - If not first clear, use these calculations:
       - calculation = base * (attempts / passes)
-			- points = base + calculation
+      - points = base + calculation
     - Once calculated, give these points to the user by updating their User entry
 - Google authentication:
   - Users can sign in using their Google account
