@@ -9,24 +9,51 @@
 ## Description
 Project League is a full-stack web application which allows users to partake in JavaScript coding challenges with the goal of improving and expanding their own skills in the JavaScript language. Users can take on these challenges solo or compete with others on a leaderboard.
 
-Features (so far):
-- It uses a combination of web scraping and a Java setup script to populate the scraped coding problems into MongoDB
-- Contains a web page which fetches and loads a coding problem from the MongoDB. The coding problem page will have an IDE for users to submit their solution. Solutions are written in JavaScript code.
-- One submitted, user solution will be run by a debugger to determine if it passes certain test cases that are unique to each problem.
-  - If pass: move onto a next coding problem.
-  - If fail: fix the answer and re-submit.
+Features:
+- Dataset population:
+  - Using a combination of web scraping and a Java setup script to populate the scraped coding problems into the Database with MongoDB.
+- Home page:
+  - The main page thaat users first see.
+  - Description of what the website is about.
+  - Has two buttons: go to a random problem, and go to the search page. 
+- Problem page:
+  - Coding problem is shown with their title and description.
+  - A Code Editor is displayed which users can code their answers into.
+    - The code upon load will either be user's answer, local storage answer, or default template.
+  - Debug btn: Code Runner runs user's code with few test cases, and determine if they each pass. 
+  - Submit btn: will do similar action as debug, however:
+    - Code Runner runs more test cases that weren't shown to the user.
+    - User's answer gets inserted into database.
+      - If all test cases passes, give them points.
+        - Only first submit pass will give points, subsequent submits gives 0 points.
+      - If at least 1 test case fail, no points. But they can still attempt again.
+- Point calculation:
+  - When giving EXP to user
+    - base point is provided (100)
+    - Fetches attempts from all users, ratioed by those who pass.
+    - If it's a first clear, give first clear bonus points (175)
+    - If not first clear, use these calculations:
+      - calculation = base * (attempts / passes)
+      - points = base + calculation
+    - Once calculated, give these points to the user by updating their User entry
 - Google authentication:
-  - Users can sign in using their google account
-  - If first time user, redirect to setup page so users can enter their username, starting skill level, and bio
-  - Subsequent sign-ins will retireve info from database
+  - Users can sign in using their Google account
+  - If first time user, insert a new User instance into our Database
+  - Subsequent sign-ins will retireve user info from our Database
 - Search page:
-  - Users can search for coding problems by title
-  - They can then filter the search results by tags and by specifying a difficulty range
-  - Finally, they can click "code" on one of the problem results to navigate to the coding page with that problem loaded in
+  - Users can search for coding problems by title and description.
+  - They can filter the search results by tags and difficulty
+  - Clicking 'code' button on one of the problem results will navigate to the solve page for that problem.
+  - Their search result gets save when they leave the page, and is loaded back in when they return.
 - Profile page:
-  - A page for specific registered users can be viewed.
-  - Displays email (TODO: seen only by that user), username, avatar, bio, and their previous answers
-  - User can edit their profile settings by changing username and bio. Will get updated in database. 
+  - A page showcasing a registered user on our site.
+  - Displays email, username, and avatar.
+- Leaderboard page:
+  - Showcases the top 10 users from our website, determined by their EXP.
+  - If logged in, the current user will also be shown in the leaderboard, and what's their current position is.
+- History page:
+  - If logged in, showcase user's previous coded answers they submit to our website.
+  - They can click on View Problem button to redirect to the solve page of the problem.
 
 ## Technology Stack
 - Languages
