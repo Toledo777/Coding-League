@@ -64,7 +64,7 @@ const codeRunnerLimiter = rateLimit({
 });
 
 // values for calculating score
-const [base, firstClear] = [100, 175];
+const [base, firstClear, laterClear] = [100, 175, 100];
 
 /**
  * gets random problem from the DB
@@ -183,13 +183,13 @@ router.post('/problem/submit', codeRunnerLimiter, async (req, res) => {
 
 				// if not first clear
 				if (passCount > 1 && allCount > 1) {
-					// store calculation so we can limit it to 100 later
-					// base = 100
-					const calculation = base * (allCount / passCount);
-					points = base + (((calculation < 100) ? calculation : 100));
+					
+					// 100 + 100
+					points = base + laterClear;
 				}
 				// if first clear
 				else {
+					// 100 + 175
 					points = base + firstClear;
 				}
 
