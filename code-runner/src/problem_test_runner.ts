@@ -76,7 +76,9 @@ async function runTestCase(code: string, testCase: TestCase, timeout = 2000): Pr
         readTextFileWithLimit(files.solution_out, BUFFER_SIZE),
     ]);
 
-    const ok = status.success && answer == expected_output.replaceAll("\n", "");
+
+    const expected = expected_output.replaceAll("\n", "");
+    const ok = status.success && (answer == expected || answer.replaceAll('"', '') == expected);
 
     return { ok, stderr, stdout, answer, expected: expected_output };
 }
